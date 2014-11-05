@@ -1,0 +1,150 @@
+{
+  "defaults": {
+    "x": 0,
+    "y": 0,
+    "scale": 4,
+    "image": "/images/overworld_1.png"
+  },
+  "monkey": [
+    {
+      "image": "/images/monkey-1.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/monkey-2.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/monkey-3.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/monkey-4.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+  ],
+  "song": {
+    "image": "/images/song.png",
+    "x": 0,
+    "y": 0,
+    "scale": 4
+  },
+  "album": {
+    "image": "/images/album.png",
+    "x": 0,
+    "y": 0,
+    "scale": 4
+  },
+  "playlist": {
+    "image": "/images/playlist.png",
+    "x": 0,
+    "y": 0,
+    "scale": 4
+  },
+  "user": [
+    {
+      "image": "/images/spotifydude-1.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/spotifydude-2.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/spotifydude-3.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/spotifydude-4.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+  ],
+  "empty._": {
+    "image": "/images/overworld_1.png",
+    "x": 48,
+    "y": 32,
+    "scale": 4
+  },
+  "empty.-": {
+    "image": "/images/overworld_1.png",
+    "x": 64,
+    "y": 32,
+    "scale": 4
+  },
+  "wall.#": {
+    "image": "/images/overworld_1.png",
+    "x": 112,
+    "y": 64,
+    "scale": 4
+  },
+  "wall.F": {
+    "image": "/images/overworld_1.png",
+    "x": 96,
+    "y": 128,
+    "scale": 4
+  },
+  "left-side": {
+    "image": "/images/overworld_1.png",
+    "x": 0,
+    "y": 16,
+    "scale": 4
+  },
+  "right-side": {
+    "image": "/images/overworld_1.png",
+    "x": 32,
+    "y": 16,
+    "scale": 4
+  },
+  "upper-side": {
+    "image": "/images/overworld_1.png",
+    "x": 16,
+    "y": 0,
+    "scale": 4
+  },
+  "lower-side": {
+    "image": "/images/overworld_1.png",
+    "x": 16,
+    "y": 32,
+    "scale": 4
+  },
+  "corner-upper-left": {
+    "image": "/images/overworld_1.png",
+    "x": 0,
+    "y": 0,
+    "scale": 4
+  },
+  "corner-upper-right": {
+    "image": "/images/overworld_1.png",
+    "x": 32,
+    "y": 0,
+    "scale": 4
+  },
+  "corner-lower-left": {
+    "image": "/images/overworld_1.png",
+    "x": 0,
+    "y": 32,
+    "scale": 4
+  },
+  "corner-lower-right": {
+    "image": "/images/overworld_1.png",
+    "x": 32,
+    "y": 32,
+    "scale": 4
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "turns": 50,
+  "layout": [
+    "U  _  ",
+    "pM-## ",
+    "###a- ",
+    "  _# s",
+    "-# _ #",
+    "M#s# p"
+  ],
+  "units": {
+    "M": "monkey",
+    "s": "song",
+    "a": "album",
+    "p": "playlist",
+    "U": "user",
+    "#": "wall",
+    " ": "empty",
+    "_": "empty",
+    "-": "empty"
+  }
+}

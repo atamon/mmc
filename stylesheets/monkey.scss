@@ -1,0 +1,360 @@
+// Fonts
+
+@font-face {
+    font-family: 'TF2';
+    src: url('../fonts/tf2build.eot');
+    src: url('../fonts/tf2build.eot') format('embedded-opentype'),
+         url('../fonts/tf2build.woff2') format('woff2'),
+         url('../fonts/tf2build.woff') format('woff'),
+         url('../fonts/tf2build.ttf') format('truetype'),
+         url('../fonts/tf2build.svg#TF2BuildTF2Build') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TF2';
+    src: url('../fonts/tf2secondary.eot');
+    src: url('../fonts/tf2secondary.eot') format('embedded-opentype'),
+         url('../fonts/tf2secondary.woff2') format('woff2'),
+         url('../fonts/tf2secondary.woff') format('woff'),
+         url('../fonts/tf2secondary.ttf') format('truetype'),
+         url('../fonts/tf2secondary.svg#TF2Secondary') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+// Variables
+
+$green-dark:      #3F7812;
+$green:           #86C435;
+$green-light:     #BACE49;
+$light:           #D8FCAD;
+$orange:          #E19924;
+$beige:           #FDFDE6;
+$brown:           #B7A071;
+$yellow:          #FFDE00;
+
+$background:      $green-dark;
+
+$heading:         'TF2';
+$sans:            Montserrat, sans-serif;
+
+$base-size:       18;
+
+@import "normalize";
+@import "lib";
+
+$font-size:       to_rem($base-size, 16);
+$lineheight:      to_rem(1.5 * $base-size);
+
+$laptop:        1280px;
+$tablet:        768px;
+$mobile:        480px;
+
+@import "underlines";
+
+@mixin respond($size) {
+  @media only screen and (max-width: $size) {
+    @content;
+  }
+}
+
+html {
+  background-color: $background;
+  color: $light;
+  font: #{$font-size}/1.5 $sans;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  flex-direction: column;
+}
+
+[role="main"] {
+  width: 25rem;
+}
+
+[role="banner"] {
+
+  .logo {
+    text-align: center;
+    position: relative;
+    top: $lineheight*1.5;
+    width: 100%;
+    font-size: .5rem;
+    z-index: 100;
+  }
+
+  .spotify-logo {
+    opacity: .8;
+    transition: opacity .3s ease-out;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  h1 {
+    color: $green-dark;
+    margin-top: $lineheight;
+    font-weight: bold;
+    line-height: 1.2;
+    font-size: 6em;
+
+    .first-row,
+    .second-row,
+    .third-row {
+      display: block;
+    }
+
+    .first-row {
+      color: $green-light;
+      font-size: 1em;
+      transform: rotate(1deg);
+    }
+    .second-row {
+      font-size: 1.6em;
+      transform: rotate(-2deg);
+    }
+    .third-row {
+      color: $orange;
+      font-size: 3.5em;
+      position: relative;
+      top: -.2em;
+      transform: rotate(4deg);
+    }
+  }
+}
+
+[role="main"] {
+
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+
+  &:not(.btn):not(.no-underline) {
+    @include underline($size: 2.5, $color: $yellow, $bg: $green-dark, $offset: .1em);
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+
+  small {
+    font-weight: normal;
+  }
+}
+
+.highlight {
+  @include underline($size: 2.5, $color: $light, $bg: $green-dark, $offset: .1em);
+}
+
+.intro-text {
+  font-size: 1.2em;
+}
+
+strong {
+  color: lighten($light, 10%);
+
+  &.highlight {
+    color: #fff;
+    background: none;
+  }
+}
+
+ol, ul {
+  padding: 0;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading;
+  font-weight: normal;
+  color: #fff;
+  margin: 0 0 $lineheight;
+  letter-spacing: -1px;
+
+  .highlight {
+    @include underline($offset: -.1em);
+  }
+}
+
+h1 {
+  font-size: to_rem(48);
+}
+
+h2 {
+  font-family: $sans;
+  font-weight: bold;
+
+  .highlight {
+    @include underline-offset(.1em);
+  }
+}
+
+pre, code, .pre {
+  font-family: Monaco, Menlo, monospace;
+  background-color: rgba($green, .4);
+  color: lighten($light, 10%);
+}
+
+pre, .pre {
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: rgba($green, .3);
+}
+
+code {
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 85%;
+}
+
+.btn {
+  -webkit-appearance: none;
+  border: 0;
+  display: inline-block;
+  background-color: $orange;
+  color: #fff;
+  text-align: center;
+  font-size: to_rem(24);
+  font-weight: normal;
+  padding: .4em 2em;
+  border-radius: 13px;
+  position: relative;
+  transition: background-color .1s ease-out;
+
+  box-shadow: inset rgba(#FFC446, .3) 0 -1px 1px 1px,
+              rgba(#AB5700, .8) 0 5px 0,
+              rgba(41, 78, 11, .5) 0 6px 0px 2px,
+              rgba(255, 196, 70, .2) 0 6px 0 3px,
+              rgba(#000, .1) 0 5px 30px 3px;
+
+  &:hover {
+    background-color: lighten(saturate($orange, 10%), 2%);
+  }
+
+  &:active,
+  &:focus {
+    outline: 0;
+    top: 5px;
+    box-shadow: inset rgba(#FFC446, .3) 0 -1px 1px 1px,
+                rgba(#AB5700, .8) 0 1px 0,
+                rgba(41, 78, 11, .5) 0 1px 0px 2px,
+                rgba(255, 196, 70, .2) 0 1px 0 3px,
+                rgba(#000, .05) 0 5px 10px 3px;
+  }
+}
+
+// Forms
+
+input[type="text"],
+input[type="url"],
+input[type="password"],
+input[type="email"],
+textarea {
+  -webkit-appearance: none;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  border: 0;
+  padding: .6em;
+  border-radius: 4px;
+  color: #333;
+  background-color: rgba(#fff, .95);
+  transition: background-color .2s ease-out;
+
+  &.ghost,
+  &.ghost:focus {
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  &:focus {
+    outline: 0;
+    background-color: #fff;
+  }
+}
+
+
+// Helpers
+
+.group {
+  @include clearfix;
+}
+
+
+.left {
+  text-align: left;
+}
+
+.wide {
+  width: 100%;
+  display: block;
+}
+
+.content--centered {
+  text-align: center;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+[class^="icon-"] {
+  &::before {
+    display: inline-block;
+    content: "";
+    font-style: normal;
+    background-size: 100% 100%;
+  }
+}
+
+#team-form {
+
+  .input-group {
+    text-align: right;
+    padding-right: 53px;
+
+    label {
+      margin-right: to_rem(14);
+    }
+  }
+}
+
+.icon-leaf::before {
+  width: 40px;
+  height: 30px;
+  background: transparent url('../images/leaf-icon.svg') no-repeat left center;
+}
+
+
+#logo {
+  fill: $light;
+}
+
+#spotify {
+  margin: 2rem 0;
+  width: 7rem;
+}
+
+@import "views";
+@import "game";
