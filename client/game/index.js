@@ -1,6 +1,4 @@
 var MOVE_TIMEOUT = 600;
-var SCENE_WIDTH = Math.min(window.innerWidth, window.innerHeight);
-var SCENE_HEIGHT = Math.min(window.innerWidth, window.innerHeight);
 
 var monkeyMusic = require('monkey-music');
 var Scene = require('./Scene');
@@ -11,12 +9,25 @@ var replay = require('./replay');
 var gameContainer = document.querySelector('#game-container');
 var scene = null;
 
+function getMaxGameSize() {
+  // Chrome will produce glitches if we don't make sure to
+  // use a resolution that is a power of 2
+  var windowSize = Math.min(window.innerWidth, window.innerHeight);
+
+  var power = Math.floor(Math.log(windowSize) / Math.LN2);
+  return Math.pow(2, power);
+}
+
 function displayLevel(info) {
   var level = info.level;
   var teams = info.teams;
 
+  var sceneWidth = getMaxGameSize();
+  var sceneHeight = getMaxGameSize();
+  console.log(sceneWidth, sceneHeight);
+
   scene = new Scene({
-    size: { x: SCENE_WIDTH, y: SCENE_HEIGHT },
+    size: { x: sceneWidth, y: sceneHeight },
     backgroundColor: 0x83d135,
     el: gameContainer,
     tileMap: tileMap,
