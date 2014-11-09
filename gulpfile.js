@@ -45,4 +45,4 @@ gulp.task('watch', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['game', 'css']);
+gulp.task('default', ['game', 'boss', 'css']);

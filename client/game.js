@@ -1,6 +1,6 @@
 var io = require('socket.io-client');
 var settings = require('../client-settings.json');
-var GUI = require('./gui');
+var GUI = require('./game/gui');
 
 var url = settings.host;
 
