@@ -155,6 +155,8 @@ var joinGame = function (gameId, teamName, cb) {
   var game = games[gameId];
   var waitingTeam = waitingTeams[gameId];
 
+  // TODO This assumes that we're only accepting two teams
+  // per game. Which is boring.
   if (waitingTeam) {
     // Game ready
     game.teams = [waitingTeam.teamName, teamName];
@@ -179,6 +181,22 @@ var joinGame = function (gameId, teamName, cb) {
   }
 };
 
+var closeGame = function (gameId) {
+  var game = games[gameId];
+  if (!game) return;
+
+  forEach(game.timeouts, clearTimeout);
+
+  var lastTurn = game.turns[game.turns.length - 1];
+  forEach(lastTurn, function (teamTurn) {
+    if (teamTurn && typeof teamTurn.cb === 'function') {
+      teamTurn.cb('Game prematurely closed');
+    }
+  });
+
+  delete games[gameId];
+};
+
 var gameExists = function (gameId) {
   return !!games[gameId];
 };
@@ -197,3 +215,4 @@ exports.createGame = createGame;
 exports.gameExists = gameExists;
 exports.getLevel = getLevel;
 exports.getTeams = getTeams;
+exports.closeGame = closeGame;

@@ -1,5 +1,5 @@
 var PIXI = require('pixi.js');
-var tileMap = require('../tilemap.json');
+var tileMap = require('./tilemap.json');
 var isArray = require('mout/lang/isArray');
 
 var TILE_WIDTH = 64;
@@ -15,10 +15,7 @@ var makeTexture = function (textureInfo) {
   return new PIXI.Texture(baseTexture, frame);
 };
 
-var textureFromTile = function (tile) {
-  var textureInfo = tileMap[tile];
-  if (!textureInfo) return;
-
+var textureFromTile = function (textureInfo) {
   if (isArray(textureInfo)) {
     // MovieClips expect an array of textures
     return textureInfo.map(makeTexture);
@@ -28,7 +25,7 @@ var textureFromTile = function (tile) {
   }
 };
 
-var spriteFromTexture = function (texture, tile, x, y) {
+var spriteFromTexture = function (texture, scale, x, y) {
   var sprite;
   if (isArray(texture)) {
     // Series of textures that make up an animation
@@ -49,19 +46,17 @@ var spriteFromTexture = function (texture, tile, x, y) {
   // Rescale to support different texture sizes
   // For starters at least when graphic resources is
   // scarce.
-  var scale = tileMap[tile].scale;
-  if (scale) {
-    sprite.scale.x = scale;
-    sprite.scale.y = scale;
-  }
+  sprite.scale.x = scale || 1;
+  sprite.scale.y = scale || 1;
 
   return sprite;
 };
 
 var build = function (tile, x, y) {
-  var texture = textureFromTile(tile);
-  if (!texture) return;
-  var sprite = spriteFromTexture(texture, tile, x, y);
+  var tileInfo = tileMap[tile];
+  if (!tileInfo) return;
+  var texture = textureFromTile(tileInfo);
+  var sprite = spriteFromTexture(texture, tileInfo.scale, x, y);
   return sprite;
 };
 

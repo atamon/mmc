@@ -22,6 +22,7 @@ var game = require('./game');
 
 // Routes
 app.use('/game', require('./game-router'));
+app.use('/boss', require('./boss-router'));
 
 // TODO This is merely meant as a curl endpoint atm.
 // We should figure out how we want to expose this

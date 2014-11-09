@@ -15,34 +15,6 @@ router.use('/', function (err, req, res, next) {
   res.send(400, { message: err.message || 'Invalid request' });
 });
 
-// // Serve boss page
-// router.get('/:teamName/challenge/:bossId', function (req, res) {
-//   // TODO Make real lookup of level for this boss
-//   var level = levels.get('test');
-
-//   // Look up level and AI for this boss
-//   // Render boss page
-//   res.render('challenge', {
-//     teamOne: req.body.teamName,
-//     teamTwo: req.body.bossId,
-//     level: level
-//   });
-// });
-
-
-// // Handle team vs boss AI
-// router.post('/:teamName/challenge/:bossId', function (req, res) {
-//   // Look up level and AI for this boss
-//   //
-//   // Request AI from http://localhost:BOSS_PORT
-//   //
-//   // Send level ID, teamName and bossName to game
-//   // Set up game
-//   // Start next-command counter
-//   //
-//   // Connect socket for visualisation
-// });
-
 router.get('/:gameId', function (req, res) {
   if (!game.gameExists(req.params.gameId)) {
     return res.send(404);

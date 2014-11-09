@@ -1,5 +1,6 @@
 {
   "port": "3001",
+  "botPort": "1337",
   "secret": "???",
   "gmail": {
     "user": "???",

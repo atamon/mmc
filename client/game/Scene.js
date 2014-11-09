@@ -7,6 +7,7 @@ var unique = require('mout/array/unique');
 PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 var TILE_WIDTH = 64;
 var TILE_HEIGHT = 64;
+var MONKEY_Z = 2;
 
 var Scene = function (options) {
   var stage = new PIXI.Stage(options.backgroundColor || 0x83d135);
@@ -77,6 +78,9 @@ var Scene = function (options) {
 
     // Cache monkey tiles by teamName
     if (tile === 'monkey') {
+      // Make sure they are displayed above everything else
+      sprite.z = MONKEY_Z;
+
       var id = '';
       for (var i = 0; i < positions.length; i++) {
         var position = positions[i];

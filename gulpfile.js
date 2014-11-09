@@ -10,7 +10,8 @@ var paths = {
   css: 'public/css',
   scripts: ['client/**/*.js'],
   config: ['./*.json', 'client/**/*.json'],
-  gameMain: ['client/game.js']
+  gameMain: ['client/game.js'],
+  bossMain: ['client/boss.js']
 };
 
 var buildCSS = function() {
@@ -34,11 +35,13 @@ var buildJS = function(main) {
 
 gulp.task('css', buildCSS);
 gulp.task('game', buildJS.bind(null, paths.gameMain));
+gulp.task('boss', buildJS.bind(null, paths.bossMain));
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scss, ['css']);
   gulp.watch(paths.scripts, ['game']);
+  gulp.watch(paths.scripts, ['boss']);
 });
 
 // The default task (called when you run `gulp` from cli)

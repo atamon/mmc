@@ -22,7 +22,9 @@
     "gulp-util": "^3.0.1",
     "monkey-music": "^0.1.0",
     "mout": "^0.10.0",
-    "pixi.js": "^1.6.1",
+    "pixi.js": "^2.0.0",
+    "request": "^2.47.0",
+    "reqwest": "^1.1.5",
     "socket.io": "^1.2.0",
     "socket.io-client": "^1.2.0"
   }
