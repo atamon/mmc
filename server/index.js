@@ -7,6 +7,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var exphbs  = require('express-handlebars');
+var session = require('express-session');
 
 // Serve statics and render handlebars
 var hbs = exphbs.create({
@@ -19,8 +20,14 @@ app.use(express.static('public'));
 // Always set io instance before requiring users of the ./sockets module
 require('./sockets').setIo(io);
 var game = require('./game');
+var settings = require('../settings.json');
+
+// Authentication
+app.use(session({ secret: settings.secret }));
 
 // Routes
+app.use('/login', require('./login-router'));
+app.use('/team', require('./team-router'));
 app.use('/game', require('./game-router'));
 app.use('/boss', require('./boss-router'));
 

@@ -39,6 +39,7 @@ $orange:          #E19924;
 $beige:           #FDFDE6;
 $brown:           #B7A071;
 $yellow:          #FFDE00;
+$red:             rgb(130, 25, 25);
 
 $background:      $green-dark;
 
@@ -328,7 +329,15 @@ textarea {
   }
 }
 
-#team-form {
+#login-form {
+
+  .error {
+    color: $red;
+
+    &:empty {
+      visibility: hidden;
+    }
+  }
 
   .input-group {
     text-align: right;
