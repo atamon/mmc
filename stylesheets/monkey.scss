@@ -246,10 +246,11 @@ code {
               rgba(255, 196, 70, .2) 0 6px 0 3px,
               rgba(#000, .1) 0 5px 30px 3px;
 
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: lighten(saturate($orange, 10%), 2%);
   }
 
+  &[disabled],
   &:active,
   &:focus {
     outline: 0;
@@ -259,6 +260,10 @@ code {
                 rgba(41, 78, 11, .5) 0 1px 0px 2px,
                 rgba(255, 196, 70, .2) 0 1px 0 3px,
                 rgba(#000, .05) 0 5px 10px 3px;
+  }
+
+  &[disabled] {
+    opacity: 0.8;
   }
 }
 
