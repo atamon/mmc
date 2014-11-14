@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+var cradle = require('cradle');
+var teams = new(cradle.Connection)('http://localhost:5984').database('teams');
+
+function parseMembers(args) {
+  if (args.length % 2 !== 0) {
+    console.error('Missing email');
+    process.exit(1);
+  }
+
+  var teams = [];
+  for (var i = 0; i < args.length; i += 2) {
+    teams.push({
+      name: args[i],
+      email: args[i + 1]
+    });
+  }
+
+  return teams;
+}
+
+var data = {
+  teamName: process.argv[2],
+  coins: 0,
+  challenges: [],
+  teams: parseMembers(process.argv.slice(3))
+};
+
+teams.get(data.teamName, function (err, doc) {
+  if (err && err.error !== 'not_found' ) {
+    console.error(err);
+    process.exit(1);
+  }
+
+  if (doc) {
+    console.log('Team exists. Aborting');
+    return;
+  }
+
+  teams.save(data.teamName, data, function (err, doc) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    console.log('Finished:');
+    console.log(JSON.stringify(doc, null, ' '));
+  });
+});

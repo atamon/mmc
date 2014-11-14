@@ -1,0 +1,2 @@
+curl -X PUT http://localhost:5984/teams
+curl -X PUT http://localhost:5984/replays

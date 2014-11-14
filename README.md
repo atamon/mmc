@@ -2,6 +2,12 @@
 ```
 npm install
 gulp
+./script/create-dbs
+```
+
+### Add teams
+```
+./script/add-team "Team Glenn" "Glenn Glenn" glenn@glenn.glenn "Ada Ada" ada@ada.ada
 ```
 
 ### Manual game setup
