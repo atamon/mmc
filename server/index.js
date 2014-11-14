@@ -26,6 +26,8 @@ var settings = require('../settings.json');
 app.use(session({ secret: settings.secret }));
 
 // Routes
+app.get('/schedule', function (req, res) { res.render('schedule'); });
+app.get('/', function (req, res) { res.redirect('/login'); });
 app.use('/login', require('./login-router'));
 app.use('/team', require('./team-router'));
 app.use('/game', require('./game-router'));

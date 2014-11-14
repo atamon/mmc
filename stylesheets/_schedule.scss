@@ -1,0 +1,22 @@
+.schedule {
+  width: 50vw;
+  margin: to_rem(50);
+
+  .schedule-list {
+    list-style-type: none;
+    text-align: left;
+
+    li {
+      display: flex;
+      flex-direction: row;
+
+      time {
+        font-weight: bold;
+        color: lighten($light, 10%);
+        width: to_rem(120);
+        flex-shrink: 0;
+      }
+    }
+
+  }
+}
