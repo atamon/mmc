@@ -33,8 +33,6 @@ app.use('/team', require('./team-router'));
 app.use('/game', require('./game-router'));
 app.use('/boss', require('./boss-router'));
 
-// TODO This is merely meant as a curl endpoint atm.
-// We should figure out how we want to expose this
 app.use('/create', bodyParser());
 app.post('/create', function (req, res) {
   var id = game.createGame(req.body);

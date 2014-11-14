@@ -126,13 +126,20 @@ var executeTurn = function (turn, cb) {
 };
 
 var createGame = function (options) {
-  log.info('starting game', options);
+  if (options.gameId !== undefined && games[options.gameId]) {
+    log.error('failed to create game with existing id', options.gameId);
+    return false;
+  }
 
-  var id = idCounter++;
-  log.info('game created with id', id);
+  var gameId = options.gameId;
+  if (gameId === undefined) {
+     gameId = idCounter++;
+  }
 
-  var game = games[id] = {};
-  game.id = id;
+  log.info('game created with id', gameId);
+
+  var game = games[gameId] = {};
+  game.id = gameId;
 
   var level = levels.get(options.level);
   if (!level) {
@@ -140,6 +147,7 @@ var createGame = function (options) {
     return false;
   }
 
+  // The level JSON, to be handed to monkeyMusic
   game.level = level;
 
   // Initialize the turns array with an empty turn
@@ -148,36 +156,55 @@ var createGame = function (options) {
   // Prepare for handling turn timeouts for each team
   game.timeouts = {};
 
-  return id;
+  // We shall try to support large games as well
+  game.numberOfTeams = options.numberOfTeams || 2;
+
+  // Start accepting joining teams
+  waitingTeams[gameId] = [];
+
+  return gameId;
 };
 
 var joinGame = function (gameId, teamName, cb) {
   var game = games[gameId];
-  var waitingTeam = waitingTeams[gameId];
+  if (!game) {
+    return cb('Invalid game id');
+  }
 
-  // TODO This assumes that we're only accepting two teams
-  // per game. Which is boring.
-  if (waitingTeam) {
-    // Game ready
-    game.teams = [waitingTeam.teamName, teamName];
+  var waiting = waitingTeams[gameId];
+  if (!waiting) {
+    return cb('Game already running');
+  }
+
+  // Wait for remaining teams
+  var timeout = setTimeout(function () {
+    cb('Join request timed out. No other team joined in');
+
+    // Deleting a non-existant key is alright,
+    // so we do this the simple way
+    delete waitingTeams[gameId];
+  }, PENDING_JOIN_TIMEOUT);
+
+  waiting.push({
+    teamName: teamName,
+    cb: cb,
+    timeout: timeout
+  });
+
+  // Game ready
+  if (waiting.length >= game.numberOfTeams) {
+    game.teams = waiting.map(function (o) { return o.teamName; });
     game.state = monkeyMusic.newGameState(game.teams, game.level);
 
-    clearTimeout(waitingTeam.timeout);
-    waitingTeam.cb(null, monkeyMusic.stateForPlayer(game.state, waitingTeam.teamName));
+    // Serve first game state to all teams
+    waiting.forEach(function (team) {
+      clearTimeout(team.timeout);
+      team.cb(null, monkeyMusic.stateForPlayer(game.state, team.teamName));
+    });
 
-    cb(null, monkeyMusic.stateForPlayer(game.state, teamName));
-  } else {
-    // Wait for next player
-    var timeout = setTimeout(function () {
-      cb('Join request timed out. No other team joined in');
-      delete waitingTeams[gameId];
-    }, PENDING_JOIN_TIMEOUT);
-
-    waitingTeams[gameId] = {
-      teamName: teamName,
-      cb: cb,
-      timeout: timeout
-    };
+    // Delete the array of waiting teams to make sure we
+    // don't let any more teams join
+    delete waitingTeams[gameId];
   }
 };
 
