@@ -17,18 +17,16 @@ var currentGameDisplay = document.getElementById('game-id');
 createGameBtn.addEventListener('click', createGame);
 
 function createGame() {
+  createGameBtn.setAttribute('disabled', 'disabled');
   var url = location.href.split('/');
   var data = {
-    bossId: decodeURIComponent(url.pop()),
-    teamName: decodeURIComponent(url.pop())
+    bossId: decodeURIComponent(url.pop())
   };
-  console.log(data);
   reqwest({
     url: location.origin + '/boss/start',
     method: 'POST',
     data: data,
     success: function (body) {
-      console.log(body);
       currentGameDisplay.innerHTML = body.gameId;
       socket.emit('game', body.gameId, game.displayLevel);
     }
@@ -38,5 +36,16 @@ function createGame() {
 }
 
 socket.on('connect', function () {
-  socket.on('replay', game.displayReplay);
+  socket.on('replay', function (replay) {
+    // Once a replay is sent to us, we let the team create a new game
+    // We shan't force people to wait for a boring/failed game to end
+    createGameBtn.removeAttribute('disabled');
+
+    game.displayReplay(replay);
+  });
 });
+socket.on('disconnect', function () {
+  socket.off('replay', game.displayReplay);
+});
+
+createGame();
