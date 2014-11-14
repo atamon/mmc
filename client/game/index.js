@@ -56,10 +56,8 @@ function getPlayerPosition(state) {
 var runningGame = null;
 function displayReplay(game) {
   if (runningGame) {
-    throw new Error('This is still b0rken');
-    // clearInterval(runningGame);
-    // runningGame = null;
-    // scene.restart();
+    clearInterval(runningGame);
+    runningGame = null;
   }
 
   GUI.setStatus('preparing');
@@ -84,17 +82,6 @@ function displayReplay(game) {
       // Stop looping
       clearInterval(runningGame);
       runningGame = null;
-
-      // Clear the scene of any state it might have
-      // This allows us to play another replay without
-      // the rendering going bananas.
-      // NOTE: We actually do like bananas in this contest
-      // but let's leave some of them for the monkeys
-      // scene.restart();
-      // Parse the last layout so we still show how the game ended
-      var finalStates = statesForPlayer[statesForPlayer.length - 1];
-      var finalPositions = finalStates.map(getPlayerPosition);
-      scene.parseLayout(finalStates[0].layout, finalPositions);
 
       // Update GUI
       GUI.setStatus(game.message || '', true);

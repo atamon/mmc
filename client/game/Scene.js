@@ -36,6 +36,8 @@ var Scene = function (options) {
   levelNode.mouseup = options.onMouseClick;
   levelNode.mousemove = options.onMouseMove;
   stage.addChild(levelNode);
+  var monkeyNode = new PIXI.DisplayObjectContainer();
+  stage.addChild(monkeyNode);
 
   element.appendChild(renderer.view);
 
@@ -70,16 +72,22 @@ var Scene = function (options) {
   };
 
   var monkeys = {};
-  var setTile = function (x, y, tile, positions) {
+  var addSprite = function (x, y, tile, positions) {
     var sprite = grid.setTile(x, y, tile);
-    if (sprite) {
-      levelNode.addChild(sprite);
-    }
+    if (!sprite) return;
 
-    // Cache monkey tiles by teamName
-    if (tile === 'monkey') {
-      // Make sure they are displayed above everything else
-      sprite.z = MONKEY_Z;
+    // We handle monkeys differently as they are moved
+    // around the screen and may be covered by other
+    // tiles.
+    if (tile !== 'monkey') {
+      levelNode.addChild(sprite);
+    } else {
+      monkeyNode.addChild(sprite);
+
+      // Reset positions for the monkey so that we can
+      // reuse everything between games rematches
+      sprite.position.x = x * TILE_WIDTH;
+      sprite.position.y = y * TILE_HEIGHT;
 
       var id = '';
       for (var i = 0; i < positions.length; i++) {
@@ -91,29 +99,31 @@ var Scene = function (options) {
       }
 
       if (id !== '') {
+        // Cache monkey tiles by teamName
         monkeys[id] = sprite;
       }
     }
+
   };
 
   var addOutline = function (width, height) {
 
     // Left side + right side
     for (var i = 1; i < height + 1; i++) {
-      setTile(0, i, 'left-side');
-      setTile(width + 1, i, 'right-side');
+      addSprite(0, i, 'left-side');
+      addSprite(width + 1, i, 'right-side');
     }
     // Upper side + lower side
     for (var y = 1; y < width + 1; y++) {
-      setTile(y, 0, 'upper-side');
-      setTile(y, height + 1, 'lower-side');
+      addSprite(y, 0, 'upper-side');
+      addSprite(y, height + 1, 'lower-side');
     }
 
     // Corners
-    setTile(0, 0, 'corner-upper-left');
-    setTile(0, height + 1, 'corner-lower-left');
-    setTile(width + 1, 0, 'corner-upper-right');
-    setTile(width + 1, height + 1, 'corner-lower-right');
+    addSprite(0, 0, 'corner-upper-left');
+    addSprite(0, height + 1, 'corner-lower-left');
+    addSprite(width + 1, 0, 'corner-upper-right');
+    addSprite(width + 1, height + 1, 'corner-lower-right');
   };
 
   var autoScale = function (node) {
@@ -136,7 +146,7 @@ var Scene = function (options) {
         var tile = row[x];
         // Add 1 to x and y so that we can manually insert
         // outlining tiles for decorations
-        setTile(x + 1, y + 1, tile, positions);
+        addSprite(x + 1, y + 1, tile, positions);
       }
     }
 
@@ -176,6 +186,7 @@ var Scene = function (options) {
   this.start = function () {
     addOutline(grid.getWidth(), grid.getHeight());
     autoScale(levelNode, true);
+    autoScale(monkeyNode, true);
 
     levelNode.hitArea =
       new PIXI.Rectangle(0, 0, TILE_WIDTH * (grid.getWidth() + 1), TILE_HEIGHT * (grid.getHeight() + 1));
