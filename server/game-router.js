@@ -5,6 +5,11 @@ var bodyParser = require('body-parser');
 
 var validate = require('./validate.js');
 var game = require('./game.js');
+var sockets = require('./sockets');
+
+game.on('gameover', function (results) {
+  sockets.sendReplayTo(results.gameId, results.replay);
+});
 
 // Parse POST body
 router.use('/', bodyParser.json());

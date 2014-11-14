@@ -3,11 +3,13 @@ var PENDING_JOIN_TIMEOUT = 60000;
 
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
+var EventEmitter = require('events').EventEmitter;
 
 var levels = require('./levels');
 var log = require('./log');
 var sockets = require('./sockets');
 
+var events = new EventEmitter();
 var idCounter = 1;
 var games = {};
 var waitingTeams = {};
@@ -62,7 +64,32 @@ var handleGameOver = function (game) {
     level: game.level
   };
 
-  sockets.sendReplayTo(game.id, replay);
+  var scores = game.teams.map(function (winners, teamName) {
+    var sfp = monkeyMusic.stateForPlayer(game.state, teamName);
+    return {
+      teamName: teamName,
+      score: sfp.score
+    };
+  });
+
+  var sortedScores = scores.sort(function (a, b) {
+    if (a.score === undefined) {
+      return -1;
+    }
+    if (b.score === undefined) {
+      return 1;
+    }
+    return a.score - b.score;
+  });
+
+  var data = {
+    replay: replay,
+    scores: sortedScores,
+    gameId: game.id
+  };
+
+  events.emit('gameover', data);
+  events.emit('gameover:' + game.id, data);
   delete games[game.id];
 };
 
@@ -243,3 +270,4 @@ exports.gameExists = gameExists;
 exports.getLevel = getLevel;
 exports.getTeams = getTeams;
 exports.closeGame = closeGame;
+exports.on = events.on.bind(events);

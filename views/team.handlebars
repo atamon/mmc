@@ -1,1 +1,10 @@
 <div>HELLO TEAM {{teamName}}</div>
+<h2>Nubmer of coins: <span id="coins">{{coins}}</span></h2>
+
+{{#each bosses}}
+  <div class="boss-tile">
+    <a href="/boss/{{@key}}" target="_blank">
+      <h2>{{@key}}</h2>
+    </a>
+  </div>
+{{/each}}

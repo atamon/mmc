@@ -1,6 +1,6 @@
 var bodyParser = require('body-parser');
 var secret = require('./secret');
-
+var db = require('./db');
 var router = require('express').Router();
 
 router.use('/', bodyParser.urlencoded());
@@ -12,19 +12,34 @@ router.post('/', function (req, res) {
   var teamName = req.body.teamName;
   var apiKey = req.body.apiKey;
 
-  if (!apiKey || !teamName || secret.forTeam(teamName) !== apiKey) {
-    // Invalid login
-    res.render('login', {
-      teamName: teamName,
-      apiKey: apiKey,
-      error: 'Team name and apiKey mismatch'
-    });
-  } else {
-    // Look for req.session.validTeam whenever we need to
-    // authenticate the client
-    req.session.validTeam = true;
-    res.redirect('/team/' + teamName);
-  }
+  validateLogin(teamName, apiKey, function (err, isValid) {
+    if (err) {
+      return res.status(500).render('error');
+    }
+
+    if (!isValid) {
+      // Invalid login
+      res.render('login', {
+        teamName: teamName,
+        apiKey: apiKey,
+        error: 'Team name and apiKey mismatch'
+      });
+    } else {
+      // Look for req.session.validTeam whenever we need to
+      // authenticate the client
+      req.session.validTeam = teamName;
+      res.redirect('/team');
+    }
+  });
 });
+
+function validateLogin(teamName, apiKey, cb) {
+  db.isTeamRegistered(teamName, function (err, isRegistered) {
+    var isValid = isRegistered &&
+      apiKey && teamName &&
+      secret.forTeam(teamName) === apiKey;
+    cb(err, isValid);
+  });
+}
 
 module.exports = router;
