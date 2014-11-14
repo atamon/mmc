@@ -5,6 +5,8 @@ var game = require('./game');
 
 function handleConnection(socket) {
   socket.on('game', function (gameId, cb) {
+    if (!game.gameExists(gameId)) return;
+
     log.info('a team has joined: %s', gameId);
     socket.join(gameId);
 
