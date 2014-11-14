@@ -23,7 +23,7 @@ Visit /game/:id
 ```
 node index.js
 node bots/index.js
-Visit /boss/:teamName/:bossId
+Visit /boss/:bossId
 (Where :bossId should be a key in ./bosses.json)
 From browser: Press Start game. Copy gameId.
 Run your bot from command line with [teamName apiKey gameId]
