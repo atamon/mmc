@@ -7,7 +7,6 @@ var unique = require('mout/array/unique');
 PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 var TILE_WIDTH = 64;
 var TILE_HEIGHT = 64;
-var MONKEY_Z = 2;
 
 var Scene = function (options) {
   var stage = new PIXI.Stage(options.backgroundColor || 0x83d135);
@@ -18,7 +17,6 @@ var Scene = function (options) {
 
   var element = options.el;
   var tileMap = options.tileMap;
-  var levelLayout = options.levelLayout;
 
   var assets = [];
   forEach(tileMap, function (tile) {
@@ -51,7 +49,12 @@ var Scene = function (options) {
     renderer.render(stage);
   };
 
+  var levelLayout = null;
   var decorateLayout = function (layout) {
+    if (!levelLayout) {
+      throw new Error('Missing levelLayout, failed to decorate level');
+    }
+
     return layout.map(function (row, y) {
       return row.map(function (tile, x) {
         // Decoration works in the way that we append '.<actual tile>'
@@ -106,6 +109,7 @@ var Scene = function (options) {
 
   };
 
+  var hasOutline = false;
   var addOutline = function (width, height) {
 
     // Left side + right side
@@ -124,6 +128,8 @@ var Scene = function (options) {
     addSprite(0, height + 1, 'corner-lower-left');
     addSprite(width + 1, 0, 'corner-upper-right');
     addSprite(width + 1, height + 1, 'corner-lower-right');
+
+    hasOutline = true;
   };
 
   var autoScale = function (node) {
@@ -183,8 +189,16 @@ var Scene = function (options) {
     return this;
   };
 
+  this.setLevelLayout = function (layout) {
+    levelLayout = layout;
+    return this;
+  };
+
   this.start = function () {
-    addOutline(grid.getWidth(), grid.getHeight());
+    if (!hasOutline) {
+      addOutline(grid.getWidth(), grid.getHeight());
+    }
+
     autoScale(levelNode, true);
     autoScale(monkeyNode, true);
 

@@ -1,4 +1,5 @@
 var MOVE_TIMEOUT = 600;
+var GAME_RESTART_TIMEOUT = MOVE_TIMEOUT + 10;
 
 var monkeyMusic = require('monkey-music');
 var Scene = require('./Scene');
@@ -7,7 +8,16 @@ var GUI = require('./gui');
 var replay = require('./replay');
 
 var gameContainer = document.querySelector('#game-container');
-var scene = null;
+var sceneWidth = getMaxGameSize();
+var sceneHeight = getMaxGameSize();
+var scene = new Scene({
+  size: { x: sceneWidth, y: sceneHeight },
+  backgroundColor: 0x83d135,
+  el: gameContainer,
+  tileMap: tileMap
+});
+
+var runningGame = null;
 
 function getMaxGameSize() {
   // Chrome will produce glitches if we don't make sure to
@@ -19,25 +29,20 @@ function getMaxGameSize() {
 }
 
 function displayLevel(info) {
+  if (!info || !info.level) {
+    throw new Error('Missing level info, failed to display it');
+  }
+
+  // Don't mess with a running game. This is
+  // only for displaying a static scene anyways
+  if (runningGame) return;
+
   var level = info.level;
-  var teams = info.teams;
-
-  var sceneWidth = getMaxGameSize();
-  var sceneHeight = getMaxGameSize();
-  console.log(sceneWidth, sceneHeight);
-
-  scene = new Scene({
-    size: { x: sceneWidth, y: sceneHeight },
-    backgroundColor: 0x83d135,
-    el: gameContainer,
-    tileMap: tileMap,
-    levelLayout: level.layout
-  });
-
-  var dummyGame = monkeyMusic.newGameState(teams, level);
+  var dummyGame = monkeyMusic.newGameState([], level);
   var dummyPlayerState = monkeyMusic.stateForPlayer(dummyGame, 'glenn');
   scene.onReady(function () {
     scene
+      .setLevelLayout(level.layout)
       .parseLayout(dummyPlayerState.layout, [])
       .start();
 
@@ -53,11 +58,20 @@ function getPlayerPosition(state) {
   };
 }
 
-var runningGame = null;
 function displayReplay(game) {
   if (runningGame) {
     clearInterval(runningGame);
     runningGame = null;
+
+    GUI.setStatus('Loading new game', true);
+    return setTimeout(function () {
+      // By faking a reloading time we can
+      // wait for the animations to finish
+      // and therefore reduce flickering in
+      // the scene when restarting during a
+      // playing game.
+      displayReplay(game);
+    }, GAME_RESTART_TIMEOUT);
   }
 
   GUI.setStatus('preparing');
@@ -84,7 +98,7 @@ function displayReplay(game) {
       runningGame = null;
 
       // Update GUI
-      GUI.setStatus(game.message || '', true);
+      GUI.setStatus('Game Over', true);
       return;
     }
 
