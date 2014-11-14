@@ -22,6 +22,9 @@ router.use('/', function (err, req, res, next) {
 
 router.get('/:gameId', function (req, res) {
   if (!game.gameExists(req.params.gameId)) {
+    // TODO, We could render a view for which the
+    // team can start a game on this id, or some random
+    // game. This is a rather worthless response
     return res.send(404);
   }
 
@@ -29,10 +32,6 @@ router.get('/:gameId', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-  // As gameId is provided here, we need to be able to
-  // manually set up a new game,
-  // the new game should have two team names and a level before
-  // we can make any use of it here
   if (!validate.request(req, res)) return;
 
   // After this point we don't need the apiKey

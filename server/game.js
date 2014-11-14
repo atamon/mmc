@@ -1,5 +1,9 @@
+// We wait a second for teams to post their turn
 var TURN_TIME_LIMIT = 1000;
+// We wait a minute for all players to join after the first one
 var PENDING_JOIN_TIMEOUT = 60000;
+// We wait 10 minutes until we kill games that nobody have joined
+var PASSIVE_GAME_LIFE_LENGTH = 60000 * 10;
 
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
@@ -189,6 +193,12 @@ var createGame = function (options) {
   // Start accepting joining teams
   waitingTeams[gameId] = [];
 
+  // Kill games that nobody has joined after X time
+  game.passiveGameTimeout = setTimeout(function () {
+    delete waitingTeams[gameId];
+    delete games[gameId];
+  }, PASSIVE_GAME_LIFE_LENGTH);
+
   return gameId;
 };
 
@@ -202,6 +212,9 @@ var joinGame = function (gameId, teamName, cb) {
   if (!waiting) {
     return cb('Game already running');
   }
+
+  // Cancel passive game killer timeout
+  clearTimeout(game.passiveGameTimeout);
 
   // Wait for remaining teams
   var timeout = setTimeout(function () {
