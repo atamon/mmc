@@ -86,7 +86,8 @@ router.post('/start', function (req, res) {
     url: 'http://localhost:' + settings.botPort,
     form: {
       botId: botId,
-      gameId: gameId
+      gameId: gameId,
+      teamName: req.body.bossId
     },
     json: true
   };
