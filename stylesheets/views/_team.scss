@@ -25,15 +25,5 @@
 
   a {
     display: block;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background-color: $green-light;
-    padding: .3em 1em;
-    border-radius: 3px;
-    box-shadow: rgba(#000, .1) 0 1px 1px;
-
-    &:hover {
-      background-color: lighten(saturate($green-light, 5%), 2%);
-    }
   }
 }

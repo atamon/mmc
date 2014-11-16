@@ -42,20 +42,14 @@
 }
 
 .btn--flat {
-  @extend .tbn;
-  padding: .2em;
-  border-radius: 5px;
-  font-size: 1em;
-  box-shadow: none;
-  background-color: rgba($green-light, .5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background-color: $green-light;
+  padding: .3em 1em;
+  border-radius: 3px;
+  box-shadow: rgba(#000, .1) 0 1px 1px;
 
   &:hover {
-    background-color: rgba($green-light, .8);
-  }
-
-  &:active,
-  &:focus {
-    box-shadow: none;
-    top: auto;
+    background-color: lighten(saturate($green-light, 5%), 2%);
   }
 }
