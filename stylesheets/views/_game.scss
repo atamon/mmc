@@ -83,6 +83,7 @@ $game-collapse: 1024px;
   }
 
   .game-copyright {
+    z-index: 999;
     position: absolute;
     bottom: 15px;
     left: to_rem(10);
