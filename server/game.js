@@ -68,7 +68,7 @@ var handleGameOver = function (game) {
     level: game.level
   };
 
-  var scores = game.teams.map(function (winners, teamName) {
+  var scores = game.teams.map(function (teamName) {
     var sfp = monkeyMusic.stateForPlayer(game.state, teamName);
     return {
       teamName: teamName,
