@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     prefixer = require('gulp-autoprefixer');
 
 var paths = {
-  scss: 'stylesheets/*.scss',
+  scss: 'stylesheets/**/*.scss',
   css: 'public/css',
   scripts: ['client/**/*.js'],
   config: ['./*.json', 'client/**/*.json'],
