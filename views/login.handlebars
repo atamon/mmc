@@ -1,8 +1,8 @@
 <form id="login-form" action="/login" method="POST">
   <code class="error">{{error}}</code>
   <div class="input-group">
-    <p><label class="input-label">Teamname</label><input name="teamName" type="text" placeholder="Team" required value="{{teamName}}"></p>
-    <p><label class="input-label">API Key</label><input name="apiKey" type="password" placeholder="API Key" required value="{{apiKey}}"></p>
+    <p><label for="team-name" class="input-label">Team name</label><input name="teamName" id="team-name" type="text" placeholder="Your team" required value="{{teamName}}"></p>
+    <p><label for="team-password" class="input-label">API Key</label><input id="team-password" name="apiKey" type="password" placeholder="API Key" required value="{{apiKey}}"></p>
   </div>
     <button class="btn">Enter</button>
 </form>
