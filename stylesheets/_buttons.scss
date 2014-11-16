@@ -22,7 +22,6 @@
     background-color: lighten(saturate($orange, 10%), 2%);
   }
 
-  &[disabled],
   &:active,
   &:focus {
     outline: 0;
@@ -35,7 +34,9 @@
   }
 
   &[disabled] {
-    color: darken($orange, 20%);
-    opacity: .7;
+    box-shadow: none;
+    background-color: rgba($green, .3);
+    color: rgba(#fff, .8);
+    cursor: not-allowed;
   }
 }
