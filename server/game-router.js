@@ -49,7 +49,7 @@ router.post('/', function (req, res) {
     }
 
     if (!isRegistered) {
-      res.status(400).send({ message: 'Invalid team name' });
+      res.status(400).send({ message: 'Invalid team name ' + req.body.team });
       return;
     }
 
