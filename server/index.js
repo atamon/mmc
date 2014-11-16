@@ -30,6 +30,14 @@ app.use(session({ secret: settings.secret }));
 // Routes
 app.get('/schedule', function (req, res) { res.render('schedule'); });
 app.get('/', function (req, res) { res.redirect('/login'); });
+app.get('/editor/:size', function (req, res) {
+  var options = { width: req.params.size, height: req.params.size };
+  res.render('editor', { options: JSON.stringify(options) });
+});
+app.get('/editor', function (req, res) {
+  res.redirect('/editor/25');
+});
+
 app.use('/login', routes.login);
 app.use('/team', routes.teams);
 app.use('/game', routes.games);
