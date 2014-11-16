@@ -177,7 +177,6 @@ var Scene = function (options) {
       var sprite = tile.sprite;
       grid.clearTile(position.x + 1, position.y + 1);
 
-      console.log(position.x, position.y, tile);
       animator.addRemoval({
         sprite: sprite,
         timeLeft: duration / 2,

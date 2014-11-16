@@ -34,7 +34,6 @@ function Animator(options) {
     var sprite = removal.sprite;
 
     if (removal.timeLeft <= 0) {
-      console.log(sprite, sprite.parent, sprite._parent);
       if (sprite.parent) {
         sprite.parent.removeChild(sprite);
       }
