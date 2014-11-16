@@ -1,6 +1,6 @@
 var bodyParser = require('body-parser');
-var secret = require('./secret');
-var db = require('./db');
+var secret = require('../secret');
+var db = require('../db');
 var router = require('express').Router();
 
 router.use('/', bodyParser.urlencoded());

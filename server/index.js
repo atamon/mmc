@@ -9,6 +9,8 @@ var io = require('socket.io')(http);
 var exphbs  = require('express-handlebars');
 var session = require('express-session');
 
+var routes = require('./routes.js');
+
 // Serve statics and render handlebars
 var hbs = exphbs.create({
   defaultLayout: 'main'
@@ -28,11 +30,11 @@ app.use(session({ secret: settings.secret }));
 // Routes
 app.get('/schedule', function (req, res) { res.render('schedule'); });
 app.get('/', function (req, res) { res.redirect('/login'); });
-app.use('/login', require('./login-router'));
-app.use('/team', require('./team-router'));
-app.use('/game', require('./game-router'));
-app.use('/boss', require('./boss-router'));
-app.use('/replays', require('./replay-router'));
+app.use('/login', routes.login);
+app.use('/team', routes.teams);
+app.use('/game', routes.games);
+app.use('/boss', routes.bosses);
+app.use('/replays', routes.replays);
 
 app.use('/create', bodyParser());
 app.post('/create', function (req, res) {

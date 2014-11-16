@@ -3,11 +3,11 @@ var BAD_REQUEST = 400;
 var router = require('express').Router();
 var bodyParser = require('body-parser');
 
-var validate = require('./validate.js');
-var game = require('./game.js');
-var sockets = require('./sockets');
-var db = require('./db');
-var log = require('./log');
+var validate = require('../validate.js');
+var game = require('../game.js');
+var sockets = require('../sockets');
+var db = require('../db');
+var log = require('../log');
 
 game.on('gameover', function (results) {
   sockets.sendReplayTo(results.gameId, results.replay);

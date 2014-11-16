@@ -1,8 +1,8 @@
 var router = require('express').Router();
-var db = require('./db');
-var log = require('./log');
+var db = require('../db');
+var log = require('../log');
 
-var bosses = require('../bosses.json');
+var bosses = require('../../bosses.json');
 
 router.use('/', function (req, res, next) {
   if (!req.session.validTeam) {

@@ -1,13 +1,13 @@
 var router = require('express').Router();
 var request = require('request');
 var bodyParser = require('body-parser');
-var levels = require('./levels');
-var settings = require('../settings.json');
+var levels = require('../levels');
+var settings = require('../../settings.json');
 
-var log = require('./log');
-var bosses = require('../bosses.json');
-var game = require('./game');
-var db = require('./db');
+var log = require('../log');
+var bosses = require('../../bosses.json');
+var game = require('../game');
+var db = require('../db');
 
 function handleGameOver(gameId, bossId) {
   game.on('gameover:' + gameId, function (results) {

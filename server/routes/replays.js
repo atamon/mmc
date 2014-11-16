@@ -1,7 +1,7 @@
 var router = require('express').Router();
-var game = require('./game');
-var db = require('./db');
-var log = require('./log');
+var game = require('../game');
+var db = require('../db');
+var log = require('../log');
 
 game.on('gameover', function (results) {
   var gameId = results.gameId;
