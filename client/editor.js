@@ -13,8 +13,8 @@ var options = window.mmcEditorOptions;
 
 var TILE_WIDTH = 64;
 var TILE_HEIGHT = 64;
-var SCENE_WIDTH = Math.min(window.innerWidth, window.innerHeight);
-var SCENE_HEIGHT = Math.min(window.innerWidth, window.innerHeight);
+var SCENE_WIDTH = 512;
+var SCENE_HEIGHT = 512;
 
 // Do we load this somehow?
 var layoutHeight = +options.height || 12;
@@ -36,8 +36,8 @@ var toUnitLayout = function toUnitLayout(levelLayout) {
 
 var toLevelTile = function (event) {
   return {
-    x: Math.max(Math.floor(event.originalEvent.offsetX / event.target.scale.x / TILE_WIDTH), 0),
-    y: Math.max(Math.floor(event.originalEvent.offsetY / event.target.scale.y / TILE_HEIGHT), 0)
+    x: Math.max(Math.floor(event.originalEvent.offsetX / event.target.scale.x / TILE_WIDTH  / scene.getResolution()), 0),
+    y: Math.max(Math.floor(event.originalEvent.offsetY / event.target.scale.y / TILE_HEIGHT  / scene.getResolution()), 0)
   };
 };
 
@@ -78,10 +78,6 @@ var onLevelClick = function (event) {
 var getDecoratedTile = function (abbr) {
   var unit = units[abbr];
   return ['wall', 'empty'].indexOf(unit) !== -1 ? unit + '.' + abbr : unit;
-};
-
-var stringify = window.stringify = function () {
-  return JSON.stringify(levelLayout, null, 2);
 };
 
 var drawOverlay = function () {
@@ -147,7 +143,6 @@ var scene = new Scene({
   backgroundColor: 0x83d135,
   el: document.getElementById('game-container'),
   tileMap: tileMap,
-  levelLayout: levelLayout,
   grid: grid,
   onMouseClick: onLevelClick,
   onMouseMove: drawHoverTile
@@ -163,3 +158,12 @@ scene.onReady(function () {
   drawOverlay();
   initHoverTile();
 });
+
+window.stringify = function () {
+  return JSON.stringify(levelLayout, null, 2);
+};
+window.parse = function (array) {
+  levelLayout = array.slice(0);
+  scene.setLevelLayout(levelLayout);
+  scene.parseLayout(toUnitLayout(levelLayout), []);
+};

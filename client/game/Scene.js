@@ -4,13 +4,18 @@ var Grid = require('./Grid');
 var forEach = require('mout/collection/forEach');
 var unique = require('mout/array/unique');
 
+
 PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 var TILE_WIDTH = 64;
 var TILE_HEIGHT = 64;
 
 var Scene = function (options) {
   var stage = new PIXI.Stage(options.backgroundColor || 0x83d135);
-  var renderer = new PIXI.autoDetectRenderer(options.size.x, options.size.y);
+
+  var resolution = window.devicePixelRatio;
+  var renderer = new PIXI.autoDetectRenderer(options.size.x, options.size.y, {
+    resolution: resolution
+  });
 
   var grid = options.grid || new Grid();
   var animator = options.animator || new Animator({ tileWidth: TILE_WIDTH, tileHeight: TILE_HEIGHT });
@@ -137,6 +142,10 @@ var Scene = function (options) {
     node.scale.y = options.size.y / (TILE_HEIGHT * (grid.getHeight() + 1));
   };
 
+  this.getResolution = function () {
+    return resolution;
+  };
+
   this.addChild = function (node, doScale) {
     stage.addChild(node);
     if (doScale === true) autoScale(node);
@@ -202,7 +211,11 @@ var Scene = function (options) {
     autoScale(monkeyNode, true);
 
     levelNode.hitArea =
-      new PIXI.Rectangle(0, 0, TILE_WIDTH * (grid.getWidth() + 2), TILE_HEIGHT * (grid.getHeight() + 2));
+      new PIXI.Rectangle(
+        0,
+        0,
+        TILE_WIDTH * (grid.getWidth() + 2) * resolution,
+        TILE_HEIGHT * (grid.getHeight() + 2) * resolution);
 
     return this;
   };
