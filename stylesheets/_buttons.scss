@@ -35,6 +35,7 @@
   }
 
   &[disabled] {
-    opacity: 0.8;
+    color: darken($orange, 20%);
+    opacity: .7;
   }
 }
