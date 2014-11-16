@@ -65,8 +65,25 @@ var setChallengeCompleted = function (teamName, bossId, cb) {
         });
       });
     });
+  });
+};
 
+var saveReplay = function (gameId, results, cb) {
+  replays.save(results, function (err, doc) {
+    cb(err, !!doc);
+  });
+};
 
+var getAllReplays = function (cb) {
+  replays.all({ include_docs: true }, function (err, rows) {
+    if (err) return cb(err);
+
+    var replays = rows.map(function (row) {
+      delete row._id;
+      delete row._rev;
+      return row;
+    });
+    cb(null, replays);
   });
 };
 
@@ -74,3 +91,5 @@ exports.getTeamCoins = getTeamCoins;
 exports.isTeamRegistered = isTeamRegistered;
 exports.getCompletedChallenges = getCompletedChallenges;
 exports.setChallengeCompleted = setChallengeCompleted;
+exports.saveReplay = saveReplay;
+exports.getAllReplays = getAllReplays;

@@ -32,6 +32,7 @@ app.use('/login', require('./login-router'));
 app.use('/team', require('./team-router'));
 app.use('/game', require('./game-router'));
 app.use('/boss', require('./boss-router'));
+app.use('/replays', require('./replay-router'));
 
 app.use('/create', bodyParser());
 app.post('/create', function (req, res) {

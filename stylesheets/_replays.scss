@@ -1,0 +1,9 @@
+.replay-list {
+  list-style-type: none;
+
+  .replay {
+    span:not(:first-child):before {
+      content: ' - ';
+    }
+  }
+}
