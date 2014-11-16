@@ -89,7 +89,8 @@ var handleGameOver = function (game) {
   var data = {
     replay: replay,
     scores: sortedScores,
-    gameId: game.id
+    gameId: game.id,
+    level: game.level
   };
 
   events.emit('gameover', data);

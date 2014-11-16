@@ -28,7 +28,7 @@ function getMaxGameSize() {
   return Math.pow(2, power);
 }
 
-function displayLevel(info) {
+function displayLevel(info, cb) {
   if (!info || !info.level) {
     throw new Error('Missing level info, failed to display it');
   }
@@ -47,6 +47,11 @@ function displayLevel(info) {
       .start();
 
     gameContainer.classList.add('ready');
+
+    // Allow for callbacks
+    if (cb && typeof cb === 'function') {
+      cb();
+    }
   });
 }
 

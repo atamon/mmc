@@ -78,13 +78,12 @@ var getAllReplays = function (cb) {
   replays.all({ include_docs: true }, function (err, rows) {
     if (err) return cb(err);
 
-    var replays = rows.map(function (row) {
-      delete row._id;
-      delete row._rev;
-      return row;
-    });
-    cb(null, replays);
+    cb(null, rows.map(function (row) { return row; }));
   });
+};
+
+var getReplay = function (replayId, cb) {
+  replays.get(replayId, cb);
 };
 
 exports.getTeamCoins = getTeamCoins;
@@ -93,3 +92,4 @@ exports.getCompletedChallenges = getCompletedChallenges;
 exports.setChallengeCompleted = setChallengeCompleted;
 exports.saveReplay = saveReplay;
 exports.getAllReplays = getAllReplays;
+exports.getReplay = getReplay;

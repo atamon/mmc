@@ -15,7 +15,18 @@ socket.on('disconnect', GUI.setStatus.bind(null, 'offline', false));
 
 var game = require('./game/index');
 
-socket.on('connect', function () {
-  socket.emit('game', gameId, game.displayLevel);
-  socket.on('replay', game.displayReplay);
-});
+
+// The server provided us with a pre-defined replay play it!
+if (window.monkeyMusicReplay !== undefined) {
+  game.displayLevel({
+    level: window.monkeyMusicReplay.level
+  }, function () {
+    game.displayReplay(window.monkeyMusicReplay.replay);
+  });
+} else {
+  // We're waiting for a replay through the socket
+  socket.on('connect', function () {
+    socket.emit('game', gameId, game.displayLevel);
+    socket.on('replay', game.displayReplay);
+  });
+}

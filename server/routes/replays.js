@@ -20,7 +20,6 @@ game.on('gameover', function (results) {
 
 router.get('/', function (req, res) {
   db.getAllReplays(function (err, replays) {
-    console.log(replays);
     if (err) {
       log.error(err);
       res.status(500).render('error');
@@ -30,7 +29,18 @@ router.get('/', function (req, res) {
   });
 });
 
-// TODO
-// router.get('/:gameId', function (req, res) {});
+router.get('/:replayId', function (req, res) {
+  db.getReplay(req.params.replayId, function (err, replay) {
+    if (err) {
+      log.error(err);
+      res.status(500).render('error');
+      return;
+    }
+
+    res.render('game', {
+      replay: replay
+    });
+  });
+});
 
 module.exports = router;
