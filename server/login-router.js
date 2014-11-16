@@ -5,7 +5,11 @@ var router = require('express').Router();
 
 router.use('/', bodyParser.urlencoded());
 router.get('/', function (req, res) {
-  res.render('login');
+  if (req.session.validTeam) {
+    res.redirect('/team');
+  } else {
+    res.render('login');
+  }
 });
 router.post('/', function (req, res) {
 
