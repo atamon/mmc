@@ -1,13 +1,5 @@
 #login-form {
 
-  .error {
-    color: $red;
-
-    &:empty {
-      visibility: hidden;
-    }
-  }
-
   .input-group {
     text-align: right;
     padding-right: 53px;

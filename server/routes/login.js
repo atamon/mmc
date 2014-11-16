@@ -26,7 +26,7 @@ router.post('/', function (req, res) {
       res.render('login', {
         teamName: teamName,
         apiKey: apiKey,
-        error: 'Team name and apiKey mismatch'
+        error: 'The team name or API key is incorrect.'
       });
     } else {
       // Look for req.session.validTeam whenever we need to
