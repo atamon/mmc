@@ -38,7 +38,7 @@ function displayLevel(info, cb) {
   if (runningGame) return;
 
   var level = info.level;
-  var dummyGame = monkeyMusic.createGameState([], level);
+  var dummyGame = monkeyMusic.createGameState(['glenn'], level);
   var dummyPlayerState = monkeyMusic.gameStateForTeam(dummyGame, 'glenn');
   scene.onReady(function () {
     scene

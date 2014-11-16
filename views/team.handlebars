@@ -1,22 +1,32 @@
-<h1 class="huge">{{teamName}}</h1>
+<main role="main">
+  <h1 class="huge">{{teamName}}</h1>
 
-<dl class="horizontal">
-  <dt>Coins</dt>
-  <dd id="coins">{{coins}}</dd>
-  <dt>API key</dt>
-  <dd>{{apiKey}}</dd>
-</dl>
+  <dl class="horizontal">
+    <dt>Coins</dt>
+    <dd id="coins">{{coins}}</dd>
+    <dt>API key</dt>
+    <dd>{{apiKey}}</dd>
+  </dl>
 
-{{#if bosses}}
-  <section>
-    <h2>Bosses</h2>
+  <div class="box">
+    {{#if bosses}}
+      <section>
+        <h2>Bosses</h2>
 
-    <ul class="list boss-list">
-    {{#each bosses}}
-      <li>
-        <a class="no-underline" href="/boss/{{@key}}" target="_blank">{{description}}</a>
-      </li>
-    {{/each}}
-    </ul>
-  </section>
-{{/if}}
+        <ul class="list boss-list">
+        {{#each bosses}}
+          <li>
+            <a class="no-underline" href="/boss/{{@key}}" target="_blank">{{description}}</a>
+          </li>
+        {{/each}}
+        </ul>
+      </section>
+    {{/if}}
+
+    <section>
+      <h2>Battles</h2>
+
+      <a href="/game/new" class="no-underline btn--flat">New</a>
+    </section>
+  </div>
+</main>

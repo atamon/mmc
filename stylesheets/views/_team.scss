@@ -3,6 +3,11 @@
               url('/images/floral1.svg') no-repeat left bottom,
               url('/images/floral2.svg') no-repeat right bottom;
   background-color: $green-warm;
+
+  [role="main"] {
+    max-width: 30rem;
+    margin: 0 auto;
+  }
 }
 
 .boss-list {

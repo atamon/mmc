@@ -40,3 +40,22 @@
     cursor: not-allowed;
   }
 }
+
+.btn--flat {
+  @extend .tbn;
+  padding: .2em;
+  border-radius: 5px;
+  font-size: 1em;
+  box-shadow: none;
+  background-color: rgba($green-light, .5);
+
+  &:hover {
+    background-color: rgba($green-light, .8);
+  }
+
+  &:active,
+  &:focus {
+    box-shadow: none;
+    top: auto;
+  }
+}

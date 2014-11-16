@@ -22,12 +22,17 @@ router.use('/', function (err, req, res, next) {
   res.send(400, { message: err.message || 'Invalid request' });
 });
 
+router.get('/new', function(req, res) {
+  var gameId = game.createGame({
+    level: 'battle'
+  });
+
+  res.redirect('/game/'+gameId);
+});
+
 router.get('/:gameId', function (req, res) {
   if (!game.gameExists(req.params.gameId)) {
-    // TODO, We could render a view for which the
-    // team can start a game on this id, or some random
-    // game. This is a rather worthless response
-    return res.send(404);
+    return res.redirect('/game/new');
   }
 
   res.render('game');

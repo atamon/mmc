@@ -4,6 +4,7 @@ var levelMap = {};
 
 // TODO Load all from ../levels instead
 levelMap.test = require('../levels/test.json');
+levelMap.battle = require('../levels/battle.json');
 
 var get = function (levelId) {
   return levelMap[levelId];

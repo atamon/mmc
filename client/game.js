@@ -1,12 +1,9 @@
 var io = require('socket.io-client');
-var settings = require('../client-settings.json');
 var GUI = require('./game/gui');
-
-var url = settings.host;
 
 var urlEncodedGameId = location.href.split('/').pop();
 var gameId = decodeURIComponent(urlEncodedGameId);
-var socket = io.connect(url);
+var socket = io.connect(location.origin);
 
 GUI.setStatus('offline');
 socket.on('connect', GUI.setStatus.bind(null, 'ready'));
