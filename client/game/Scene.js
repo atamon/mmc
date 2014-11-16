@@ -203,7 +203,7 @@ var Scene = function (options) {
     autoScale(monkeyNode, true);
 
     levelNode.hitArea =
-      new PIXI.Rectangle(0, 0, TILE_WIDTH * (grid.getWidth() + 1), TILE_HEIGHT * (grid.getHeight() + 1));
+      new PIXI.Rectangle(0, 0, TILE_WIDTH * (grid.getWidth() + 2), TILE_HEIGHT * (grid.getHeight() + 2));
 
     return this;
   };

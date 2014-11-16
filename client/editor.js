@@ -1,14 +1,15 @@
-var Scene = require('./scene');
-var Animator = require('./Animator');
-var Grid = require('./Grid');
-var SpriteFactory = require('./SpriteFactory');
-var tileMap = require('../tilemap.json');
+var Scene = require('./game/scene');
+var Grid = require('./game/Grid');
+var SpriteFactory = require('./game/SpriteFactory');
+var tileMap = require('./game/tilemap.json');
 var PIXI = require('pixi.js');
 
 // TODO Extract units somewhere else
-var units = require('../level.json').units;
+var units = require('../levels/test.json').units;
 var unitAbbreviations = Object.keys(units);
 var iActiveTile = 0;
+
+var options = window.mmcEditorOptions;
 
 var TILE_WIDTH = 64;
 var TILE_HEIGHT = 64;
@@ -16,20 +17,14 @@ var SCENE_WIDTH = Math.min(window.innerWidth, window.innerHeight);
 var SCENE_HEIGHT = Math.min(window.innerWidth, window.innerHeight);
 
 // Do we load this somehow?
-var layoutHeight = 12;
-var layoutWidth = 12;
+var layoutHeight = +options.height || 12;
+var layoutWidth = +options.width || 12;
 var levelLayout = [];
 for (var i = 0; i < layoutHeight; i++) {
   var row = [];
-  row.length = layoutWidth;
+  row.length = layoutWidth + 1;
   levelLayout.push(row.join(' '));
 }
-// var levelLayout = [
-//   "#   ",
-//   "#-_ ",
-//   "# # ",
-//   "    "
-// ];
 
 var toUnitLayout = function toUnitLayout(levelLayout) {
   return levelLayout.map(function (row) {
@@ -53,6 +48,8 @@ var onLevelClick = function (event) {
   var x = targetTile.x;
   var y = targetTile.y;
 
+  console.log(x, y, levelLayout.length, levelLayout[0].length);
+
   if (x < 1 || y < 1 || x > levelLayout.length || y > levelLayout[0].length) {
     return;
   }
@@ -71,7 +68,6 @@ var onLevelClick = function (event) {
   levelLayout[y - 1] = levelLayout[y - 1].substr(0, x - 1) +
                        abbr +
                        levelLayout[y - 1].substr(x, levelLayout[y - 1].length);
-  persist();
 
   var newTile = getDecoratedTile(abbr);
   var newSprite = grid.setTile(x, y, newTile);
@@ -84,18 +80,17 @@ var getDecoratedTile = function (abbr) {
   return ['wall', 'empty'].indexOf(unit) !== -1 ? unit + '.' + abbr : unit;
 };
 
-var persist = function () {
-  console.log(JSON.stringify(levelLayout, null, 2));
+var stringify = window.stringify = function () {
+  return JSON.stringify(levelLayout, null, 2);
 };
 
 var drawOverlay = function () {
   var overlay = new PIXI.Graphics();
-  overlay.beginFill(0x222222, 0.05);
-  overlay.lineStyle(1, 0xCCCCCC33);
+  overlay.beginFill(0x222222, 0.15);
   for (var y = 1; y <= levelLayout.length; y++) {
     var row = levelLayout[y - 1];
     for (var x = 1; x <= row.length; x++) {
-      overlay.drawRect(x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+      overlay.drawRect(x * TILE_WIDTH + 10, y * TILE_HEIGHT + 10, TILE_WIDTH - 10, TILE_HEIGHT - 10);
     }
   }
 
@@ -161,6 +156,7 @@ var scene = new Scene({
 
 scene.onReady(function () {
   scene
+    .setLevelLayout(levelLayout)
     .parseLayout(toUnitLayout(levelLayout))
     .start();
 

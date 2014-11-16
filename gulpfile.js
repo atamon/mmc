@@ -11,7 +11,8 @@ var paths = {
   scripts: ['client/**/*.js'],
   config: ['./*.json', 'client/**/*.json'],
   gameMain: ['client/game.js'],
-  bossMain: ['client/boss.js']
+  bossMain: ['client/boss.js'],
+  editorMain: ['client/editor.js']
 };
 
 var buildCSS = function() {
@@ -36,13 +37,15 @@ var buildJS = function(main) {
 gulp.task('css', buildCSS);
 gulp.task('game', buildJS.bind(null, paths.gameMain));
 gulp.task('boss', buildJS.bind(null, paths.bossMain));
+gulp.task('editor', buildJS.bind(null, paths.editorMain));
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scss, ['css']);
   gulp.watch(paths.scripts, ['game']);
   gulp.watch(paths.scripts, ['boss']);
+  gulp.watch(paths.scripts, ['editor']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['game', 'boss', 'css']);
+gulp.task('default', ['game', 'boss', 'css', 'editor']);
