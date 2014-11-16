@@ -38,7 +38,7 @@ router.get('/:replayId', function (req, res) {
     }
 
     res.render('game', {
-      replay: replay
+      replay: JSON.stringify(replay)
     });
   });
 });

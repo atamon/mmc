@@ -1,5 +1,6 @@
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
+var compact = require('mout/array/compact');
 
 /**
  * @param  {Object} userPos Position object with x and y key-value pairs
@@ -42,40 +43,31 @@ function findRemoved(first, second) {
 }
 
 function prepare(teams, turns, level) {
-  var gameState = monkeyMusic.newGameState(teams, level);
+  var gameState = monkeyMusic.createGameState(teams, level);
 
   var initial = [teams.map(function (teamName) {
-    var sfp = monkeyMusic.stateForPlayer(gameState, teamName);
+    var sfp = monkeyMusic.gameStateForTeam(gameState, teamName);
     // We do this to get simpler interpolations
     sfp.teamName = teamName;
     return sfp;
   })];
 
   var statesForPlayer = initial.concat(turns.map(function processTurn(globalTurn) {
-    var orderedTurn = [];
-    forEach(globalTurn, function (teamTurn) {
-      // TODO Here we should transform the teamTurn
-      // so that it perfectly matches what monkeyMusic expects from us
-      orderedTurn[teamTurn.index] = teamTurn;
+    var commands = [];
+    forEach(globalTurn, function (team) {
+      try {
+        var cmd = monkeyMusic.parseCommand(team.turn);
+        commands[team.index] = cmd;
+      } catch (e) {
+        console.warn(e);
+      }
     });
 
-    gameState = orderedTurn.reduce(function (gameState, teamTurn) {
-      var teamName = teamTurn.turn.team;
-      var direction = teamTurn.turn.direction;
-
-      if (direction) {
-        // Reduce to the game state we get when all teams have moved
-        // this turn
-        return monkeyMusic.move(gameState, teamName, direction);
-      } else {
-        return gameState;
-      }
-
-    }, gameState);
+    commands = compact(commands);
+    gameState = monkeyMusic.runCommands(gameState, commands);
 
     return teams.map(function (teamName) {
-      var sfp = monkeyMusic.stateForPlayer(gameState, teamName);
-      console.log(teamName, sfp.position);
+      var sfp = monkeyMusic.gameStateForTeam(gameState, teamName);
       // We do this to get simpler interpolations
       sfp.teamName = teamName;
       return sfp;

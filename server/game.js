@@ -7,11 +7,11 @@ var PASSIVE_GAME_LIFE_LENGTH = 60000 * 10;
 
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
+var compact = require('mout/array/compact');
 var EventEmitter = require('events').EventEmitter;
 
 var levels = require('./levels');
 var log = require('./log');
-var sockets = require('./sockets');
 
 var events = new EventEmitter();
 var idCounter = 1;
@@ -24,43 +24,44 @@ var validateTeamInGame = function (game, teamName) {
 
 var tickGame = function (game) {
   var turn = game.turns[game.turns.length - 1];
-  forEach(turn, function (team, teamName) {
-    var direction = '';
-    if (team.turn && team.turn.direction) {
-      direction = team.turn.direction;
-    }
-
-    if (direction) {
-      game.state = monkeyMusic.move(game.state, teamName, direction);
+  var commands = [];
+  forEach(turn, function (team) {
+    try {
+      var cmd = monkeyMusic.parseCommand(team.turn);
+      commands[team.index] = cmd;
+    } catch (e) {
+      team.message = e.message;
     }
   });
+
+  commands = compact(commands);
+  try {
+    game.state = monkeyMusic.runCommands(game.state, commands);
+  } catch (e) {
+    log.error(e);
+
+    closeGame(game.id);
+    handleGameOver(game);
+    return;
+  }
 
   forEach(turn, function (team, teamName) {
     if (team && team.cb) {
-      team.cb(null, monkeyMusic.stateForPlayer(game.state, teamName));
+      var sfp = monkeyMusic.gameStateForTeam(game.state, teamName);
+      sfp.message = team.message;
+      team.cb(null, sfp);
     }
   });
 
-  if (isGameOver(game)) {
+  if (monkeyMusic.isGameOver(game.state)) {
     handleGameOver(game);
   } else {
     resetTimeouts(game);
   }
 };
 
-var isGameOver = function (game) {
-  // TODO When monkeymusic is updated we can
-  // just ask monkeyMusic.isGameOver(game.state)
-  var state = monkeyMusic.stateForPlayer(game.state, game.teams[0]);
-  return state.turns <= 0;
-};
-
 var handleGameOver = function (game) {
   forEach(game.timeout, clearTimeout);
-
-  // This could probably be exchanged to something
-  // that emits 'game over' events if we start to
-  // add a bunch of calls in this method
 
   var replay = {
     turns: game.turns,
@@ -69,7 +70,7 @@ var handleGameOver = function (game) {
   };
 
   var scores = game.teams.map(function (teamName) {
-    var sfp = monkeyMusic.stateForPlayer(game.state, teamName);
+    var sfp = monkeyMusic.gameStateForTeam(game.state, teamName);
     return {
       teamName: teamName,
       score: sfp.score
@@ -235,12 +236,12 @@ var joinGame = function (gameId, teamName, cb) {
   // Game ready
   if (waiting.length >= game.numberOfTeams) {
     game.teams = waiting.map(function (o) { return o.teamName; });
-    game.state = monkeyMusic.newGameState(game.teams, game.level);
+    game.state = monkeyMusic.createGameState(game.teams, game.level);
 
     // Serve first game state to all teams
     waiting.forEach(function (team) {
       clearTimeout(team.timeout);
-      team.cb(null, monkeyMusic.stateForPlayer(game.state, team.teamName));
+      team.cb(null, monkeyMusic.gameStateForTeam(game.state, team.teamName));
     });
 
     // Delete the array of waiting teams to make sure we
