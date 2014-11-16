@@ -12,6 +12,13 @@ ol, ul {
   margin: 0;
 }
 
+p,
+blockquote,
+dl,
+pre {
+  margin: 0 0 $lineheight;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: $heading;
   font-weight: normal;
@@ -22,6 +29,10 @@ h1, h2, h3, h4, h5, h6 {
   .highlight {
     @include underline($offset: -.1em);
   }
+}
+
+.huge {
+  font-size: to_rem(60);
 }
 
 h1 {
@@ -72,4 +83,32 @@ a {
   small {
     font-weight: normal;
   }
+}
+
+dl.horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  dd {
+    text-align: left;
+  }
+  dt {
+    text-align: right;
+    margin-right: 4%;
+  }
+
+  dd, dt {
+    flex-basis: 48%;
+  }
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin: 0;
+  color: #fff;
 }

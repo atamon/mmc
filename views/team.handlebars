@@ -1,12 +1,22 @@
-<h1>{{teamName}}</h1>
+<h1 class="huge">{{teamName}}</h1>
 
+<dl class="horizontal">
+  <dt>Coins</dt>
+  <dd id="coins">{{coins}}</dd>
+  <dt>API key</dt>
+  <dd>{{apiKey}}</dd>
+</dl>
 
-<h2>Nubmer of coins: <span id="coins">{{coins}}</span></h2>
+{{#if bosses}}
+  <section>
+    <h2>Bosses</h2>
 
-{{#each bosses}}
-  <div class="boss-tile">
-    <a href="/boss/{{@key}}" target="_blank">
-      <h2>{{@key}}</h2>
-    </a>
-  </div>
-{{/each}}
+    <ul class="list boss-list">
+    {{#each bosses}}
+      <li>
+        <a class="no-underline" href="/boss/{{@key}}" target="_blank">{{description}}</a>
+      </li>
+    {{/each}}
+    </ul>
+  </section>
+{{/if}}

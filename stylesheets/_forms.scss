@@ -31,6 +31,15 @@ textarea {
   }
 }
 
+label[for] {
+  cursor: pointer;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: $lineheight / 2;
+}
+
 .error {
   color: $red;
 }

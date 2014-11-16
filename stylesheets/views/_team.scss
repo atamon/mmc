@@ -4,3 +4,31 @@
               url('/images/floral2.svg') no-repeat right bottom;
   background-color: $green-warm;
 }
+
+.boss-list {
+
+  li {
+    margin-bottom: $lineheight / 4;
+  }
+
+  li:nth-child(odd) {
+    transform: rotate(-1deg);
+  }
+  li:nth-child(even) {
+    transform: rotate(1deg);
+  }
+
+  a {
+    display: block;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background-color: $green-light;
+    padding: .3em 1em;
+    border-radius: 3px;
+    box-shadow: rgba(#000, .1) 0 1px 1px;
+
+    &:hover {
+      background-color: lighten(saturate($green-light, 5%), 2%);
+    }
+  }
+}

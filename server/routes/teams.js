@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var db = require('../db');
 var log = require('../log');
+var secret = require('../secret');
 
 var bosses = require('../../bosses.json');
 
@@ -31,7 +32,8 @@ router.get('/', function (req, res) {
         teamName: teamName,
         bosses: bosses,
         coins: nCoins,
-        challenges: challenges
+        challenges: challenges,
+        apiKey: secret.forTeam(teamName)
       });
     });
   });
