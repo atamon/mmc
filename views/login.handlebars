@@ -2,11 +2,17 @@
   {{#if error}}
     <pre class="error">{{error}}</pre>
   {{/if}}
-  <div class="input-group">
-    <p><label for="team-name" class="input-label">Team name</label><input name="teamName" id="team-name" type="text" placeholder="Your team" required value="{{teamName}}"></p>
-    <p><label for="team-password" class="input-label">API Key</label><input id="team-password" name="apiKey" type="password" placeholder="API Key" required value="{{apiKey}}"></p>
-  </div>
-    <button class="btn">Enter</button>
+
+  <p>
+    <label for="team-name" class="input-label">Team name</label>
+    <input name="teamName" id="team-name" type="text" placeholder="Your team" required value="{{teamName}}">
+  </p>
+  <p>
+    <label for="team-password" class="input-label">API Key</label>
+    <input id="team-password" name="apiKey" type="password" placeholder="API Key" required value="{{apiKey}}">
+  </p>
+
+  <input type="submit" class="btn" value="Enter the Jungle">
 </form>
 
 <svg id="spotify" width="135px" height="41px" viewBox="0 0 135 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
