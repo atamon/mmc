@@ -1,6 +1,7 @@
 {
   "beginner": {
     "level": "test",
-    "bot": "atamon"
+    "bot": "atamon",
+    "reward": 3
   }
 }
