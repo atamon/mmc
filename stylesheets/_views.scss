@@ -1,38 +1,5 @@
-/* =HOME
+/* =VIEWS
 --------------------------------------------- */
-
-.home {
-  input {
-    text-align: center;
-  }
-}
-
-@-webkit-keyframes zoom {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  65% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.team {
-  -webkit-animation: zoom .5s both;
-
-  h1 {
-    white-space: nowrap;
-    margin: 1em 0 .5em -36px;
-  }
-
-  .text-content {
-    text-align: left;
-  }
-}
 
 .secret {
   [role="main"] {
@@ -45,6 +12,7 @@
   }
 }
 
-@import "game";
-@import "replays";
-@import "schedule";
+@import "views/team";
+@import "views/game";
+@import "views/replays";
+@import "views/schedule";

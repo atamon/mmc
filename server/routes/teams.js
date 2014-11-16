@@ -27,6 +27,7 @@ router.get('/', function (req, res) {
       }
 
       res.render('team', {
+        view: 'team',
         teamName: teamName,
         bosses: bosses,
         coins: nCoins,

@@ -34,6 +34,7 @@
 $green-dark:      #3F7812;
 $green:           #86C435;
 $green-light:     #BACE49;
+$green-warm:      #71A634;
 $light:           #D8FCAD;
 $orange:          #E19924;
 $beige:           #FDFDE6;
@@ -137,7 +138,4 @@ body {
 @import "forms";
 @import "helpers";
 
-@import "views/game";
-@import "views/schedule";
-@import "views/replays";
-@import "views/login";
+@import "views";
