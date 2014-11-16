@@ -1,0 +1,55 @@
+// Helpers
+
+.group {
+  @include clearfix;
+}
+
+.highlight {
+  @include underline($size: 2.5, $color: $light, $bg: $green-dark, $offset: .1em);
+}
+
+.intro-text {
+  font-size: 1.2em;
+}
+
+.left {
+  text-align: left;
+}
+
+.wide {
+  width: 100%;
+  display: block;
+}
+
+.content--centered {
+  text-align: center;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+[class^="icon-"] {
+  &::before {
+    display: inline-block;
+    content: "";
+    font-style: normal;
+    background-size: 100% 100%;
+  }
+}
+
+.icon-leaf::before {
+  width: 40px;
+  height: 30px;
+  background: transparent url('../images/leaf-icon.svg') no-repeat left center;
+}
+
+
+#logo {
+  fill: $light;
+}
+
+#spotify {
+  margin: 2rem 0;
+  width: 7rem;
+}

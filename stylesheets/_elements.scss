@@ -1,0 +1,75 @@
+strong {
+  color: lighten($light, 10%);
+
+  &.highlight {
+    color: #fff;
+    background: none;
+  }
+}
+
+ol, ul {
+  padding: 0;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading;
+  font-weight: normal;
+  color: #fff;
+  margin: 0 0 $lineheight;
+  letter-spacing: -1px;
+
+  .highlight {
+    @include underline($offset: -.1em);
+  }
+}
+
+h1 {
+  font-size: to_rem(48);
+}
+
+h2 {
+  font-family: $sans;
+  font-weight: bold;
+
+  .highlight {
+    @include underline-offset(.1em);
+  }
+}
+
+pre, code, .pre {
+  font-family: Monaco, Menlo, monospace;
+  background-color: rgba($green, .4);
+  color: lighten($light, 10%);
+}
+
+pre, .pre {
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: rgba($green, .3);
+}
+
+code {
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 85%;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+
+  &:not(.btn):not(.no-underline) {
+    @include underline($size: 2.5, $color: $yellow, $bg: $green-dark, $offset: .1em);
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+
+  small {
+    font-weight: normal;
+  }
+}

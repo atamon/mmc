@@ -1,0 +1,40 @@
+.btn {
+  -webkit-appearance: none;
+  border: 0;
+  display: inline-block;
+  background-color: $orange;
+  color: #fff;
+  text-align: center;
+  font-size: to_rem(24);
+  font-weight: normal;
+  padding: .4em 2em;
+  border-radius: 13px;
+  position: relative;
+  transition: background-color .1s ease-out;
+
+  box-shadow: inset rgba(#FFC446, .3) 0 -1px 1px 1px,
+              rgba(#AB5700, .8) 0 5px 0,
+              rgba(41, 78, 11, .5) 0 6px 0px 2px,
+              rgba(255, 196, 70, .2) 0 6px 0 3px,
+              rgba(#000, .1) 0 5px 30px 3px;
+
+  &:hover:not([disabled]) {
+    background-color: lighten(saturate($orange, 10%), 2%);
+  }
+
+  &[disabled],
+  &:active,
+  &:focus {
+    outline: 0;
+    top: 5px;
+    box-shadow: inset rgba(#FFC446, .3) 0 -1px 1px 1px,
+                rgba(#AB5700, .8) 0 1px 0,
+                rgba(41, 78, 11, .5) 0 1px 0px 2px,
+                rgba(255, 196, 70, .2) 0 1px 0 3px,
+                rgba(#000, .05) 0 5px 10px 3px;
+  }
+
+  &[disabled] {
+    opacity: 0.8;
+  }
+}

@@ -1,3 +1,9 @@
+@mixin respond($size) {
+  @media only screen and (max-width: $size) {
+    @content;
+  }
+}
+
 @function strip-unit($num) {
   @return $num / ($num * 0 + 1);
 }

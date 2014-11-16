@@ -1,0 +1,32 @@
+// Forms
+
+input[type="text"],
+input[type="url"],
+input[type="password"],
+input[type="email"],
+textarea {
+  -webkit-appearance: none;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  border: 0;
+  padding: .6em;
+  border-radius: 4px;
+  color: #333;
+  background-color: rgba(#fff, .95);
+  transition: background-color .2s ease-out;
+
+  &.ghost,
+  &.ghost:focus {
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  &:focus {
+    outline: 0;
+    background-color: #fff;
+  }
+}
