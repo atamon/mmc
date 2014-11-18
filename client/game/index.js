@@ -6,6 +6,17 @@ var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
 var GUI = require('./gui');
 var replay = require('./replay');
+var bosses = require('./../../bosses.json');
+
+var teamColors = [
+  // Red
+  0xFF0000,
+  // Blue
+  0x0000CC,
+  // Green
+  0x00FF00
+  // TODO Violet
+];
 
 var gameContainer = document.querySelector('#game-container');
 var sceneWidth = getMaxGameSize();
@@ -52,11 +63,22 @@ function displayLevel(info, cb) {
   });
 }
 
-function getPlayerPosition(state) {
+function getMonkeyDetails(state, teamNumber) {
+  // Load special boss-headgear for bosses, if they have one
+  var headgear = 'headphones';
+  if (bosses[state.teamName] !== undefined &&
+      bosses[state.teamName].headgear !== undefined) {
+
+    headgear = bosses[state.teamName].headgear;
+  }
+
   return {
     x: state.position[1],
     y: state.position[0],
-    id: state.teamName
+    id: state.teamName,
+    headgear: headgear,
+    color: state.color !== undefined ?
+      state.color : teamColors[teamNumber]
   };
 }
 
@@ -84,7 +106,7 @@ function displayReplay(game) {
 
   // Kick of with the first static layout
   var initialStates = statesForPlayer[0];
-  var initialPositions = initialStates.map(getPlayerPosition);
+  var initialPositions = initialStates.map(getMonkeyDetails);
   scene.parseLayout(initialStates[0].layout, initialPositions);
 
   GUI.setStatus('playing');

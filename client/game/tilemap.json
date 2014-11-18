@@ -1,38 +1,80 @@
 {
-  "defaults": {
-    "x": 0,
-    "y": 0,
-    "scale": 4,
-    "image": "/images/overworld_1.png"
-  },
   "monkey": [
     {
-      "image": "/images/monkey-1.png",
+      "image": "/images/monkey.png",
       "x": 0,
       "y": 0,
-      "scale": 1,
-      "z": 2
+      "scale": 1
     },
     {
-      "image": "/images/monkey-2.png",
-      "x": 0,
+      "image": "/images/monkey.png",
+      "x": 64,
       "y": 0,
-      "scale": 1,
-      "z": 2
+      "scale": 1
     },
     {
-      "image": "/images/monkey-3.png",
-      "x": 0,
+      "image": "/images/monkey.png",
+      "x": 128,
       "y": 0,
-      "scale": 1,
-      "z": 2
+      "scale": 1
     },
     {
-      "image": "/images/monkey-4.png",
+      "image": "/images/monkey.png",
+      "x": 192,
+      "y": 0,
+      "scale": 1
+    },
+  ],
+  "headphones" : [
+    {
+      "image": "/images/headphones.png",
       "x": 0,
       "y": 0,
-      "scale": 1,
-      "z": 2
+      "scale": 1
+    },
+    {
+      "image": "/images/headphones.png",
+      "x": 64,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/headphones.png",
+      "x": 128,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/headphones.png",
+      "x": 192,
+      "y": 0,
+      "scale": 1
+    },
+  ],
+  "shades" : [
+    {
+      "image": "/images/shades.png",
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/shades.png",
+      "x": 64,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/shades.png",
+      "x": 128,
+      "y": 0,
+      "scale": 1
+    },
+    {
+      "image": "/images/shades.png",
+      "x": 192,
+      "y": 0,
+      "scale": 1
     },
   ],
   "song": {

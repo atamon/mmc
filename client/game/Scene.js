@@ -1,6 +1,7 @@
 var PIXI = require('pixi.js');
 var Animator = require('./Animator');
 var Grid = require('./Grid');
+var SpriteFactory = require('./SpriteFactory');
 var forEach = require('mout/collection/forEach');
 var unique = require('mout/array/unique');
 
@@ -34,6 +35,7 @@ var Scene = function (options) {
   var assets = [];
   forEach(tileMap, function (tile) {
     if (tile && tile.image) {
+      // TODO Look for arrays as well (for moving sprites)
       assets.push(tile.image);
     }
   });
@@ -85,38 +87,50 @@ var Scene = function (options) {
   };
 
   var monkeys = {};
-  var addSprite = function (x, y, tile, positions) {
-    var sprite = grid.setTile(x, y, tile);
-    if (!sprite) return;
+  var addMonkey = function (x, y, monkeyPositions) {
+    var id = '', color = 0xFFFFFF, headgear = '';
+    for (var i = 0; i < monkeyPositions.length; i++) {
+      var position = monkeyPositions[i];
+      if (position.x + 1 === x && position.y + 1 === y) {
+        id = position.id;
+        color = position.color;
+        headgear = position.headgear;
+        break;
+      }
+    }
 
-    // We handle monkeys differently as they are moved
-    // around the screen and may be covered by other
-    // tiles.
-    if (tile !== 'monkey') {
-      levelNode.addChild(sprite);
-    } else {
+    if (id !== '') {
+      var sprite = SpriteFactory.buildMonkey({
+        id: id,
+        color: color,
+        headgear: headgear,
+        tileHeight: tileOptions.tileHeight,
+        tileWidth: tileOptions.tileWidth
+      });
       monkeyNode.addChild(sprite);
-
       // Reset positions for the monkey so that we can
       // reuse everything between games rematches
       sprite.position.x = x * tileWidth;
       sprite.position.y = y * tileHeight;
 
-      var id = '';
-      for (var i = 0; i < positions.length; i++) {
-        var position = positions[i];
-        if (position.x + 1 === x && position.y + 1 === y) {
-          id = position.id;
-          break;
-        }
-      }
-
-      if (id !== '') {
-        // Cache monkey tiles by teamName
-        monkeys[id] = sprite;
-      }
+      // Cache monkey tiles by teamName
+      monkeys[id] = sprite;
+    } else {
+      console.warn('Failed to locate monkey at ' + x + ',' + y);
     }
+  };
 
+  var addSprite = function (x, y, tile, monkeyPositions) {
+    if (tile === 'monkey') {
+      // We handle monkeys differently as they are moved
+      // around the screen and may be covered by other
+      // tiles.
+      addMonkey(x, y, monkeyPositions);
+    } else {
+      var sprite = grid.setTile(x, y, tile);
+      if (!sprite) return;
+      levelNode.addChild(sprite);
+    }
   };
 
   var hasOutline = false;

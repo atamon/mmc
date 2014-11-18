@@ -54,4 +54,21 @@ var build = function (tile, options) {
   return sprite;
 };
 
+var buildMonkey = function (options) {
+  var monkeySprite = build('monkey', options);
+
+  if (monkeySprite.children.length > 1) {
+    // Assume this means that we got back a cached
+    // monkey. So it already has a headgear.
+    return monkeySprite;
+  }
+
+  var headgearSprite = build(options.headgear, options);
+  headgearSprite.tint = options.color;
+  monkeySprite.addChild(headgearSprite);
+
+  return monkeySprite;
+};
+
 exports.build = build;
+exports.buildMonkey = buildMonkey;
