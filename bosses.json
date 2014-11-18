@@ -1,7 +1,7 @@
 {
   "beginner": {
     "description": "Beginner",
-    "level": "test",
+    "level": "beginner",
     "bot": "atamon",
     "reward": 3
   }
