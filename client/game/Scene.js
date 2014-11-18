@@ -21,6 +21,9 @@ var Scene = function (options) {
     resolution: resolution
   });
 
+  element.style.height = (sceneHeight * resolution) + 'px';
+  element.style.width = (sceneWidth * resolution) + 'px';
+
   var tileWidth = 64;
   var tileHeight = 64;
 
@@ -139,24 +142,18 @@ var Scene = function (options) {
     hasOutline = true;
   };
 
-  var scaleScene = function () {
+  this.rescale = function () {
     scale = sceneWidth / (tileWidth * (grid.getWidth() + 1));
 
-    renderer.view.remove();
-    renderer = new PIXI.autoDetectRenderer(sceneWidth / scale, sceneHeight / scale, {
-      resolution: resolution
-    });
+    var canvasScale = Math.max(0.2, scale);
+    renderer.resize(sceneWidth / canvasScale, sceneHeight / canvasScale);
 
-    element.appendChild(renderer.view);
-    element.style.height = (sceneHeight * resolution) + 'px';
-    element.style.width = (sceneWidth * resolution) + 'px';
-
-    levelNode.hitArea =
-      new PIXI.Rectangle(
-        0,
-        0,
-        tileWidth * (grid.getWidth() + 2) * resolution,
-        tileHeight * (grid.getHeight() + 2) * resolution);
+    if (canvasScale !== scale) {
+      var nodeScale = scale / canvasScale;
+      stage.children.forEach(function (child) {
+        child.scale.x = child.scale.y = nodeScale;
+      });
+    }
   };
 
   this.getResolution = function () {
@@ -200,7 +197,8 @@ var Scene = function (options) {
       addOutline(grid.getWidth(), grid.getHeight());
     }
 
-    scaleScene();
+    this.rescale();
+
     return this;
   };
 

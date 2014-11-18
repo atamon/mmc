@@ -85,7 +85,7 @@ var drawOverlay = function () {
     }
   }
 
-  scene.addChild(overlay, true);
+  scene.addChild(overlay);
 };
 
 var hoverTile;
@@ -157,6 +157,7 @@ scene.onReady(function () {
   gameContainer.addEventListener('mousemove', drawHoverTile);
 
   drawOverlay();
+  scene.rescale();
   initHoverTile();
 });
 
