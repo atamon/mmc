@@ -2,30 +2,27 @@ var PIXI = require('pixi.js');
 var tileMap = require('./tilemap.json');
 var isArray = require('mout/lang/isArray');
 
-var TILE_WIDTH = 64;
-var TILE_HEIGHT = 64;
-
-var makeTexture = function (textureInfo) {
+var makeTexture = function (tileWidth, tileHeight, textureInfo) {
   var baseTexture = PIXI.BaseTexture.fromImage(textureInfo.image);
   var frame = new PIXI.Rectangle(
     textureInfo.x,
     textureInfo.y,
-    TILE_WIDTH / textureInfo.scale,
-    TILE_HEIGHT / textureInfo.scale);
+    tileWidth / textureInfo.scale,
+    tileHeight / textureInfo.scale);
   return new PIXI.Texture(baseTexture, frame);
 };
 
-var textureFromTile = function (textureInfo) {
+var textureFromTile = function (tileWidth, tileHeight, textureInfo) {
   if (isArray(textureInfo)) {
     // MovieClips expect an array of textures
-    return textureInfo.map(makeTexture);
+    return textureInfo.map(makeTexture.bind(null, tileWidth, tileHeight));
   } else {
     // Single sprites expect a single texture
-    return makeTexture(textureInfo);
+    return makeTexture(tileWidth, tileHeight, textureInfo);
   }
 };
 
-var spriteFromTexture = function (texture, scale, x, y) {
+var spriteFromTexture = function (texture, scale) {
   var sprite;
   if (isArray(texture)) {
     // Series of textures that make up an animation
@@ -40,9 +37,6 @@ var spriteFromTexture = function (texture, scale, x, y) {
     sprite = new PIXI.Sprite(texture);
   }
 
-  sprite.position.x = x * TILE_WIDTH;
-  sprite.position.y = y * TILE_HEIGHT;
-
   // Rescale to support different texture sizes
   // For starters at least when graphic resources is
   // scarce.
@@ -52,11 +46,11 @@ var spriteFromTexture = function (texture, scale, x, y) {
   return sprite;
 };
 
-var build = function (tile, x, y) {
+var build = function (tile, options) {
   var tileInfo = tileMap[tile];
   if (!tileInfo) return;
-  var texture = textureFromTile(tileInfo);
-  var sprite = spriteFromTexture(texture, tileInfo.scale, x, y);
+  var texture = textureFromTile(options.tileWidth, options.tileHeight, tileInfo);
+  var sprite = spriteFromTexture(texture, tileInfo.scale);
   return sprite;
 };
 

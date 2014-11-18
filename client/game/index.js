@@ -23,9 +23,7 @@ function getMaxGameSize() {
   // Chrome will produce glitches if we don't make sure to
   // use a resolution that is a power of 2
   var windowSize = Math.min(window.innerWidth, window.innerHeight);
-
-  var power = Math.floor(Math.log(windowSize) / Math.LN2);
-  return Math.pow(2, power);
+  return windowSize;
 }
 
 function displayLevel(info, cb) {
@@ -43,8 +41,7 @@ function displayLevel(info, cb) {
   scene.onReady(function () {
     scene
       .setLevelLayout(level.layout)
-      .parseLayout(dummyPlayerState.layout, [])
-      .start();
+      .parseLayout(dummyPlayerState.layout, []);
 
     gameContainer.classList.add('ready');
 

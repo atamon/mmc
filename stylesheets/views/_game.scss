@@ -60,13 +60,14 @@ $game-collapse: 1024px;
 .game-wrapper {
   position: relative;
 
-  min-width: to_rem(512);
   align-self: stretch;
   background-color: #378ad1;
 
   #game-container {
     opacity: 0;
-    min-height: to_rem(512);
+    overflow: hidden;
+    display: flex;
+    margin: auto;
 
     transition: opacity 0.5s ease-out;
 

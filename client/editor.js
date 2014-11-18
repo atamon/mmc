@@ -11,10 +11,8 @@ var iActiveTile = 0;
 
 var options = window.mmcEditorOptions;
 
-var TILE_WIDTH = 64;
-var TILE_HEIGHT = 64;
-var SCENE_WIDTH = 512;
-var SCENE_HEIGHT = 512;
+var SCENE_WIDTH = Math.min(window.innerWidth, window.innerHeight);
+var SCENE_HEIGHT = Math.min(window.innerWidth, window.innerHeight);
 
 // Do we load this somehow?
 var layoutHeight = +options.height || 12;
@@ -36,19 +34,16 @@ var toUnitLayout = function toUnitLayout(levelLayout) {
 
 var toLevelTile = function (event) {
   return {
-    x: Math.max(Math.floor(event.originalEvent.offsetX / event.target.scale.x / TILE_WIDTH  / scene.getResolution()), 0),
-    y: Math.max(Math.floor(event.originalEvent.offsetY / event.target.scale.y / TILE_HEIGHT  / scene.getResolution()), 0)
+    x: Math.max(Math.floor(event.offsetX / scene.getTileWidth() / scene.getResolution() / scene.getScale()), 0),
+    y: Math.max(Math.floor(event.offsetY / scene.getTileHeight() / scene.getResolution() / scene.getScale()), 0)
   };
 };
 
 var onLevelClick = function (event) {
-  var parent = event.target;
 
   var targetTile = toLevelTile(event);
   var x = targetTile.x;
   var y = targetTile.y;
-
-  console.log(x, y, levelLayout.length, levelLayout[0].length);
 
   if (x < 1 || y < 1 || x > levelLayout.length || y > levelLayout[0].length) {
     return;
@@ -59,8 +54,8 @@ var onLevelClick = function (event) {
   if (tile) {
     grid.clearTile(x, y);
 
-    if (tile.sprite) {
-      parent.removeChild(tile.sprite);
+    if (tile.sprite && tile.sprite.parent) {
+      tile.sprite.parent.removeChild(tile.sprite);
     }
   }
 
@@ -72,7 +67,7 @@ var onLevelClick = function (event) {
   var newTile = getDecoratedTile(abbr);
   var newSprite = grid.setTile(x, y, newTile);
   if (!newSprite) return;
-  parent.addChild(newSprite);
+  scene.addChildToLevel(newSprite);
 };
 
 var getDecoratedTile = function (abbr) {
@@ -86,7 +81,7 @@ var drawOverlay = function () {
   for (var y = 1; y <= levelLayout.length; y++) {
     var row = levelLayout[y - 1];
     for (var x = 1; x <= row.length; x++) {
-      overlay.drawRect(x * TILE_WIDTH + 10, y * TILE_HEIGHT + 10, TILE_WIDTH - 10, TILE_HEIGHT - 10);
+      overlay.drawRect(x * scene.getTileWidth() + 10, y * scene.getTileHeight() + 10, scene.getTileWidth() - 10, scene.getTileHeight() - 10);
     }
   }
 
@@ -105,8 +100,8 @@ var setHoverSprite = function (tileType) {
 };
 
 var drawHoverTile = function (e) {
-  var x = e.global.x;
-  var y = e.global.y;
+  var x = e.offsetX;
+  var y = e.offsetY;
 
   hoverTile.position.x = x;
   hoverTile.position.y = y;
@@ -114,13 +109,13 @@ var drawHoverTile = function (e) {
 
 var initHoverTile = function () {
   hoverTile = new PIXI.DisplayObjectContainer();
-  hoverTile.scale.x = hoverTile.scale.y = 0.5;
+  hoverTile.scale.x = hoverTile.scale.y = 200;
 
   var abbr = unitAbbreviations[iActiveTile];
   var tileType = getDecoratedTile(abbr);
   setHoverSprite(tileType);
 
-  scene.addChild(hoverTile, false);
+  scene.addChild(hoverTile);
 };
 
 document.addEventListener('keyup', function (e) {
@@ -137,23 +132,29 @@ document.addEventListener('keyup', function (e) {
   }
 });
 
-var grid = new Grid();
+var tileWidth = 64;
+var tileHeight = 64;
+var tileOptions = { tileWidth: tileWidth, tileHeight: tileHeight };
+var gameContainer = document.getElementById('game-container');
+
+var grid = new Grid(tileOptions);
 var scene = new Scene({
   size: { x: SCENE_WIDTH, y: SCENE_HEIGHT },
   backgroundColor: 0x83d135,
-  el: document.getElementById('game-container'),
+  el: gameContainer,
   tileMap: tileMap,
-  grid: grid,
-  onMouseClick: onLevelClick,
-  onMouseMove: drawHoverTile
+  grid: grid
 });
 
 
 scene.onReady(function () {
   scene
     .setLevelLayout(levelLayout)
-    .parseLayout(toUnitLayout(levelLayout))
-    .start();
+    .parseLayout(toUnitLayout(levelLayout));
+
+  gameContainer.classList.add('ready');
+  gameContainer.addEventListener('click', onLevelClick);
+  gameContainer.addEventListener('mousemove', drawHoverTile);
 
   drawOverlay();
   initHoverTile();
@@ -167,3 +168,4 @@ window.parse = function (array) {
   scene.setLevelLayout(levelLayout);
   scene.parseLayout(toUnitLayout(levelLayout), []);
 };
+

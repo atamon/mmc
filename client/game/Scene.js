@@ -6,22 +6,27 @@ var unique = require('mout/array/unique');
 
 
 PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
-var TILE_WIDTH = 64;
-var TILE_HEIGHT = 64;
 
 var Scene = function (options) {
+  var element = options.el;
+  var tileMap = options.tileMap;
+
   var stage = new PIXI.Stage(options.backgroundColor || 0x83d135);
 
+  var scale = 1;
   var resolution = window.devicePixelRatio;
-  var renderer = new PIXI.autoDetectRenderer(options.size.x, options.size.y, {
+  var sceneWidth = options.size.x / resolution;
+  var sceneHeight = options.size.y / resolution;
+  var renderer = new PIXI.autoDetectRenderer(sceneWidth, sceneHeight, {
     resolution: resolution
   });
 
-  var grid = options.grid || new Grid();
-  var animator = options.animator || new Animator({ tileWidth: TILE_WIDTH, tileHeight: TILE_HEIGHT });
+  var tileWidth = 64;
+  var tileHeight = 64;
 
-  var element = options.el;
-  var tileMap = options.tileMap;
+  var tileOptions = { tileWidth: tileWidth, tileHeight: tileHeight };
+  var grid = options.grid || new Grid(tileOptions);
+  var animator = options.animator || new Animator(tileOptions);
 
   var assets = [];
   forEach(tileMap, function (tile) {
@@ -35,9 +40,6 @@ var Scene = function (options) {
   loader.load();
 
   var levelNode = new PIXI.DisplayObjectContainer();
-  levelNode.interactive = true;
-  levelNode.mouseup = options.onMouseClick;
-  levelNode.mousemove = options.onMouseMove;
   stage.addChild(levelNode);
   var monkeyNode = new PIXI.DisplayObjectContainer();
   stage.addChild(monkeyNode);
@@ -94,8 +96,8 @@ var Scene = function (options) {
 
       // Reset positions for the monkey so that we can
       // reuse everything between games rematches
-      sprite.position.x = x * TILE_WIDTH;
-      sprite.position.y = y * TILE_HEIGHT;
+      sprite.position.x = x * tileWidth;
+      sprite.position.y = y * tileHeight;
 
       var id = '';
       for (var i = 0; i < positions.length; i++) {
@@ -137,20 +139,49 @@ var Scene = function (options) {
     hasOutline = true;
   };
 
-  var autoScale = function (node) {
-    node.scale.x = options.size.x / (TILE_WIDTH * (grid.getWidth() + 1));
-    node.scale.y = options.size.y / (TILE_HEIGHT * (grid.getHeight() + 1));
+  var scaleScene = function () {
+    scale = sceneWidth / (tileWidth * (grid.getWidth() + 1));
+
+    renderer.view.remove();
+    renderer = new PIXI.autoDetectRenderer(sceneWidth / scale, sceneHeight / scale, {
+      resolution: resolution
+    });
+
+    element.appendChild(renderer.view);
+    element.style.height = (sceneHeight * resolution) + 'px';
+    element.style.width = (sceneWidth * resolution) + 'px';
+
+    levelNode.hitArea =
+      new PIXI.Rectangle(
+        0,
+        0,
+        tileWidth * (grid.getWidth() + 2) * resolution,
+        tileHeight * (grid.getHeight() + 2) * resolution);
   };
 
   this.getResolution = function () {
     return resolution;
   };
 
-  this.addChild = function (node, doScale) {
-    stage.addChild(node);
-    if (doScale === true) autoScale(node);
+  this.getScale = function () {
+    return scale;
+  };
 
+  this.getTileWidth = function () {
+    return tileWidth;
+  };
+
+  this.getTileHeight = function () {
+    return tileHeight;
+  };
+
+  this.addChild = function (node) {
+    stage.addChild(node);
     return this;
+  };
+
+  this.addChildToLevel = function (node) {
+    levelNode.addChild(node);
   };
 
   this.parseLayout = function (layout, positions) {
@@ -165,6 +196,11 @@ var Scene = function (options) {
       }
     }
 
+    if (!hasOutline) {
+      addOutline(grid.getWidth(), grid.getHeight());
+    }
+
+    scaleScene();
     return this;
   };
 
@@ -199,24 +235,6 @@ var Scene = function (options) {
 
   this.setLevelLayout = function (layout) {
     levelLayout = layout;
-    return this;
-  };
-
-  this.start = function () {
-    if (!hasOutline) {
-      addOutline(grid.getWidth(), grid.getHeight());
-    }
-
-    autoScale(levelNode, true);
-    autoScale(monkeyNode, true);
-
-    levelNode.hitArea =
-      new PIXI.Rectangle(
-        0,
-        0,
-        TILE_WIDTH * (grid.getWidth() + 2) * resolution,
-        TILE_HEIGHT * (grid.getHeight() + 2) * resolution);
-
     return this;
   };
 

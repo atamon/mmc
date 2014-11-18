@@ -1,7 +1,6 @@
 var SpriteFactory = require('./SpriteFactory');
 
 function Grid(options) {
-  options = options || {};
 
   var buildSprite = options.buildSprite || SpriteFactory.build;
 
@@ -16,10 +15,14 @@ function Grid(options) {
       return tiles[y][x].sprite;
     }
 
-    var sprite = buildSprite(tile, x, y);
+    var sprite = buildSprite(tile, options);
     if (!sprite) {
       return this.clearTile(x, y);
     }
+
+    // Position sprite so that it is located inside the tile
+    sprite.position.x = x * options.tileWidth;
+    sprite.position.y = y * options.tileHeight;
 
     tiles[y][x] = {
       type: tile,
