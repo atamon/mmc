@@ -24,7 +24,7 @@ function calculateDirection(userPos, targetPos) {
 function wasRemoved(tile, nextTile) {
   return tile !== nextTile &&
     ['song', 'album', 'playlist'].indexOf(tile) !== -1 &&
-    nextTile === 'empty';
+    ['empty', 'monkey'].indexOf(nextTile) !== -1;
 }
 
 function findRemoved(first, second) {
