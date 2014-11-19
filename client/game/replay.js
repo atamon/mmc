@@ -42,17 +42,8 @@ function findRemoved(first, second) {
   return removes;
 }
 
-function prepare(teams, turns, level) {
-  var gameState = monkeyMusic.createGameState(teams, level);
-
-  var initial = [teams.map(function (teamName) {
-    var sfp = monkeyMusic.gameStateForTeam(gameState, teamName);
-    // We do this to get simpler interpolations
-    sfp.teamName = teamName;
-    return sfp;
-  })];
-
-  var statesForPlayer = initial.concat(turns.map(function processTurn(globalTurn) {
+function getStates(game, turns, teams) {
+  return turns.map(function processTurn(globalTurn) {
     var commands = [];
     forEach(globalTurn, function (team) {
       try {
@@ -64,16 +55,18 @@ function prepare(teams, turns, level) {
     });
 
     commands = compact(commands);
-    gameState = monkeyMusic.runCommands(gameState, commands);
+    game.state = monkeyMusic.runCommands(game.state, commands);
 
     return teams.map(function (teamName) {
-      var sfp = monkeyMusic.gameStateForTeam(gameState, teamName);
+      var sfp = monkeyMusic.gameStateForTeam(game.state, teamName);
       // We do this to get simpler interpolations
       sfp.teamName = teamName;
       return sfp;
     });
-  }));
+  });
+}
 
+function getInterpolations(statesForPlayer) {
   var interpolations = [];
   for (var i = 0; i < statesForPlayer.length - 1; i++) {
     var currentStates = statesForPlayer[i];
@@ -101,6 +94,40 @@ function prepare(teams, turns, level) {
     });
   }
 
+  return interpolations;
+}
+
+function prepare(teams, turns, level) {
+  var game = {};
+  game.state = monkeyMusic.createGameState(teams, level);
+
+  var initial = [teams.map(function (teamName) {
+    var sfp = monkeyMusic.gameStateForTeam(game.state, teamName);
+    // We do this to get simpler interpolations
+    sfp.teamName = teamName;
+    return sfp;
+  })];
+
+  // Get states
+  var future = getStates(game, turns, teams);
+  var statesForPlayer = initial.concat(future);
+
+  // Get interpolations
+  var interpolations = getInterpolations(statesForPlayer);
+
+  return {
+    statesForPlayer: statesForPlayer,
+    interpolations: interpolations
+  };
+}
+
+function step(currentStates, game, teams, turn) {
+  // Get states
+  var statesForPlayer = [currentStates].concat(getStates(game, [turn], teams));
+
+  // Get interpolations
+  var interpolations = getInterpolations(statesForPlayer);
+
   return {
     statesForPlayer: statesForPlayer,
     interpolations: interpolations
@@ -108,3 +135,4 @@ function prepare(teams, turns, level) {
 }
 
 exports.prepare = prepare;
+exports.step = step;

@@ -38,6 +38,7 @@ app.get('/editor', function (req, res) {
   res.redirect('/editor/25');
 });
 
+app.use('/manual', routes.manual);
 app.use('/login', routes.login);
 app.use('/team', routes.teams);
 app.use('/game', routes.games);

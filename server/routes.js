@@ -3,3 +3,4 @@ exports.games =     require('./routes/games');
 exports.replays =   require('./routes/replays');
 exports.teams =     require('./routes/teams');
 exports.bosses =    require('./routes/bosses');
+exports.manual =    require('./routes/manual');
