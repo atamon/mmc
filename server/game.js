@@ -27,7 +27,7 @@ var tickGame = function (game) {
   var commands = [];
   forEach(turn, function (team) {
     try {
-      var cmd = monkeyMusic.parseCommand(team.turn);
+      var cmd = monkeyMusic.parseCommand(game.state, team.turn);
       commands[team.index] = cmd;
     } catch (e) {
       team.message = e.message;

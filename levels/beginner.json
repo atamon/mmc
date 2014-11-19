@@ -1,7 +1,7 @@
 {
   "turns": 50,
   "layout": [
-    "                         ",
+    "                        T",
     "                         ",
     "                         ",
     "                         ",
@@ -24,10 +24,10 @@
     "                         ",
     "     ####### #######     ",
     "     #             #     ",
-    "     # ## ##### ## #     ",
+    "     #T## ##### ## #     ",
     "     #sa#  MUM  #as#     "
   ],
-  "units": {
+  "legend": {
     "M": "monkey",
     "s": "song",
     "a": "album",
@@ -36,6 +36,8 @@
     "#": "wall",
     " ": "empty",
     "_": "empty",
-    "-": "empty"
-  }
+    "-": "empty",
+    "T": "tunnel"
+  },
+  "inventorySize": 3
 }

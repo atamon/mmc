@@ -47,7 +47,7 @@ function getStates(game, turns, teams) {
     var commands = [];
     forEach(globalTurn, function (team) {
       try {
-        var cmd = monkeyMusic.parseCommand(team.turn);
+        var cmd = monkeyMusic.parseCommand(game.state, team.turn);
         commands[team.index] = cmd;
       } catch (e) {
         console.warn(e);

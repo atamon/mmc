@@ -2,9 +2,9 @@
   "turns": 50,
   "layout": [
     "U  _  ",
-    "pM-## ",
+    "pM-##T",
     "###a- ",
-    "  _# s",
+    " T_# s",
     "-# _ #",
     "M#s# p"
   ],
@@ -17,7 +17,10 @@
     "#": "wall",
     " ": "empty",
     "_": "empty",
-    "-": "empty"
+    "-": "empty",
+    "T": "tunnel"
   },
   "inventorySize": 3
 }
+
+
