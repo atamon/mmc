@@ -1,0 +1,12 @@
+{
+  "M": "monkey",
+  "s": "song",
+  "a": "album",
+  "p": "playlist",
+  "U": "user",
+  "#": "wall",
+  " ": "empty",
+  "_": "empty",
+  "-": "empty",
+  "T": "tunnel"
+}

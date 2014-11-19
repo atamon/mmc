@@ -145,6 +145,12 @@
     "y": 128,
     "scale": 4
   },
+  "tunnel": {
+    "image": "/images/tunnel.png",
+    "x": 0,
+    "y": 0,
+    "scale": 4
+  },
   "left-side": {
     "image": "/images/overworld_1.png",
     "x": 0,

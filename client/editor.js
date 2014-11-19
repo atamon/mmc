@@ -4,8 +4,7 @@ var SpriteFactory = require('./game/SpriteFactory');
 var tileMap = require('./game/tilemap.json');
 var PIXI = require('pixi.js');
 
-// TODO Extract units somewhere else
-var units = require('../levels/test.json').units;
+var units = require('./game/units.json');
 var unitAbbreviations = Object.keys(units);
 var iActiveTile = 0;
 
@@ -122,7 +121,7 @@ document.addEventListener('keyup', function (e) {
   var key = e.which;
 
   if (key >= 49 && key <= 57) {
-    iActiveTile = e.shiftKey ? key - 39 : key - 49;
+    iActiveTile = e.shiftKey ? key - 40 : key - 49;
 
     var abbr = unitAbbreviations[iActiveTile];
     var tileType = getDecoratedTile(abbr);
