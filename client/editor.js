@@ -1,4 +1,4 @@
-var Scene = require('./game/scene');
+var Scene = require('./game/Scene');
 var Grid = require('./game/Grid');
 var SpriteFactory = require('./game/SpriteFactory');
 var tileMap = require('./game/tilemap.json');
