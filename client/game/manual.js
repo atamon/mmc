@@ -4,6 +4,7 @@ var monkeyMusic = require('monkey-music');
 var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
 var replay = require('./replay');
+var GUI = require('./gui');
 
 var teamColors = [
   // Red
@@ -79,6 +80,11 @@ function start (level) {
     var initialPositions = initialStates.map(getMonkeyDetails);
     scene.parseLayout(initialStates[0].layout, initialPositions);
 
+    GUI.init({
+      id: 'teamName',
+      ids: initialStates.map(function(data) { return data.teamName })
+    });
+
     var states = [initialStates];
     var running = setInterval(function () {
       var rewindedReplay = replay.step(states[states.length - 1], game, teams, {
@@ -105,6 +111,7 @@ function start (level) {
       var interpolations = rewindedReplay.interpolations;
 
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
+      GUI.update(states[states.length - 1]);
 
       if (monkeyMusic.isGameOver(game.state)) {
         clearInterval(running);
