@@ -64,11 +64,6 @@ function Animator(options) {
       animateBubbleRemoval.bind(null, timeSinceLastFrame));
     onGoingBubbleRemovals = compact(remainingRemovals);
   };
-
-  this.clear = function () {
-    onGoingInterpolations.length = 0;
-    onGoingBubbleRemovals.length = 0;
-  };
 }
 
 module.exports = Animator;
