@@ -47,9 +47,6 @@ function init(opts) {
 }
 
 function update(states) {
-  console.log("Updating GUI with "+states.length+" states ...");
-  console.log.apply(console, states)
-
   states.forEach(function(data) {
     var el = document.getElementById(slugify(data[ID_ATTRIBUTE])),
         html = template(data);
