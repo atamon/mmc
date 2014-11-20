@@ -6,16 +6,6 @@ var tileMap = require('./tilemap.json');
 var replay = require('./replay');
 var GUI = require('./gui');
 
-var teamColors = [
-  // Red
-  0xFF0000,
-  // Blue
-  0x0000CC,
-  // Green
-  0x00FF00
-  // TODO Violet
-];
-
 var gameContainer = document.querySelector('#game-container');
 var sceneWidth = getMaxGameSize();
 var sceneHeight = getMaxGameSize();
@@ -31,17 +21,6 @@ function getMaxGameSize() {
   // use a resolution that is a power of 2
   var windowSize = Math.min(window.innerWidth, window.innerHeight);
   return windowSize;
-}
-
-function getMonkeyDetails(state, teamNumber) {
-  return {
-    x: state.position[1],
-    y: state.position[0],
-    id: state.teamName,
-    headgear: 'headphones',
-    color: state.color !== undefined ?
-      state.color : teamColors[teamNumber]
-  };
 }
 
 var playerOneDirection = '', playerTwoDirection = '';
@@ -70,22 +49,15 @@ function start (level) {
     var teams = ['Player One', 'Player Two'];
     game.state = monkeyMusic.createGameState(teams, level);
 
-    var initialStates = [
-      monkeyMusic.gameStateForTeam(game.state, teams[0]),
-      monkeyMusic.gameStateForTeam(game.state, teams[1])
-    ];
-    initialStates[0].teamName = 'Player One';
-    initialStates[1].teamName = 'Player Two';
-
-    var initialPositions = initialStates.map(getMonkeyDetails);
-    scene.parseLayout(initialStates[0].layout, initialPositions);
+    var rendererState = replay.getRendererState(game.state, teams);
+    scene.parseLayout(rendererState.layout, rendererState.monkeyDetails);
 
     GUI.init({
       id: 'teamName',
-      ids: initialStates.map(function(data) { return data.teamName })
+      ids: rendererState.teams.map(function(data) { return data.teamName; })
     });
 
-    var states = [initialStates];
+    var states = [rendererState];
     var running = setInterval(function () {
       var rewindedReplay = replay.step(states[states.length - 1], game, teams, {
         'Player One': {
@@ -107,11 +79,13 @@ function start (level) {
       });
 
 
-      states = states.concat(rewindedReplay.statesForPlayer);
+      states = states.concat(rewindedReplay.rendererStates);
       var interpolations = rewindedReplay.interpolations;
 
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
-      GUI.update(states[states.length - 1]);
+
+      var teamStates = states[states.length - 1].teams;
+      GUI.update(teamStates);
 
       if (monkeyMusic.isGameOver(game.state)) {
         clearInterval(running);

@@ -220,13 +220,8 @@ var Scene = function (options) {
     interpolation.monkeys.forEach(function (monkey) {
       var sprite = monkeys[monkey.id];
 
-      animator.addInterpolation({
-        sprite: sprite,
-        from: monkey.from,
-        to: monkey.to,
-        timeLeft: duration,
-        duration: duration
-      });
+      monkey.effects.forEach(
+        animator.addEffect.bind(null, sprite, duration));
     });
 
     interpolation.removed.forEach(function (position) {

@@ -1,7 +1,7 @@
 {
   "turns": 50,
   "layout": [
-    "U  _  ",
+    "UT _ T",
     "pM-## ",
     "###a- ",
     "  _# s",
@@ -17,7 +17,8 @@
     "#": "wall",
     " ": "empty",
     "_": "empty",
-    "-": "empty"
+    "-": "empty",
+    "T": "tunnel"
   },
   "inventorySize": 3
 }
