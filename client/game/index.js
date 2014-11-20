@@ -77,12 +77,18 @@ function displayReplay(game) {
   // Kick of with the first static layout
   var initialState = rendererStates[0];
   scene.parseLayout(initialState.layout, initialState.monkeyDetails);
+  GUI.init({
+    id: 'teamName',
+    ids: initialState.teams.map(function(data) { return data.teamName; })
+  });
 
   GUI.setStatus('playing');
 
   var iTurn = 0;
   runningGame = setInterval(function () {
     var interpolation = interpolations[iTurn];
+    var teamStates = rendererStates[iTurn].teams;
+    GUI.update(teamStates);
 
     // Interpolate moves until we've run out of them
     if (!interpolation) {
