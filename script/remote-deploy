@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ssh -A monkeymusic@warmup.monkeymusicchallenge.com 'cd mmc-warmup && git pull && ./script/deploy'

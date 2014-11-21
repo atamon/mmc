@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+cowsay 'building assets...' && sleep 0.5s
+npm install && gulp
+
+cowsay 'restarting nodejs server...' && sleep 0.5s
+killall tmux
+tmux new -d -s monkeymusic
+tmux send-keys 'npm start' 'C-m'
+
+cowsay 'restarting nginx proxy...' && sleep 0.5s
+sudo service nginx restart
+
+cowsay 'all done!'
