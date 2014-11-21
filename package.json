@@ -4,7 +4,8 @@
   "description": "### `GET /schedule` Detailed schedule of the event.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodejs index.js | ./node_modules/.bin/bunyan"
   },
   "author": "",
   "license": "ISC",
