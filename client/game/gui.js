@@ -33,7 +33,7 @@ function init(opts) {
   ID_ATTRIBUTE = opts.id;
   // Loop number of panes
   opts.ids.forEach(function(id, index) {
-    var el = document.createElement('div');
+    var el = document.getElementById(slugify(id)) || document.createElement('div');
     el.classList.add('team-pane');
     el.id = slugify(id);
 
