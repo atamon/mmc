@@ -7,6 +7,8 @@ cowsay 'restarting nodejs server...' && sleep 0.5s
 killall tmux
 tmux new -d -s monkeymusic
 tmux send-keys 'npm start' 'C-m'
+tmux new -d -s monkeymusic-bots
+tmux send-keys 'node bots/index.js' 'C-m'
 
 cowsay 'restarting nginx proxy...' && sleep 0.5s
 sudo service nginx restart
