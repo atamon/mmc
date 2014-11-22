@@ -100,7 +100,7 @@ var Scene = function (options) {
     }
 
     if (id !== '') {
-      var sprite = SpriteFactory.buildMonkey({
+      var sprite = monkeys[id] || SpriteFactory.buildMonkey({
         id: id,
         color: color,
         headgear: headgear,
