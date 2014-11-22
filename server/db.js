@@ -13,13 +13,15 @@ var getTeamCoins = function (teamName, cb) {
   });
 };
 
-var udpateTeamCoins = function (amount, teamName, cb) {
+var updateTeamCoins = function (amount, teamName, cb) {
   getTeamCoins(teamName, function (err, nCoins) {
     if (err) return cb(err);
 
-    teams.merge(teamName, { coins: nCoins + amount }, function (err, doc) {
-      if (err) return cb(err);
-      cb(null, doc.coins);
+    var updatedCoins = nCoins + amount;
+    teams.merge(teamName, { coins: updatedCoins }, function (err, res) {
+      if (err || ! res.ok) return cb(err || 'Database failure');
+
+      cb(null, updatedCoins);
     });
   });
 };
@@ -37,7 +39,7 @@ var getCompletedChallenges = function(teamName, cb) {
   teams.get(teamName, function (err, doc) {
     if (err) return cb(err);
 
-    cb(null, doc.challenges || []);
+    cb(null, doc.challenges);
   });
 };
 
@@ -52,16 +54,15 @@ var setChallengeCompleted = function (teamName, bossId, cb) {
     }
 
     completed.push(bossId);
-    teams.merge(teamName, { challenges: completed }, function (err, doc) {
-      if (err) return cb(err);
+    teams.merge(teamName, { challenges: completed }, function (err, res) {
+      if (err || ! res.ok) return cb(err || 'Database failure');
 
-      var challenges = doc.challenges;
-      udpateTeamCoins(reward, teamName, function (err, nCoins) {
+      updateTeamCoins(reward, teamName, function (err, nCoins) {
         if (err) return cb(err);
 
         cb(null, {
           coins: nCoins,
-          challanges: challenges
+          challenges: completed
         });
       });
     });
@@ -93,3 +94,4 @@ exports.setChallengeCompleted = setChallengeCompleted;
 exports.saveReplay = saveReplay;
 exports.getAllReplays = getAllReplays;
 exports.getReplay = getReplay;
+exports.updateTeamCoins = updateTeamCoins;

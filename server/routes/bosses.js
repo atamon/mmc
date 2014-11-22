@@ -9,43 +9,33 @@ var bosses = require('../../bosses.json');
 var game = require('../game');
 var db = require('../db');
 
-function handleGameOver(gameId, bossId) {
-  game.on('gameover:' + gameId, function (results) {
-    var scores = results.scores;
+function handleGameOver(challengedBoss, results) {
+  var gameId = results.gameId;
+  var scores = results.scores;
 
-    // Just make 100% sure that we actually had two or more teams here
-    console.assert(scores.length > 1, gameId, results);
+  // Just make 100% sure that we actually had two or more teams here
+  console.assert(scores.length > 1, gameId, results);
 
-    if (scores[0].score > scores[1].score) {
-      var winner = scores[0];
+  if (scores[0].score !== scores[1].score) {
+    var winner = scores[0];
 
-      if (winner.teamName !== bossId) {
-        log.info(winner.teamName + ' beat boss ' + bossId +
-          '['+ winner.score + ' - ' + scores[1].score + ']');
+    if (winner.teamName !== challengedBoss) {
+      log.info(winner.teamName + ' beat boss ' + challengedBoss +
+        '['+ winner.score + ' - ' + scores[1].score + ']');
 
-        // Team won! Make sure that it's registered
-        db.isTeamRegistered(winner.teamName, function (err, isRegistered) {
-          if (err) return log.error(err);
+      db.setChallengeCompleted(winner.teamName, challengedBoss, function (err, result) {
+        if (err) log.error(err);
 
-          if (!isRegistered) {
-            return log.info('Unregistered team completed boss ' + bossId);
-          }
+        if (!result) {
+          // Team already completed this challenge. Ignore
+          return;
+        }
 
-          db.setChallengeCompleted(winner.teamName, bossId, function (err, result) {
-            if (err) log.error(err);
-
-            if (!result) {
-              // Team already completed this challenge. Ignore
-              return;
-            }
-
-            // result 'coins', 'challenges'
-            // TODO Update ranking, bossgrid, coins through sockets
-          });
-        });
-      }
+        // result 'coins', 'challenges'
+        // TODO Update ranking, bossgrid, coins through sockets
+      });
     }
-  });
+ }
 }
 
 // Require login so we can get teamName from there
@@ -73,9 +63,10 @@ router.get('/:bossId', function (req, res) {
 // Handle team vs boss AI
 router.use('/start', bodyParser.urlencoded());
 router.post('/start', function (req, res) {
+  var bossId = req.body.bossId;
   // Look up level and AI for this boss
-  var levelId = bosses[req.body.bossId].level;
-  var botId = bosses[req.body.bossId].bot;
+  var levelId = bosses[bossId].level;
+  var botId = bosses[bossId].bot;
 
   var gameId = game.createGame({
     level: levelId
@@ -87,7 +78,7 @@ router.post('/start', function (req, res) {
     form: {
       botId: botId,
       gameId: gameId,
-      teamName: req.body.bossId
+      teamName: bossId
     },
     json: true
   };
@@ -105,7 +96,7 @@ router.post('/start', function (req, res) {
       return res.send(botRes.statusCode, body);
     }
 
-    handleGameOver(gameId);
+    game.on('gameover:' + gameId, handleGameOver.bind(null, bossId));
 
     res.send(200, { gameId: gameId });
   });

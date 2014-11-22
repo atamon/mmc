@@ -78,13 +78,7 @@ var handleGameOver = function (game) {
   });
 
   var sortedScores = scores.sort(function (a, b) {
-    if (a.score === undefined) {
-      return -1;
-    }
-    if (b.score === undefined) {
-      return 1;
-    }
-    return a.score - b.score;
+    return b.score - a.score;
   });
 
   var data = {
