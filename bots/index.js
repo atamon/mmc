@@ -25,9 +25,9 @@ app.post('/', function (req, res) {
 
 function runBot(teamName, botId, gameId) {
 
-  var botPath = path.resolve(__dirname + '/' + botId + '/run');
+  var botPath = path.resolve(__dirname + '/' + botId);
   var args = [teamName, secret.forTeam(teamName), gameId];
-  var botProcess = child_process.spawn(botPath, args, { stdio: 'inherit' });
+  var botProcess = child_process.spawn(botPath + '/run', args, { stdio: 'inherit', cwd: botPath });
 
   botProcess.on('exit', function (code, signal) {
     amountRunningBots--;
