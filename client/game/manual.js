@@ -1,5 +1,6 @@
 var MOVE_TIMEOUT = 600;
 
+var mixIn = require('mout/object/mixIn');
 var monkeyMusic = require('monkey-music');
 var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
@@ -23,21 +24,69 @@ function getMaxGameSize() {
   return windowSize;
 }
 
-var playerOneDirection = '', playerTwoDirection = '';
+var playerTurns = {
+  'Player One': {
+    turn: {
+      command: 'move',
+      direction: '',
+      team: 'Player One'
+    },
+    index: 0
+  },
+  'Player Two': {
+    turn: {
+      command: 'move',
+      direction: '',
+      team: 'Player Two'
+    },
+    index: 1
+  }
+};
+
+var quickMove = {};
+function parseState(playerId, state) {
+
+  if (Object.keys(state.buffs || {}).indexOf('speedy') !== -1) {
+    quickMove[playerId] = true;
+  } else {
+    delete quickMove[playerId];
+  }
+}
+
+function updatePlayerCommand(playerId, changes) {
+  mixIn(playerTurns[playerId].turn, changes);
+}
+
+function move(playerId, direction) {
+  if (quickMove[playerId]) {
+    return { command: 'move', directions: [direction, direction] };
+  } else {
+    return { command: 'move', direction: direction };
+  }
+}
+
+function use(index) {
+  return { command: 'use', item: index };
+}
+
 document.addEventListener('keydown', function (e) {
+
 
   var key = e.which;
   switch (key) {
-    case 87: playerOneDirection = 'up';    break;
-    case 65: playerOneDirection = 'left';  break;
-    case 83: playerOneDirection = 'down';  break;
-    case 68: playerOneDirection = 'right'; break;
+    case 87: updatePlayerCommand('Player One', move('Player One', 'up')); break;
+    case 65: updatePlayerCommand('Player One', move('Player One', 'left')); break;
+    case 83: updatePlayerCommand('Player One', move('Player One', 'down')); break;
+    case 68: updatePlayerCommand('Player One', move('Player One', 'right')); break;
+    case 69: updatePlayerCommand('Player One', use('banana')); break;
 
-    case 73: playerTwoDirection = 'up';    break;
-    case 74: playerTwoDirection = 'left';  break;
-    case 75: playerTwoDirection = 'down';  break;
-    case 76: playerTwoDirection = 'right'; break;
-    default:                               break;
+    case 73: updatePlayerCommand('Player Two', move('Player Two', 'up')); break;
+    case 74: updatePlayerCommand('Player Two', move('Player Two', 'left')); break;
+    case 75: updatePlayerCommand('Player Two', move('Player Two', 'down')); break;
+    case 76: updatePlayerCommand('Player Two', move('Player Two', 'right')); break;
+    case 79: updatePlayerCommand('Player Two', use('banana')); break;
+
+    default: break;
   }
 });
 
@@ -59,24 +108,7 @@ function start (level) {
 
     var states = [rendererState];
     var running = setInterval(function () {
-      var rewindedReplay = replay.step(states[states.length - 1], game, teams, {
-        'Player One': {
-          turn: {
-            command: 'move',
-            direction: playerOneDirection,
-            team: 'Player One'
-          },
-          index: 0
-        },
-        'Player Two': {
-          turn: {
-            command: 'move',
-            direction: playerTwoDirection,
-            team: 'Player Two'
-          },
-          index: 1
-        }
-      });
+      var rewindedReplay = replay.step(states[states.length - 1], game, teams, playerTurns);
 
 
       states = states.concat(rewindedReplay.rendererStates);
@@ -86,6 +118,9 @@ function start (level) {
 
       var teamStates = states[states.length - 1].teams;
       GUI.update(teamStates);
+
+      parseState(teams[0], teamStates[0]);
+      parseState(teams[1], teamStates[1]);
 
       if (monkeyMusic.isGameOver(game.state)) {
         clearInterval(running);

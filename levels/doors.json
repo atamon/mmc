@@ -1,0 +1,29 @@
+{
+  "turns": 50,
+  "layout": [
+    "  s# ",
+    "  MD ",
+    "L Us ",
+    "  Md ",
+    "  s# "
+  ],
+  "legend": {
+    "M": "monkey",
+    "s": "song",
+    "a": "album",
+    "p": "playlist",
+    "U": "user",
+    "#": "wall",
+    " ": "empty",
+    "_": "empty",
+    "-": "empty",
+    "T": "tunnel",
+    "b": "banana",
+    "D": "closed-door",
+    "d": "open-door",
+    "L": "lever"
+  },
+  "inventorySize": 3
+}
+
+

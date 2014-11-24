@@ -121,15 +121,29 @@ var Scene = function (options) {
   };
 
   var addSprite = function (x, y, tile, monkeyPositions) {
-    if (tile === 'monkey') {
+    switch (tile) {
       // We handle monkeys differently as they are moved
       // around the screen and may be covered by other
       // tiles.
-      addMonkey(x, y, monkeyPositions);
-    } else {
-      var sprite = grid.setTile(x, y, tile);
-      if (!sprite) return;
-      levelNode.addChild(sprite);
+      case 'monkey': addMonkey(x, y, monkeyPositions); break;
+
+      case 'open-door':
+      case 'closed-door':
+        var door = grid.getTile(x, y);
+        if (door &&
+            /(door$)/.test(door.type) &&
+            door.type !== tile &&
+            door.sprite.parent) {
+
+          door.sprite.parent.removeChild(door.sprite);
+          grid.clearTile(x, y);
+        }
+
+     default:
+        var sprite = grid.setTile(x, y, tile);
+        if (!sprite) return;
+        levelNode.addChild(sprite);
+        break;
     }
   };
 
@@ -235,6 +249,10 @@ var Scene = function (options) {
         duration: duration / 2,
         origScale: sprite.scale.x
       });
+    });
+
+    interpolation.updated.forEach(function (update) {
+      addSprite(update.x + 1, update.y + 1, update.tile);
     });
 
     return this;

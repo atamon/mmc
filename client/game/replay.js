@@ -4,6 +4,11 @@ var compact = require('mout/array/compact');
 var teamColors = require('./colors');
 var bosses = require('./../../bosses.json');
 
+function unitIsPickable(unit) {
+  var pickables = ['song', 'album', 'playlist', 'banana'];
+  return pickables.indexOf(unit) !== -1;
+}
+
 function getRendererState(state, teams) {
   var rendererState = monkeyMusic.gameStateForRenderer(state);
   rendererState.teams = teams.map(function (teamName) {
@@ -37,23 +42,22 @@ function calculateDirection(userPos, targetPos) {
 
 function wasRemoved(tile, nextTile) {
   return tile !== nextTile &&
-    ['song', 'album', 'playlist'].indexOf(tile) !== -1 &&
+    unitIsPickable(tile) &&
     ['empty', 'monkey'].indexOf(nextTile) !== -1;
 }
 
-function findRemoved(first, second) {
-  var removes = [];
+function wasUpdated(tile, nextTile) {
+  return tile !== nextTile &&
+    // Pickable tiles are removed separately
+    ['open-door', 'closed-door'].indexOf(nextTile) !== -1;
+}
+
+function traverseLayouts(first, second, cb) {
   first.forEach(function (row, y) {
     row.forEach(function (tile, x) {
-      var nextTile = second[y][x];
-      // If music was picked up
-      if (wasRemoved(tile, nextTile)) {
-        removes.push({ x: x, y: y });
-      }
+      cb(x, y, tile, second[y][x]);
     });
   });
-
-  return removes;
 }
 
 function getFutureStates(game, turns, teams) {
@@ -81,10 +85,23 @@ function getInterpolations(statesForPlayer) {
     var currentState = statesForPlayer[i];
     var nextState = statesForPlayer[i + 1];
 
+    var updates = [], removes = [];
+    traverseLayouts(currentState.baseLayout, nextState.baseLayout, function (x, y, tile, nextTile) {
+      if (wasUpdated(tile, nextTile)) {
+        updates.push({ x: x, y: y, tile: nextTile });
+      }
+    });
+    traverseLayouts(currentState.layout, nextState.layout, function (x, y, tile, nextTile) {
+      if (wasRemoved(tile, nextTile)) {
+        removes.push({ x: x, y: y });
+      }
+    });
+
     interpolations.push({
       monkeys: getMonkeyEvents(currentState, nextState),
       // Assume that layouts look the same for all teams during the same turn
-      removed: findRemoved(currentState.layout, nextState.layout)
+      removed: removes,
+      updated: updates
     });
   }
 
