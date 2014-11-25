@@ -50,7 +50,9 @@ var build = function (tile, options) {
   var tileInfo = tileMap[tile];
   if (!tileInfo) return;
   var texture = textureFromTile(options.tileWidth, options.tileHeight, tileInfo);
-  var sprite = spriteFromTexture(texture, tileInfo.scale);
+  // Animating sprites are scaled by their first image's scale
+  var scale = tileInfo.length > 1 ? tileInfo[0].scale : tileInfo.scale;
+  var sprite = spriteFromTexture(texture, scale);
   return sprite;
 };
 

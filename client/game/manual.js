@@ -80,12 +80,14 @@ document.addEventListener('keydown', function (e) {
     case 83: updatePlayerCommand('Player One', move('Player One', 'down')); break;
     case 68: updatePlayerCommand('Player One', move('Player One', 'right')); break;
     case 69: updatePlayerCommand('Player One', use('banana')); break;
+    case 81: updatePlayerCommand('Player One', use('trap')); break;
 
     case 73: updatePlayerCommand('Player Two', move('Player Two', 'up')); break;
     case 74: updatePlayerCommand('Player Two', move('Player Two', 'left')); break;
     case 75: updatePlayerCommand('Player Two', move('Player Two', 'down')); break;
     case 76: updatePlayerCommand('Player Two', move('Player Two', 'right')); break;
     case 79: updatePlayerCommand('Player Two', use('banana')); break;
+    case 85: updatePlayerCommand('Player Two', use('trap')); break;
 
     default: break;
   }
@@ -114,6 +116,11 @@ function start (level) {
       var interpolations = rewindedReplay.interpolations;
 
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
+
+      var rendererState = states[states.length - 1];
+      scene.updateTraps(
+        rendererState.armedTrapPositions,
+        rendererState.trapPositions);
 
       var teamStates = states[states.length - 1].teams;
       GUI.update(teamStates);

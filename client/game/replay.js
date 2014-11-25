@@ -140,7 +140,7 @@ function getInterpolations(rendererStates) {
 
     var effects = [];
     nextState.renderingHints.forEach(hintToEffects.bind(null, effects, nextState));
-    console.log(effects);
+
     interpolations.push({
       effects: effects,
       removed: removes,

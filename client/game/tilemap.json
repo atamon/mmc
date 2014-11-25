@@ -151,6 +151,26 @@
     "y": 0,
     "scale": 4
   },
+  "trap": {
+    "image": "/images/trap.png",
+    "x": 0,
+    "y": 0,
+    "scale": 4
+  },
+  "armed-trap": [
+    {
+      "image": "/images/trap.png",
+      "x": 0,
+      "y": 0,
+      "scale": 4
+    },
+    {
+      "image": "/images/trap.png",
+      "x": 16,
+      "y": 0,
+      "scale": 4
+    }
+  ],
   "banana": {
     "image": "/images/banana.png",
     "x": 0,

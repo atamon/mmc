@@ -46,6 +46,8 @@ var Scene = function (options) {
 
   var levelNode = new PIXI.DisplayObjectContainer();
   stage.addChild(levelNode);
+  var trapNode = new PIXI.DisplayObjectContainer();
+  stage.addChild(trapNode);
   var monkeyNode = new PIXI.DisplayObjectContainer();
   stage.addChild(monkeyNode);
 
@@ -118,6 +120,17 @@ var Scene = function (options) {
     } else {
       console.warn('Failed to locate monkey at ' + x + ',' + y);
     }
+  };
+
+  var addTrap = function (type, position) {
+    var x = position[1];
+    var y = position[0];
+
+    var sprite = SpriteFactory.build(type, { tileWidth: tileWidth, tileHeight: tileHeight });
+    trapNode.addChild(sprite);
+
+    sprite.position.x = (x + 1) * tileWidth;
+    sprite.position.y = (y + 1) * tileHeight;
   };
 
   var addSprite = function (x, y, tile, monkeyPositions) {
@@ -254,6 +267,12 @@ var Scene = function (options) {
     });
 
     return this;
+  };
+
+  this.updateTraps = function (armedTrapPositions, trapPositions) {
+    trapNode.removeChildren();
+    armedTrapPositions.forEach(addTrap.bind(null, 'armed-trap'));
+    trapPositions.forEach(addTrap.bind(null, 'trap'));
   };
 
   this.setLevelLayout = function (layout) {
