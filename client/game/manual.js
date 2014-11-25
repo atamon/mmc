@@ -1,6 +1,7 @@
 var MOVE_TIMEOUT = 600;
 
 var mixIn = require('mout/object/mixIn');
+var forEach = require('mout/collection/forEach');
 var monkeyMusic = require('monkey-music');
 var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
@@ -44,7 +45,7 @@ var playerTurns = {
 };
 
 var quickMove = {};
-function parseState(playerId, state) {
+function parseState(state, playerId) {
 
   if (Object.keys(state.buffs || {}).indexOf('speedy') !== -1) {
     quickMove[playerId] = true;
@@ -102,14 +103,12 @@ function start (level) {
     scene.parseLayout(rendererState.layout, rendererState.monkeyDetails);
 
     GUI.init({
-      id: 'teamName',
-      ids: rendererState.teams.map(function(data) { return data.teamName; })
+      ids: teams
     });
 
     var states = [rendererState];
     var running = setInterval(function () {
       var rewindedReplay = replay.step(states[states.length - 1], game, teams, playerTurns);
-
 
       states = states.concat(rewindedReplay.rendererStates);
       var interpolations = rewindedReplay.interpolations;
@@ -119,8 +118,7 @@ function start (level) {
       var teamStates = states[states.length - 1].teams;
       GUI.update(teamStates);
 
-      parseState(teams[0], teamStates[0]);
-      parseState(teams[1], teamStates[1]);
+      forEach(teamStates, parseState);
 
       if (monkeyMusic.isGameOver(game.state)) {
         clearInterval(running);

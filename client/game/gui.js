@@ -1,11 +1,10 @@
 var messages = require('./messages');
 var template = require('../templates/team.hbs');
+var forEach = require('mout/collection/forEach');
 
 var statusEl = document.getElementById('game-status'),
     modalEl = document.getElementById('game-modal'),
     container = document.getElementById('game-container');
-
-var ID_ATTRIBUTE;
 
 function setStatus(key, keyIsMessage) {
   if (key.split('\n').length > 1) {
@@ -30,7 +29,6 @@ function slugify(text) {
 }
 
 function init(opts) {
-  ID_ATTRIBUTE = opts.id;
   // Loop number of panes
   opts.ids.forEach(function(id, index) {
     var el = document.getElementById(slugify(id)) || document.createElement('div');
@@ -47,8 +45,9 @@ function init(opts) {
 }
 
 function update(states) {
-  states.forEach(function(data) {
-    var el = document.getElementById(slugify(data[ID_ATTRIBUTE])),
+  forEach(states, function(data, id) {
+    data.teamName = id;
+    var el = document.getElementById(slugify(id)),
         html = template(data);
 
     el.innerHTML = html;

@@ -1,23 +1,35 @@
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
 var compact = require('mout/array/compact');
+var map = require('mout/collection/map');
 var teamColors = require('./colors');
 var bosses = require('./../../bosses.json');
 
 function unitIsPickable(unit) {
-  var pickables = ['song', 'album', 'playlist', 'banana'];
+  var pickables = ['song', 'album', 'playlist', 'banana', 'trap'];
   return pickables.indexOf(unit) !== -1;
 }
 
 function getRendererState(state, teams) {
   var rendererState = monkeyMusic.gameStateForRenderer(state);
-  rendererState.teams = teams.map(function (teamName) {
-    var sfp = monkeyMusic.gameStateForTeam(state, teamName);
-    // We do this to get simpler interpolations
-    sfp.teamName = teamName;
-    return sfp;
+  rendererState.monkeyDetails = map(rendererState.teams, function getMonkeyDetails(state, teamNumber) {
+    // Load special boss-headgear for bosses, if they have one
+    var headgear = 'headphones';
+    if (bosses[state.teamName] !== undefined &&
+        bosses[state.teamName].headgear !== undefined) {
+
+      headgear = bosses[state.teamName].headgear;
+    }
+
+    return {
+      x: state.position[1],
+      y: state.position[0],
+      id: teams[teamNumber],
+      headgear: headgear,
+      color: state.color !== undefined ?
+        state.color : teamColors[teamNumber]
+    };
   });
-  rendererState.monkeyDetails = rendererState.teams.map(getMonkeyDetails);
   return rendererState;
 }
 
@@ -79,11 +91,40 @@ function getFutureStates(game, turns, teams) {
   });
 }
 
-function getInterpolations(statesForPlayer) {
+function hintToEffects(effects, renderingState, h) {
+  switch (h.hint) {
+    case 'move-team':
+      effects.push({
+        type: 'tween',
+        nTurns: 1,
+        id: h.team,
+        from: { x: h.from[1], y: h.from[0] },
+        to: { x: h.to[1], y: h.to[0] },
+      });
+      break;
+    case 'enter-tunnel':
+      effects.push({
+        type: 'tween',
+        nTurns: 0.4,
+        id: h.team,
+        from: { x: h.from[1], y: h.from[0] },
+        to: { x: h.enter[1], y: h.enter[0] }
+      });
+      effects.push({
+        type: 'fade',
+        nTurns: 1,
+        id: h.team,
+        to: { x: h.exit[1], y: h.exit[0] }
+      });
+      break;
+  }
+}
+
+function getInterpolations(rendererStates) {
   var interpolations = [];
-  for (var i = 0; i < statesForPlayer.length - 1; i++) {
-    var currentState = statesForPlayer[i];
-    var nextState = statesForPlayer[i + 1];
+  for (var i = 0; i < rendererStates.length - 1; i++) {
+    var currentState = rendererStates[i];
+    var nextState = rendererStates[i + 1];
 
     var updates = [], removes = [];
     traverseLayouts(currentState.baseLayout, nextState.baseLayout, function (x, y, tile, nextTile) {
@@ -97,72 +138,17 @@ function getInterpolations(statesForPlayer) {
       }
     });
 
+    var effects = [];
+    nextState.renderingHints.forEach(hintToEffects.bind(null, effects, nextState));
+    console.log(effects);
     interpolations.push({
-      monkeys: getMonkeyEvents(currentState, nextState),
-      // Assume that layouts look the same for all teams during the same turn
+      effects: effects,
       removed: removes,
       updated: updates
     });
   }
 
   return interpolations;
-}
-
-function getMonkeyDetails(state, teamNumber) {
-  // Load special boss-headgear for bosses, if they have one
-  var headgear = 'headphones';
-  if (bosses[state.teamName] !== undefined &&
-      bosses[state.teamName].headgear !== undefined) {
-
-    headgear = bosses[state.teamName].headgear;
-  }
-
-  return {
-    x: state.position[1],
-    y: state.position[0],
-    id: state.teamName,
-    headgear: headgear,
-    color: state.color !== undefined ?
-      state.color : teamColors[teamNumber]
-  };
-}
-
-function getMonkeyEvents(first, second) {
-  return first.teams.map(function (firstTeamState, teamIndex) {
-    var secondTeamState = second.teams[teamIndex];
-    var firstPos = { x: firstTeamState.position[1], y: firstTeamState.position[0] };
-    var secondPos = { x: secondTeamState.position[1], y: secondTeamState.position[0] };
-    var effects = [];
-
-    console.assert(firstTeamState.teamName === secondTeamState.teamName, firstTeamState, secondTeamState);
-
-    // The monkey just went through a tunnel
-    var monkeyOnTunnel = second.baseLayout[secondPos.y][secondPos.x] === 'tunnel';
-    var monkeyHasBeenOnTunnel = first.baseLayout[firstPos.y][firstPos.x] === 'tunnel';
-    if (monkeyOnTunnel && !monkeyHasBeenOnTunnel) {
-      // TODO With animation hints we can know which tunnel
-      // the monkey entered and fade into it
-      effects.push({
-        type: 'fade',
-        from: firstPos,
-        to: secondPos,
-        nTurns: 1 // nTurns not real ms duration
-      });
-    } else {
-      effects.push({
-        type: 'tween',
-        nTurns: 1,
-        from: firstPos,
-        to: secondPos,
-        direction: calculateDirection(firstPos, secondPos),
-      });
-    }
-
-    return {
-      id: firstTeamState.teamName,
-      effects: effects
-    };
-  });
 }
 
 function prepare(teams, turns, level) {
