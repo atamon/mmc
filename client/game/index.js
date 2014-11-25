@@ -78,8 +78,7 @@ function displayReplay(game) {
   var initialState = rendererStates[0];
   scene.parseLayout(initialState.layout, initialState.monkeyDetails);
   GUI.init({
-    id: 'teamName',
-    ids: initialState.teams.map(function(data) { return data.teamName; })
+    ids: game.teams
   });
 
   GUI.setStatus('playing');
