@@ -2,6 +2,7 @@ var messages = require('./messages');
 var teamTemplate = require('../templates/team.hbs');
 var globalTemplate = require('../templates/global.hbs');
 var forEach = require('mout/collection/forEach');
+var colors = require('./colors');
 
 var statusEl = document.getElementById('game-status'),
     modalEl = document.getElementById('game-modal'),
@@ -29,6 +30,10 @@ function slugify(text) {
     .replace(/-+$/, '');            // Trim - from end of text
 }
 
+function toHex(number) {
+  return '#'+number.toString(16);
+}
+
 function init(opts) {
   // Loop number of panes
   opts.ids.forEach(function(id, index) {
@@ -54,8 +59,11 @@ function updateState(template, data, id) {
 
 function update(rendererState) {
   updateState(globalTemplate, rendererState, 'global-pane');
-  forEach(rendererState.teams, function (teamData, teamName) {
+  Object.keys(rendererState.teams).forEach(function (teamName, index) {
+    var teamData = rendererState.teams[teamName];
     teamData.teamName = teamName;
+    teamData.color = toHex(colors[index]);
+    console.log(teamData);
     updateState(teamTemplate, teamData, teamName);
   });
 }

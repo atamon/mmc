@@ -1,9 +1,9 @@
 module.exports = [
   // Red
-  0xFF0000,
-  // Blue
-  0x0000CC,
-  // Green
-  0x00FF00
+  0xFD7C7C,
+  // Pink
+  0xF58BFC,
+  // Yellow
+  0xFBFF50
   // TODO Violet
 ];
