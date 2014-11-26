@@ -1,7 +1,7 @@
 {
   "beginner": {
     "description": "Beginner",
-    "level": "beginner",
+    "level": "maze",
     "bot": "atamon",
     "headgear": "shades",
     "reward": 3
