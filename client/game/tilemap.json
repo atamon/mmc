@@ -51,6 +51,38 @@
       "scale": 1
     },
   ],
+  "explosion" : [
+    {
+      "image": "/images/explosion.png",
+      "x": 0,
+      "y": 0,
+      "scale": 2
+    },
+    {
+      "image": "/images/explosion.png",
+      "x": 32,
+      "y": 0,
+      "scale": 2
+    },
+    {
+      "image": "/images/explosion.png",
+      "x": 64,
+      "y": 0,
+      "scale": 2
+    },
+    {
+      "image": "/images/explosion.png",
+      "x": 96,
+      "y": 0,
+      "scale": 2
+    },
+    {
+      "image": "/images/explosion.png",
+      "x": 128,
+      "y": 0,
+      "scale": 2
+    },
+  ],
   "shades" : [
     {
       "image": "/images/shades.png",

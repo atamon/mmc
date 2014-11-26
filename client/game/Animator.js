@@ -1,9 +1,14 @@
 var compact = require('mout/array/compact');
+var SpriteFactory = require('./SpriteFactory');
 
 function Animator(options) {
 
   var tileWidth = options.tileWidth;
   var tileHeight = options.tileHeight;
+  var tileOptions = {
+    tileWidth: tileWidth,
+    tileHeight: tileHeight
+  };
 
   var onGoingInterpolations = [];
   var onGoingBubbleRemovals = [];
@@ -72,6 +77,54 @@ function Animator(options) {
       };
 
       return tween;
+    },
+
+    explode: function (sprite, turnDuration, options) {
+      var effectDuration = turnDuration * options.nTurns;
+      var timeLeft = effectDuration;
+      var delayLeft = turnDuration * options.delayTurns;
+
+      var explosionSprite = SpriteFactory.build('explosion', {
+        tileWidth: tileWidth,
+        tileHeight: tileHeight
+      });
+
+      // Make em big!
+      explosionSprite.scale.x += explosionSprite.scale.x;
+      explosionSprite.scale.y += explosionSprite.scale.y;
+      explosionSprite.anchor.x = 0.25;
+      explosionSprite.anchor.y = 0.25;
+
+      // Pause animation
+      explosionSprite.loop = false;
+      explosionSprite.stop();
+
+      var insert = function (timeSinceLastFrame) {
+        delayLeft -= timeSinceLastFrame;
+
+        if (delayLeft <= 0) {
+          // Play animation
+          explosionSprite.play();
+          sprite.addChild(explosionSprite);
+
+          return remove;
+        }
+
+        return insert;
+      };
+
+      var remove = function (timeSinceLastFrame) {
+        timeLeft -= timeSinceLastFrame;
+
+        if (timeLeft <= 0) {
+          sprite.removeChild(explosionSprite);
+          return undefined;
+        }
+
+        return remove;
+      };
+
+      return insert;
     }
   };
 
