@@ -127,39 +127,41 @@ function Animator(options) {
       return insert;
     },
 
-    halt: function (sprite, turnDuration, options) {
+    darken: function (sprite, turnDuration, options) {
       var effectDuration = turnDuration * options.nTurns;
       var timeLeft = effectDuration;
       var delayLeft = turnDuration * options.delayTurns;
 
+      var oldHeadgearTint = 0xFFFFFF;
 
-      var halt = function (timeSinceLastFrame) {
+      var darken = function (timeSinceLastFrame) {
         delayLeft -= timeSinceLastFrame;
 
         if (delayLeft <= 0) {
           // Stop monkey animation
-          sprite.stop();
+          sprite.tint = 0xCCCCCC;
 
           // Stop headgear as well
           if (sprite.children[0]) {
-            sprite.children[0].stop();
+            oldHeadgearTint = sprite.children[0].tint;
+            sprite.children[0].tint = 0x444444;
           }
 
           return resume;
         }
 
-        return halt;
+        return darken;
       };
 
       var resume = function (timeSinceLastFrame) {
         timeLeft -= timeSinceLastFrame;
 
         if (timeLeft <= 0) {
-          sprite.play();
+          sprite.tint = 0xFFFFFF;
 
           // Start headgear as well
           if (sprite.children[0]) {
-            sprite.children[0].play();
+            sprite.children[0].tint = oldHeadgearTint;
           }
           return undefined;
         }
@@ -167,7 +169,7 @@ function Animator(options) {
         return resume;
       };
 
-      return halt;
+      return darken;
     }
   };
 

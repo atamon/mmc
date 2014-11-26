@@ -82,6 +82,12 @@
       "y": 0,
       "scale": 2
     },
+    {
+      "image": "/images/explosion.png",
+      "x": 160,
+      "y": 0,
+      "scale": 2
+    },
   ],
   "shades" : [
     {

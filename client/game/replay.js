@@ -125,7 +125,7 @@ function hintToEffects(effects, renderingState, h) {
         id: h.team
       });
       effects.push({
-        type: 'halt',
+        type: 'darken',
         delayTurns: 1,
         nTurns: 5,
         id: h.team
