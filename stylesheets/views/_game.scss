@@ -62,7 +62,7 @@ $water: #378ad1;
 #global-pane {
   background: $water;
   width: 100%;
-  min-height: to_rem(54);
+  padding: .5rem 0;
 
   dl {
     margin-bottom: 0;
@@ -72,6 +72,7 @@ $water: #378ad1;
 .game-wrapper {
   position: relative;
 
+  flex: 1;
   align-self: stretch;
   background-color: $water;
   display: flex;
@@ -110,6 +111,10 @@ $water: #378ad1;
 
     h2, p {
       margin: 0;
+    }
+
+    h2 {
+      text-shadow: rgba(#000, .2) 2px 2px 0;
     }
 
     .team-score {
