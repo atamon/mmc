@@ -1,5 +1,6 @@
 {
   "turns": 50,
+  "inventorySize": 3,
   "layout": [
     "U  _  ",
     "pM-## ",

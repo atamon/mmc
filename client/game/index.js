@@ -6,10 +6,11 @@ var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
 var GUI = require('./gui');
 var replay = require('./replay');
+var Util = require('./Util');
 
 var gameContainer = document.querySelector('#game-container');
-var sceneWidth = getMaxGameSize();
-var sceneHeight = getMaxGameSize();
+var sceneWidth = Util.getMaxGameSize();
+var sceneHeight = Util.getMaxGameSize();
 var scene = new Scene({
   size: { x: sceneWidth, y: sceneHeight },
   backgroundColor: 0x83d135,
@@ -18,13 +19,6 @@ var scene = new Scene({
 });
 
 var runningGame = null;
-
-function getMaxGameSize() {
-  // Chrome will produce glitches if we don't make sure to
-  // use a resolution that is a power of 2
-  var windowSize = Math.min(window.innerWidth, window.innerHeight);
-  return windowSize;
-}
 
 function displayLevel(info, cb) {
   if (!info || !info.level) {
@@ -86,8 +80,9 @@ function displayReplay(game) {
   var iTurn = 0;
   runningGame = setInterval(function () {
     var interpolation = interpolations[iTurn];
-    var teamStates = rendererStates[iTurn].teams;
-    GUI.update(teamStates);
+    var rendererState = rendererStates[iTurn];
+
+    GUI.update(rendererState);
 
     // Interpolate moves until we've run out of them
     if (!interpolation) {
@@ -101,6 +96,10 @@ function displayReplay(game) {
     }
 
     scene.interpolate(interpolation, MOVE_TIMEOUT);
+    scene.updateTraps(
+      rendererState.armedTrapPositions,
+      rendererState.trapPositions);
+
     iTurn++;
   }, MOVE_TIMEOUT);
 }

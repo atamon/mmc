@@ -10,7 +10,7 @@ var paths = {
   css: 'public/css',
   scripts: ['client/**/*.js'],
   config: ['./*.json', 'client/**/*.json'],
-  gameMain: ['client/game.js'],
+  versusMain: ['client/versus.js'],
   bossMain: ['client/boss.js'],
   editorMain: ['client/editor.js'],
   manualMain: ['client/manual.js']
@@ -36,7 +36,7 @@ var buildJS = function(main) {
 };
 
 gulp.task('css', buildCSS);
-gulp.task('game', buildJS.bind(null, paths.gameMain));
+gulp.task('versus', buildJS.bind(null, paths.versusMain));
 gulp.task('boss', buildJS.bind(null, paths.bossMain));
 gulp.task('editor', buildJS.bind(null, paths.editorMain));
 gulp.task('manual', buildJS.bind(null, paths.manualMain));
@@ -44,11 +44,11 @@ gulp.task('manual', buildJS.bind(null, paths.manualMain));
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scss, ['css']);
-  gulp.watch(paths.scripts, ['game']);
+  gulp.watch(paths.scripts, ['versus']);
   gulp.watch(paths.scripts, ['boss']);
   gulp.watch(paths.scripts, ['editor']);
   gulp.watch(paths.scripts, ['manual']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['game', 'boss', 'css', 'editor', 'manual']);
+gulp.task('default', ['versus', 'boss', 'css', 'editor', 'manual']);

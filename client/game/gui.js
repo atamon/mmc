@@ -1,5 +1,6 @@
 var messages = require('./messages');
-var template = require('../templates/team.hbs');
+var teamTemplate = require('../templates/team.hbs');
+var globalTemplate = require('../templates/global.hbs');
 var forEach = require('mout/collection/forEach');
 
 var statusEl = document.getElementById('game-status'),
@@ -41,17 +42,22 @@ function init(opts) {
     else {
       container.parentNode.appendChild(el);
     }
-  })
+  });
 }
 
-function update(states) {
-  forEach(states, function(data, id) {
-    data.teamName = id;
-    var el = document.getElementById(slugify(id)),
-        html = template(data);
+function updateState(template, data, id) {
+  var el = document.getElementById(slugify(id)),
+      html = template(data);
 
-    el.innerHTML = html;
-  })
+  el.innerHTML = html;
+}
+
+function update(rendererState) {
+  updateState(globalTemplate, rendererState, 'global-pane');
+  forEach(rendererState.teams, function (teamData, teamName) {
+    teamData.teamName = teamName;
+    updateState(teamTemplate, teamData, teamName);
+  });
 }
 
 exports.init = init;

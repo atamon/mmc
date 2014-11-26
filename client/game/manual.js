@@ -7,10 +7,11 @@ var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
 var replay = require('./replay');
 var GUI = require('./gui');
+var Util = require('./Util');
 
 var gameContainer = document.querySelector('#game-container');
-var sceneWidth = getMaxGameSize();
-var sceneHeight = getMaxGameSize();
+var sceneWidth = Util.getMaxGameSize();
+var sceneHeight = Util.getMaxGameSize();
 var scene = new Scene({
   size: { x: sceneWidth, y: sceneHeight },
   backgroundColor: 0x83d135,
@@ -18,12 +19,6 @@ var scene = new Scene({
   tileMap: tileMap
 });
 
-function getMaxGameSize() {
-  // Chrome will produce glitches if we don't make sure to
-  // use a resolution that is a power of 2
-  var windowSize = Math.min(window.innerWidth, window.innerHeight);
-  return windowSize;
-}
 
 var playerTurns = {
   'Player One': {
@@ -49,8 +44,10 @@ function parseState(state, playerId) {
 
   if (Object.keys(state.buffs || {}).indexOf('speedy') !== -1) {
     quickMove[playerId] = true;
+    delete playerTurns[playerId].turn.direction;
   } else {
     delete quickMove[playerId];
+    delete playerTurns[playerId].turn.directions;
   }
 }
 
@@ -114,18 +111,16 @@ function start (level) {
 
       states = states.concat(rewindedReplay.rendererStates);
       var interpolations = rewindedReplay.interpolations;
+      var rendererState = states[states.length - 1];
 
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
-
-      var rendererState = states[states.length - 1];
       scene.updateTraps(
         rendererState.armedTrapPositions,
         rendererState.trapPositions);
 
-      var teamStates = states[states.length - 1].teams;
-      GUI.update(teamStates);
+      GUI.update(rendererState);
 
-      forEach(teamStates, parseState);
+      forEach(rendererState.teams, parseState);
 
       if (monkeyMusic.isGameOver(game.state)) {
         clearInterval(running);

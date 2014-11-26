@@ -35,7 +35,9 @@ router.get('/:gameId', function (req, res) {
     return res.redirect('/game/new');
   }
 
-  res.render('game');
+  res.render('versus', {
+    gameId: req.params.gameId
+  });
 });
 
 router.post('/', function (req, res) {

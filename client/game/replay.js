@@ -117,6 +117,14 @@ function hintToEffects(effects, renderingState, h) {
         to: { x: h.exit[1], y: h.exit[0] }
       });
       break;
+    case 'trigger-trap':
+      effects.push({
+        type: 'explode',
+        delayTurns: 0.5,
+        nTurns: 2,
+        id: h.team
+      });
+      break;
   }
 }
 

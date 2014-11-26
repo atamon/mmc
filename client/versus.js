@@ -10,7 +10,7 @@ socket.on('connect', GUI.setStatus.bind(null, 'ready'));
 socket.on('error', GUI.setStatus.bind(null, 'offline', false));
 socket.on('disconnect', GUI.setStatus.bind(null, 'offline', false));
 
-var game = require('./game/index');
+var game = require('./game');
 
 
 // The server provided us with a pre-defined replay play it!
