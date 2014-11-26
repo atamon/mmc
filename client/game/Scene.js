@@ -4,6 +4,7 @@ var Grid = require('./Grid');
 var SpriteFactory = require('./SpriteFactory');
 var forEach = require('mout/collection/forEach');
 var unique = require('mout/array/unique');
+var colors = require('./colors').faded;
 
 
 PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
@@ -122,11 +123,13 @@ var Scene = function (options) {
     }
   };
 
-  var addTrap = function (type, position) {
-    var x = position[1];
-    var y = position[0];
+  var addTrap = function (teams, type, trap) {
+    var x = trap.position[1];
+    var y = trap.position[0];
+    var tintColor = colors[teams.indexOf(trap.team)];
 
     var sprite = SpriteFactory.build(type, { tileWidth: tileWidth, tileHeight: tileHeight });
+    sprite.tint = tintColor;
     trapNode.addChild(sprite);
 
     sprite.position.x = (x + 1) * tileWidth;
@@ -269,10 +272,10 @@ var Scene = function (options) {
     return this;
   };
 
-  this.updateTraps = function (armedTrapPositions, trapPositions) {
+  this.updateTraps = function (armedTraps, traps, teams) {
     trapNode.removeChildren();
-    armedTrapPositions.forEach(addTrap.bind(null, 'armed-trap'));
-    trapPositions.forEach(addTrap.bind(null, 'trap'));
+    armedTraps.forEach(addTrap.bind(null, teams, 'armed-trap'));
+    traps.forEach(addTrap.bind(null, teams, 'trap'));
   };
 
   this.setLevelLayout = function (layout) {

@@ -2,7 +2,7 @@ var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
 var compact = require('mout/array/compact');
 var map = require('mout/collection/map');
-var teamColors = require('./colors');
+var teamColors = require('./colors').clear;
 var bosses = require('./../../bosses.json');
 
 function unitIsPickable(unit) {

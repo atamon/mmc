@@ -115,8 +115,8 @@ function start (level) {
 
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
       scene.updateTraps(
-        rendererState.armedTrapPositions,
-        rendererState.trapPositions);
+        rendererState.armedTraps,
+        rendererState.traps, teams);
 
       GUI.update(rendererState);
 

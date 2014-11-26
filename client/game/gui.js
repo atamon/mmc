@@ -1,8 +1,7 @@
 var messages = require('./messages');
 var teamTemplate = require('../templates/team.hbs');
 var globalTemplate = require('../templates/global.hbs');
-var forEach = require('mout/collection/forEach');
-var colors = require('./colors');
+var colors = require('./colors').clear;
 
 var statusEl = document.getElementById('game-status'),
     modalEl = document.getElementById('game-modal'),
