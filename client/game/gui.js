@@ -46,7 +46,6 @@ function init(opts) {
 }
 
 function updateState(template, data, id) {
-  data.teamName = id;
   var el = document.getElementById(slugify(id)),
       html = template(data);
 
@@ -55,7 +54,10 @@ function updateState(template, data, id) {
 
 function update(rendererState) {
   updateState(globalTemplate, rendererState, 'global-pane');
-  forEach(rendererState.teams, updateState.bind(null, teamTemplate));
+  forEach(rendererState.teams, function (teamData, teamName) {
+    teamData.teamName = teamName;
+    updateState(teamTemplate, teamData, teamName);
+  });
 }
 
 exports.init = init;

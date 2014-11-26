@@ -37,7 +37,7 @@ router.get('/:replayId', function (req, res) {
       return;
     }
 
-    res.render('game', {
+    res.render('versus', {
       replay: JSON.stringify(replay)
     });
   });

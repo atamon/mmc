@@ -7,10 +7,11 @@ var Scene = require('./Scene');
 var tileMap = require('./tilemap.json');
 var replay = require('./replay');
 var GUI = require('./gui');
+var Util = require('./Util');
 
 var gameContainer = document.querySelector('#game-container');
-var sceneWidth = getMaxGameSize();
-var sceneHeight = getMaxGameSize();
+var sceneWidth = Util.getMaxGameSize();
+var sceneHeight = Util.getMaxGameSize();
 var scene = new Scene({
   size: { x: sceneWidth, y: sceneHeight },
   backgroundColor: 0x83d135,
@@ -18,12 +19,6 @@ var scene = new Scene({
   tileMap: tileMap
 });
 
-function getMaxGameSize() {
-  // Chrome will produce glitches if we don't make sure to
-  // use a resolution that is a power of 2
-  var windowSize = Math.min(window.innerWidth, window.innerHeight);
-  return windowSize;
-}
 
 var playerTurns = {
   'Player One': {

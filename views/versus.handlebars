@@ -8,7 +8,11 @@
   <div id="game-container"></div>
 </div>
 <div id="game-status" class="red">Offline</div>
-{{#with replay}}
-<script> window.monkeyMusicReplay = {{{../replay}}} </script>
-{{/with}}
-<script src="/game.js"></script>
+{{#if replay}}
+<script> window.monkeyMusicReplay = {{{replay}}} </script>
+{{else}}
+<div>
+  <p>Run your AI with gameId <code id="game-id">{{gameId}}</code></p>
+</div>
+{{/if}}
+<script src="/versus.js"></script>

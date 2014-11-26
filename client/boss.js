@@ -9,7 +9,7 @@ socket.on('connect', GUI.setStatus.bind(null, 'ready'));
 socket.on('error', GUI.setStatus.bind(null, 'offline', false));
 socket.on('disconnect', GUI.setStatus.bind(null, 'offline', false));
 
-var game = require('./game/index');
+var game = require('./game');
 
 var createGameBtn = document.getElementById('start-game');
 var currentGameDisplay = document.getElementById('game-id');
