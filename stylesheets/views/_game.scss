@@ -92,6 +92,8 @@ $water: #378ad1;
   }
 
   #game-container {
+    flex-grow: 0;
+    flex-shrink: 0;
     opacity: 0;
     overflow: hidden;
     display: flex;
