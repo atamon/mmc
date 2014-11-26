@@ -8,7 +8,7 @@ router.get('/', function (req, res) {
 router.get('/:levelId', function (req, res) {
   var level = levels.get(req.params.levelId);
   if (!level) {
-    res.status(404).render('error');
+    res.status(404).render('error', { error: 'Invalid level ID' });
     return;
   }
 

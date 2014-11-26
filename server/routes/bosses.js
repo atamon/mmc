@@ -49,6 +49,10 @@ router.use('/', function (req, res, next) {
 
 // // Serve boss page
 router.get('/:bossId', function (req, res) {
+  var boss = bosses[req.params.bossId];
+  if (!boss) {
+    return res.status(404).render('error', { error: 'Invalid boss ID'});
+  }
   var level = levels.get(bosses[req.params.bossId].level);
 
   // Look up level and AI for this boss
