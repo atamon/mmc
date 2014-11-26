@@ -1,7 +1,7 @@
 // We wait a second for teams to post their turn
 var TURN_TIME_LIMIT = 1000;
 // We wait a minute for all players to join after the first one
-var PENDING_JOIN_TIMEOUT = 60000;
+var PENDING_JOIN_TIMEOUT = 60000 * 2;
 // We wait 10 minutes until we kill games that nobody have joined
 var PASSIVE_GAME_LIFE_LENGTH = 60000 * 10;
 
@@ -201,12 +201,15 @@ var createGame = function (options) {
 var joinGame = function (gameId, teamName, cb) {
   var game = games[gameId];
   if (!game) {
-    return cb('Invalid game id');
+    return cb('Invalid game id. Games time out if not enough players join. ' +
+              'Please retry after having started a new game.');
   }
 
   var waiting = waitingTeams[gameId];
   if (!waiting) {
-    return cb('Game already running');
+    return cb('Game already running. ' +
+              'This means enough other teams have already joined in.' +
+              'Start a new game and join before you spread the ID to anyone else.');
   }
 
   // Cancel passive game killer timeout
@@ -214,7 +217,8 @@ var joinGame = function (gameId, teamName, cb) {
 
   // Wait for remaining teams
   var timeout = setTimeout(function () {
-    cb('Join request timed out. No other team joined in');
+    cb('Join request timed out as no other team joined in.' +
+       'Start a new game and be sure to have someone join in with you.');
 
     // Deleting a non-existant key is alright,
     // so we do this the simple way
