@@ -124,6 +124,12 @@ function hintToEffects(effects, renderingState, h) {
         nTurns: 2,
         id: h.team
       });
+      effects.push({
+        type: 'halt',
+        delayTurns: 1,
+        nTurns: 5,
+        id: h.team
+      });
       break;
   }
 }

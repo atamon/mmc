@@ -125,6 +125,49 @@ function Animator(options) {
       };
 
       return insert;
+    },
+
+    halt: function (sprite, turnDuration, options) {
+      var effectDuration = turnDuration * options.nTurns;
+      var timeLeft = effectDuration;
+      var delayLeft = turnDuration * options.delayTurns;
+
+
+      var halt = function (timeSinceLastFrame) {
+        delayLeft -= timeSinceLastFrame;
+
+        if (delayLeft <= 0) {
+          // Stop monkey animation
+          sprite.stop();
+
+          // Stop headgear as well
+          if (sprite.children[0]) {
+            sprite.children[0].stop();
+          }
+
+          return resume;
+        }
+
+        return halt;
+      };
+
+      var resume = function (timeSinceLastFrame) {
+        timeLeft -= timeSinceLastFrame;
+
+        if (timeLeft <= 0) {
+          sprite.play();
+
+          // Start headgear as well
+          if (sprite.children[0]) {
+            sprite.children[0].play();
+          }
+          return undefined;
+        }
+
+        return resume;
+      };
+
+      return halt;
     }
   };
 
