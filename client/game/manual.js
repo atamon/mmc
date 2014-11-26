@@ -114,18 +114,16 @@ function start (level) {
 
       states = states.concat(rewindedReplay.rendererStates);
       var interpolations = rewindedReplay.interpolations;
+      var rendererState = states[states.length - 1];
 
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
-
-      var rendererState = states[states.length - 1];
       scene.updateTraps(
         rendererState.armedTrapPositions,
         rendererState.trapPositions);
 
-      var teamStates = states[states.length - 1].teams;
-      GUI.update(teamStates);
+      GUI.update(rendererState);
 
-      forEach(teamStates, parseState);
+      forEach(rendererState.teams, parseState);
 
       if (monkeyMusic.isGameOver(game.state)) {
         clearInterval(running);

@@ -86,8 +86,9 @@ function displayReplay(game) {
   var iTurn = 0;
   runningGame = setInterval(function () {
     var interpolation = interpolations[iTurn];
-    var teamStates = rendererStates[iTurn].teams;
-    GUI.update(teamStates);
+    var rendererState = rendererStates[iTurn];
+
+    GUI.update(rendererState);
 
     // Interpolate moves until we've run out of them
     if (!interpolation) {
@@ -101,6 +102,10 @@ function displayReplay(game) {
     }
 
     scene.interpolate(interpolation, MOVE_TIMEOUT);
+    scene.updateTraps(
+      rendererState.armedTrapPositions,
+      rendererState.trapPositions);
+
     iTurn++;
   }, MOVE_TIMEOUT);
 }
