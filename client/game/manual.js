@@ -49,8 +49,10 @@ function parseState(state, playerId) {
 
   if (Object.keys(state.buffs || {}).indexOf('speedy') !== -1) {
     quickMove[playerId] = true;
+    delete playerTurns[playerId].turn.direction;
   } else {
     delete quickMove[playerId];
+    delete playerTurns[playerId].turn.directions;
   }
 }
 
