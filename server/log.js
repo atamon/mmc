@@ -18,3 +18,7 @@ var log = bunyan.createLogger({
 });
 
 module.exports = log;
+module.exports.silence = function () {
+  log.info = function () {};
+  log.error = function () {};
+};

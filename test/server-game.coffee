@@ -5,6 +5,8 @@ sinon = require('sinon')
 game = require('../server/game')
 level = require('../server/levels').get('maze')
 
+require('../server/log').silence()
+
 
 describe 'when a game is created', ->
   gameId = null
@@ -105,6 +107,18 @@ describe 'when a game is created', ->
             secondPlayer.secondCall.args[0].should.be.a('string')
             chai.expect(secondPlayer.secondCall.args[1]).to.equal(undefined)
             secondPlayer.thirdCall.args[1].remainingTurns.should.equal(99)
+
+        describe 'when someone ragequits', ->
+
+          beforeEach ->
+            for i in [0..99]
+              game.executeTurn(firstPlayerMove, firstPlayer);
+              clock.tick(1000)
+
+          it 'should still continue until game over', ->
+            firstPlayer.callCount.should.equal(101)
+            firstPlayer.lastCall.args[1].isGameOver.should.equal(true)
+
 
 
 
