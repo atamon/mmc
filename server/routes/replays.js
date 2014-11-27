@@ -2,6 +2,7 @@ var router = require('express').Router();
 var game = require('../game');
 var db = require('../db');
 var log = require('../log');
+var settings = require('../../settings.json');
 
 game.on('gameover', function (results) {
   var gameId = results.gameId;
@@ -16,6 +17,14 @@ game.on('gameover', function (results) {
       // TODO Push new replays to sockets?
     }
   });
+});
+
+router.use('/', function (req, res, next) {
+  if (req.session.validTeam !== settings.adminUser) {
+    return res.status(403).render('error', { error: 'Nah aah!' });
+  } else {
+    next();
+  }
 });
 
 router.get('/', function (req, res) {
