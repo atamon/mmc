@@ -97,7 +97,7 @@ router.post('/start', function (req, res) {
 
   // Request AI from http://localhost:BOSS_PORT
   var options = {
-    url: 'http://localhost:' + settings.botPort,
+    url: settings.botHost + ':' + settings.botPort,
     form: {
       botId: botId,
       gameId: gameId,

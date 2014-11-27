@@ -1,6 +1,7 @@
 {
   "port": "3001",
   "botPort": "1337",
+  "botHost": "http://localhost",
   "secret": "???",
   "gmail": {
     "user": "???",
