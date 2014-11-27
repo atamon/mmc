@@ -223,6 +223,7 @@ var joinGame = function (gameId, teamName, cb) {
     // Deleting a non-existant key is alright,
     // so we do this the simple way
     delete waitingTeams[gameId];
+    delete games[gameId];
   }, PENDING_JOIN_TIMEOUT);
 
   waiting.push({
@@ -245,6 +246,9 @@ var joinGame = function (gameId, teamName, cb) {
     // Delete the array of waiting teams to make sure we
     // don't let any more teams join
     delete waitingTeams[gameId];
+
+    // Start ticking the first timeouts for all teams
+    resetTimeouts(game);
   }
 };
 
@@ -276,11 +280,16 @@ var getTeams = function (gameId) {
   return games[gameId] ? games[gameId].teams : null;
 };
 
+var getNumberOfTickedTurns = function (gameId) {
+  return games[gameId] ? games[gameId].turns.length - 1 : null;
+};
+
 exports.executeTurn = executeTurn;
 exports.joinGame = joinGame;
 exports.createGame = createGame;
 exports.gameExists = gameExists;
 exports.getLevel = getLevel;
 exports.getTeams = getTeams;
+exports.getNumberOfTickedTurns = getNumberOfTickedTurns;
 exports.closeGame = closeGame;
 exports.on = events.on.bind(events);

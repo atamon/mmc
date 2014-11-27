@@ -4,7 +4,7 @@
   "description": "### `GET /schedule` Detailed schedule of the event.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/mocha",
     "start": "nodejs index.js | ./node_modules/.bin/bunyan"
   },
   "author": "",
@@ -36,5 +36,11 @@
     "reqwest": "^1.1.5",
     "socket.io": "^1.2.0",
     "socket.io-client": "^1.2.0"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "coffee-script": "^1.8.0",
+    "mocha": "^2.0.1",
+    "sinon": "^1.12.1"
   }
 }
