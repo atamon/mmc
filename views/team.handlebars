@@ -2,31 +2,13 @@
   <h1 class="huge">{{teamName}}</h1>
 
   <dl class="horizontal">
-    <dt>Coins</dt>
-    <dd id="coins">{{coins}}</dd>
     <dt>API key</dt>
     <dd>{{apiKey}}</dd>
   </dl>
 
-  <div class="box">
-    {{#if bosses}}
-      <section>
-        <h2>Bosses</h2>
-
-        <ul class="list boss-list">
-        {{#each bosses}}
-          <li>
-            <a class="btn--flat no-underline" href="/boss/{{@key}}" target="_blank">{{description}}</a>
-          </li>
-        {{/each}}
-        </ul>
-      </section>
-    {{/if}}
-
-    <section>
-      <h2>Battles</h2>
-
-      <a href="/game/new" class="no-underline btn--flat">New</a>
-    </section>
-  </div>
+  <dl class="horizontal">
+    <dt class="spacious"><a href="/boss" class="no-underline btn--flat">Challenge a Boss</a></dt>
+    <dt class="spacious"><a href="/versus/levels" class="no-underline btn--flat">Create a Versus Match</a></dt>
+    <dt class="spacious"><a href="/versus/open-games" class="no-underline btn--flat">Join existing Versus Match</a></dt>
+  </dl>
 </main>

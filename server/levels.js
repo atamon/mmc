@@ -10,4 +10,9 @@ var get = function (levelId) {
   }
 };
 
+var getAllVersus = function () {
+  return ['maze', 'Maze 1', 'Amaze ing', 'Amaze ing', 'Amaze ing', 'Amaze ing', 'Versus Two'];
+};
+
 exports.get = get;
+exports.getAllVersus = getAllVersus;

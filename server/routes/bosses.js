@@ -47,6 +47,25 @@ router.use('/', function (req, res, next) {
   }
 });
 
+// Serve boss list
+router.get('/', function (req, res) {
+  var teamName = req.session.validTeam;
+
+  db.getCompletedChallenges(teamName, function (err, challenges) {
+    if (err) {
+      log.error(err);
+      res.status(500).render('error');
+      return;
+    }
+
+    res.render('bosses', {
+      view: 'team',
+      completed: challenges,
+      bosses: bosses
+    });
+  });
+});
+
 // // Serve boss page
 router.get('/:bossId', function (req, res) {
   var boss = bosses[req.params.bossId];

@@ -1,0 +1,19 @@
+<main role="main">
+  <h1 class="huge">{{teamName}}</h1>
+
+  <div class="box">
+    {{#if bosses}}
+      <section>
+        <h2>Bosses</h2>
+
+        <ul class="list boss-list">
+        {{#each bosses}}
+          <li class="spacious">
+            <a class="btn--flat no-underline" href="/boss/{{@key}}" target="_blank">{{description}}</a>
+          </li>
+        {{/each}}
+        </ul>
+      </section>
+    {{/if}}
+  </div>
+</main>

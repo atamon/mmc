@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 
 var validate = require('../validate.js');
 var game = require('../game.js');
+var levels = require('../levels');
 var sockets = require('../sockets');
 var db = require('../db');
 var log = require('../log');
@@ -22,23 +23,9 @@ router.use('/', function (err, req, res, next) {
   res.send(400, { message: err.message || 'Invalid request' });
 });
 
-router.get('/new', function(req, res) {
-  var gameId = game.createGame({
-    level: 'maze'
-  });
-
-  // If we lack a gameId we render an error page.
-  // Something's off if we do.
-  if (gameId) {
-    res.redirect('/game/'+gameId);
-  } else {
-    res.status(500).render('error');
-  }
-});
-
 router.get('/:gameId', function (req, res) {
   if (!game.gameExists(req.params.gameId)) {
-    return res.redirect('/game/new');
+    return res.status(500).render('error', { error: 'Sorry, no game here!' });
   }
 
   res.render('versus', {

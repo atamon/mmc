@@ -8,6 +8,7 @@ var PASSIVE_GAME_LIFE_LENGTH = 60000 * 10;
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
 var compact = require('mout/array/compact');
+var filter = require('mout/collection/filter');
 var EventEmitter = require('events').EventEmitter;
 
 var levels = require('./levels');
@@ -176,6 +177,7 @@ var createGame = function (options) {
 
   // The level JSON, to be handed to monkeyMusic
   game.level = level;
+  game.levelId = options.level;
 
   // Initialize the turns array with an empty turn
   game.turns = [{}];
@@ -188,6 +190,10 @@ var createGame = function (options) {
 
   // Start accepting joining teams
   waitingTeams[gameId] = [];
+
+  // Games can be open or closed
+  // Open games are to be listed somewhere
+  game.open = options.open || false;
 
   // Kill games that nobody has joined after X time
   game.passiveGameTimeout = setTimeout(function () {
@@ -284,6 +290,12 @@ var getNumberOfTickedTurns = function (gameId) {
   return games[gameId] ? games[gameId].turns.length - 1 : null;
 };
 
+var getAllOpen = function () {
+  return filter(games, function (game) {
+    return game.open;
+  });
+};
+
 exports.executeTurn = executeTurn;
 exports.joinGame = joinGame;
 exports.createGame = createGame;
@@ -293,3 +305,4 @@ exports.getTeams = getTeams;
 exports.getNumberOfTickedTurns = getNumberOfTickedTurns;
 exports.closeGame = closeGame;
 exports.on = events.on.bind(events);
+exports.getAllOpen = getAllOpen;

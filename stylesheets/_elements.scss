@@ -94,13 +94,8 @@ dl.horizontal {
   dd {
     text-align: left;
   }
-  dt {
-    text-align: right;
-    margin-right: 4%;
-  }
-
-  dd, dt {
-    flex-basis: 48%;
+  dt.spacious {
+    margin: to_rem(25);
   }
 }
 
