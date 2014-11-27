@@ -70,8 +70,15 @@ var Scene = function (options) {
       throw new Error('Missing levelLayout, failed to decorate level');
     }
 
+    var suffix = /-\d$/gi;
     return layout.map(function (row, y) {
       return row.map(function (tile, x) {
+        // Remove suffixes from for example tunnels as this does not
+        // help rendering.
+        if (suffix.test(tile)) {
+          tile = tile.replace(suffix, '');
+        }
+
         // Decoration works in the way that we append '.<actual tile>'
         // from level.layout
         // We decorate two cases, walls and empties

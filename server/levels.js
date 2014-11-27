@@ -4,7 +4,8 @@ var get = function (levelId) {
   try {
     return require('monkey-music/levels/' + levelId + '.json');
   } catch (e) {
-    log.error('Failed to find level ' + levelId);
+    log.error('Failed to require level ' + levelId);
+    log.error(e);
     return false;
   }
 };
