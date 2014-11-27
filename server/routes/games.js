@@ -24,10 +24,16 @@ router.use('/', function (err, req, res, next) {
 
 router.get('/new', function(req, res) {
   var gameId = game.createGame({
-    level: 'battle'
+    level: 'maze'
   });
 
-  res.redirect('/game/'+gameId);
+  // If we lack a gameId we render an error page.
+  // Something's off if we do.
+  if (gameId) {
+    res.redirect('/game/'+gameId);
+  } else {
+    res.status(500).render('error');
+  }
 });
 
 router.get('/:gameId', function (req, res) {
