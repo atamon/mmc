@@ -10,11 +10,8 @@ router.use('/', function (req, res, next) {
   }
 });
 
-router.get('/', function (req, res) {
-  res.redirect('/manual/test');
-});
-router.get('/:levelId', function (req, res) {
-  var level = levels.get('boss/' + req.params.levelId);
+function routeManual (levelType, req, res) {
+  var level = levels.get(levelType + '/' + req.params.levelId);
   if (!level) {
     res.status(404).render('error', { error: 'Invalid level ID' });
     return;
@@ -23,6 +20,10 @@ router.get('/:levelId', function (req, res) {
   res.render('manual', {
     level: JSON.stringify(level)
   });
-});
+}
+
+router.get('/boss/:levelId', routeManual.bind(null, 'boss'));
+router.get('/demo/:levelId', routeManual.bind(null, 'demo'));
+router.get('/versus/:levelId', routeManual.bind(null, 'versus'));
 
 module.exports = router;

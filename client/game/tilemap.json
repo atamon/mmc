@@ -225,13 +225,13 @@
     "image": "/images/door.png",
     "x": 0,
     "y": 0,
-    "scale": 4
+    "scale": 2
   },
   "open-door": {
     "image": "/images/door.png",
-    "x": 16,
+    "x": 32,
     "y": 0,
-    "scale": 4
+    "scale": 2
   },
   "lever": {
     "image": "/images/lever.png",
