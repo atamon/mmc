@@ -58,6 +58,7 @@ var build = function (tile, options) {
 
 var buildMonkey = function (options) {
   var monkeySprite = build('monkey', options);
+  monkeySprite.gotoAndPlay(0);
 
   if (monkeySprite.children.length > 1) {
     // Assume this means that we got back a cached

@@ -233,6 +233,7 @@ var Scene = function (options) {
     var decoratedLayout = decorateLayout(layout);
 
     levelNode.removeChildren();
+    monkeyNode.removeChildren();
     for (var y = 0; y < decoratedLayout.length; y++) {
       var row = decoratedLayout[y];
       for (var x = 0; x < row.length; x++) {
