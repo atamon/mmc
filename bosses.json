@@ -1,21 +1,39 @@
 {
+  "bananas": {
+    "description": "Banana Master",
+    "level": "bananas",
+    "bot": "atamon"
+  },
+  "doors": {
+    "description": "Door Galore",
+    "level": "doors",
+    "bot": "atamon"
+  },
   "maze": {
-    "description": "Maze",
+    "description": "A MAZEING",
     "level": "maze",
+    "arguments": "0.15",
+    "bot": "atamon"
+  },
+  "noob": {
+    "description": "The Noob",
     "bot": "atamon",
-    "arguments": "0.9",
-    "reward": 3
+    "level": "noob",
+    "arguments": "0.25"
+  },
+  "tackling": {
+    "description": "Hockey Player",
+    "bot": "atamon",
+    "level": "tackling"
   },
   "traps": {
-    "description": "Traps",
-    "level": "traps",
+    "description": "Gotta trap 'em all!",
     "bot": "atamon",
-    "reward": 3
+    "level": "traps"
   },
   "tunnels": {
-    "description": "Tunnels",
-    "level": "tunnels",
+    "description": "Teenage Mutant Ninja Tunnels",
     "bot": "atamon",
-    "reward": 3
+    "level": "tunnels"
   }
 }
