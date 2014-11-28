@@ -29,13 +29,20 @@ function displayLevel(info, cb) {
   // only for displaying a static scene anyways
   if (runningGame) return;
 
+  var teams = info.teams || ['Player One', 'Player Two'];
   var level = info.level;
-  var dummyState = monkeyMusic.createGameState(['glenn'], level);
-  var dummyPlayerState = replay.getRendererState(dummyState, []);
+  var dummyState = monkeyMusic.createGameState(teams, level);
+  var rendererState = replay.getRendererState(dummyState, teams);
   scene.onReady(function () {
     scene
       .setLevelLayout(level.layout)
-      .parseLayout(dummyPlayerState.baseLayout, []);
+      .parseLayout(rendererState.layout, rendererState.monkeyDetails);
+
+    GUI.clearTeams();
+    GUI.init({
+      ids: teams
+    });
+    GUI.update(rendererState);
 
     gameContainer.classList.add('ready');
 
@@ -71,6 +78,8 @@ function displayReplay(game) {
   // Kick of with the first static layout
   var initialState = rendererStates[0];
   scene.parseLayout(initialState.layout, initialState.monkeyDetails);
+
+  GUI.clearTeams();
   GUI.init({
     ids: game.teams
   });

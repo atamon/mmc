@@ -49,6 +49,13 @@ function init(opts) {
   });
 }
 
+function clearTeams() {
+  var els = container.parentNode.querySelectorAll('.team-pane') || [];
+  Array.prototype.forEach.call(els, function (el) {
+    el.remove();
+  });
+}
+
 function updateState(template, data, id) {
   var el = document.getElementById(slugify(id)),
       html = template(data);
@@ -62,7 +69,6 @@ function update(rendererState) {
     var teamData = rendererState.teams[teamName];
     teamData.teamName = teamName;
     teamData.color = toHex(colors[index]);
-    console.log(teamData);
     updateState(teamTemplate, teamData, teamName);
   });
 }
@@ -70,3 +76,4 @@ function update(rendererState) {
 exports.init = init;
 exports.update = update;
 exports.setStatus = setStatus;
+exports.clearTeams = clearTeams;
