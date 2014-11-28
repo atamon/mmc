@@ -1,5 +1,6 @@
 var compact = require('mout/array/compact');
 var SpriteFactory = require('./SpriteFactory');
+var PIXI = require('pixi.js');
 
 function Animator(options) {
 
@@ -169,6 +170,30 @@ function Animator(options) {
       };
 
       return darken;
+    },
+
+    hit: function (sprite, turnDuration, options) {
+      var effectDuration = turnDuration * options.nTurns;
+      var timeLeft = effectDuration;
+
+      var blendMode = sprite.blendMode;
+      sprite.blendMode = PIXI.blendModes.ADD;
+
+      var flash = function (timeSinceLastFrame) {
+        timeLeft -= timeSinceLastFrame;
+
+        if (timeLeft <= 0) {
+          sprite.blendMode = blendMode;
+          sprite.tint = 0xFFFFFF;
+          return undefined;
+        }
+
+        sprite.tint += 0x333333 * (Math.random() > 0.5 ? 1 : -1);
+
+        return flash;
+      };
+
+      return flash;
     }
   };
 

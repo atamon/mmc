@@ -131,6 +131,12 @@ function hintToEffects(effects, renderingState, h) {
         id: h.team
       });
       break;
+    case 'got-tackled':
+      effects.push({
+        type: 'hit',
+        nTurns: 0.2,
+        id: h.team
+      });
   }
 }
 
