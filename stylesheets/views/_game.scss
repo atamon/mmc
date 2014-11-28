@@ -104,6 +104,10 @@ $water: #378ad1;
     &.ready {
       opacity: 1;
     }
+
+    canvas {
+      flex-grow: 1;
+    }
   }
 
   .team-pane {
