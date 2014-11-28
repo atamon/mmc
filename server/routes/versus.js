@@ -22,7 +22,7 @@ router.get('/levels', function (req, res) {
 
 router.get('/new/:levelId', function(req, res) {
   var gameId = game.createGame({
-    level: req.params.levelId,
+    level: 'versus/' + req.params.levelId,
     open: true
   });
 

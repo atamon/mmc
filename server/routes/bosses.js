@@ -72,7 +72,8 @@ router.get('/:bossId', function (req, res) {
   if (!boss) {
     return res.status(404).render('error', { error: 'Invalid boss ID'});
   }
-  var level = levels.get(bosses[req.params.bossId].level);
+  var levelId = boss.level;
+  var level = levels.getBoss(levelId);
 
   // Look up level and AI for this boss
   // Render boss page
@@ -88,11 +89,19 @@ router.use('/start', bodyParser.urlencoded());
 router.post('/start', function (req, res) {
   var bossId = req.body.bossId;
   // Look up level and AI for this boss
-  var levelId = bosses[bossId].level;
-  var botId = bosses[bossId].bot;
+  var boss = bosses[bossId];
+  if (!boss) {
+    log.error('Failed to find boss with id ' + bossId);
+    res.status(404).send({ message: 'Invalid boss ID' });
+    return;
+  }
+
+  var levelId = boss.level;
+  var botId = boss.bot;
+  var args = boss.arguments || '';
 
   var gameId = game.createGame({
-    level: levelId
+    level: 'boss/' + levelId
   });
 
   // Request AI from http://localhost:BOSS_PORT
@@ -101,7 +110,8 @@ router.post('/start', function (req, res) {
     form: {
       botId: botId,
       gameId: gameId,
-      teamName: bossId
+      teamName: bossId,
+      arguments: args
     },
     json: true
   };

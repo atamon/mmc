@@ -1,9 +1,21 @@
 {
-  "beginner": {
-    "description": "Beginner",
+  "maze": {
+    "description": "Maze",
     "level": "maze",
     "bot": "atamon",
-    "headgear": "shades",
+    "arguments": "0.9",
+    "reward": 3
+  },
+  "traps": {
+    "description": "Traps",
+    "level": "traps",
+    "bot": "atamon",
+    "reward": 3
+  },
+  "tunnels": {
+    "description": "Tunnels",
+    "level": "tunnels",
+    "bot": "atamon",
     "reward": 3
   }
 }

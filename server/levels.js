@@ -10,9 +10,25 @@ var get = function (levelId) {
   }
 };
 
-var getAllVersus = function () {
-  return ['maze', 'Maze 1', 'Amaze ing', 'Amaze ing', 'Amaze ing', 'Amaze ing', 'Versus Two'];
+exports.get = get;
+
+exports.getAllVersus = function () {
+  return require('monkey-music/levels').versus;
+};
+exports.getAllBosses = function () {
+  return require('monkey-music/levels').boss;
+};
+exports.getAllDemo = function () {
+  return require('monkey-music/levels').demo;
 };
 
-exports.get = get;
-exports.getAllVersus = getAllVersus;
+exports.getBoss = function (levelId) {
+  return get('boss/' + levelId);
+};
+exports.getVersus = function (levelId) {
+  return get('versus/' + levelId);
+};
+exports.getDemo = function (levelId) {
+  return get('demo/' + levelId);
+};
+

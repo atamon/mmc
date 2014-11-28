@@ -17,16 +17,20 @@ app.post('/', function (req, res) {
     return res.status(400).send({ 'message': 'Missing botId or gameId' });
   }
 
-  runBot(req.body.teamName, req.body.botId, req.body.gameId);
-  log.info('Bot %s started. Currently running %i number of bots.', req.body.botId, amountRunningBots);
+  runBot(req.body);
+  log.info('Bot ' + req.body.botId + ' started. Currently running ' + amountRunningBots + ' number of bots.');
 
   res.status(200).end();
 });
 
-function runBot(teamName, botId, gameId) {
+function runBot(options) {
+  var teamName = options.teamName;
+  var botId = options.botId;
+  var gameId = options.gameId;
+  var botArgs = options.arguments || [];
 
   var botPath = path.resolve(__dirname + '/' + botId);
-  var args = [teamName, secret.forTeam(teamName), gameId];
+  var args = [teamName, secret.forTeam(teamName), gameId].concat(botArgs);
   var botProcess = child_process.spawn(botPath + '/run', args, { stdio: 'inherit', cwd: botPath });
 
   botProcess.on('exit', function (code, signal) {
