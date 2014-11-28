@@ -19,8 +19,7 @@ var scene = new Scene({
   tileMap: tileMap
 });
 
-
-var playerTurns = {
+var defaultPlayerTurns = {
   'Player One': {
     turn: {
       command: 'move',
@@ -39,6 +38,8 @@ var playerTurns = {
   }
 };
 
+var playerTurns = JSON.parse(JSON.stringify(defaultPlayerTurns));
+
 var quickMove = {};
 function parseState(state, playerId) {
 
@@ -49,6 +50,10 @@ function parseState(state, playerId) {
     delete quickMove[playerId];
     delete playerTurns[playerId].turn.directions;
   }
+}
+
+function resetPlayerCommands() {
+  playerTurns = JSON.parse(JSON.stringify(defaultPlayerTurns));
 }
 
 function updatePlayerCommand(playerId, changes) {
@@ -108,6 +113,7 @@ function start (level) {
     var states = [rendererState];
     var running = setInterval(function () {
       var rewindedReplay = replay.step(states[states.length - 1], game, teams, playerTurns);
+      resetPlayerCommands();
 
       states = states.concat(rewindedReplay.rendererStates);
       var interpolations = rewindedReplay.interpolations;
