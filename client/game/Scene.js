@@ -170,7 +170,6 @@ var Scene = function (options) {
     }
   };
 
-  var hasOutline = false;
   var addOutline = function (width, height) {
 
     // Left side + right side
@@ -189,8 +188,6 @@ var Scene = function (options) {
     addSprite(0, height + 1, 'corner-lower-left');
     addSprite(width + 1, 0, 'corner-upper-right');
     addSprite(width + 1, height + 1, 'corner-lower-right');
-
-    hasOutline = true;
   };
 
   this.rescale = function () {
@@ -234,6 +231,8 @@ var Scene = function (options) {
 
   this.parseLayout = function (layout, positions) {
     var decoratedLayout = decorateLayout(layout);
+
+    levelNode.removeChildren();
     for (var y = 0; y < decoratedLayout.length; y++) {
       var row = decoratedLayout[y];
       for (var x = 0; x < row.length; x++) {
@@ -244,9 +243,10 @@ var Scene = function (options) {
       }
     }
 
-    if (!hasOutline) {
-      addOutline(grid.getWidth(), grid.getHeight());
-    }
+    var gridWidth = layout[0].length;
+    var gridHeight = layout[1].length;
+
+    addOutline(gridWidth, gridHeight);
 
     this.rescale();
 
