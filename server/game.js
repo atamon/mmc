@@ -232,7 +232,7 @@ var joinGame = function (gameId, teamName, cb) {
     delete games[gameId];
   }, PENDING_JOIN_TIMEOUT);
 
-  waiting.push({
+  waiting.unshift({
     teamName: teamName,
     cb: cb,
     timeout: timeout

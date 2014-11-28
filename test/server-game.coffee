@@ -15,7 +15,7 @@ describe 'when a game is created', ->
   beforeEach ->
     clock = sinon.useFakeTimers()
     gameId = game.createGame
-      level: 'maze'
+      level: '/boss/maze'
 
   it 'should give me a correct id', ->
     game.gameExists(gameId).should.equal(true)
