@@ -10,7 +10,6 @@ function Animator(options) {
     tileHeight: tileHeight
   };
 
-  var onGoingInterpolations = [];
   var onGoingBubbleRemovals = [];
   var onGoingEffects = [];
 
@@ -192,10 +191,6 @@ function Animator(options) {
 
   this.addRemoval = function (removal) {
     onGoingBubbleRemovals.push(removal);
-  };
-
-  this.addInterpolation = function (interpolation) {
-    onGoingInterpolations.push(interpolation);
   };
 
   this.update = function (timeSinceLastFrame) {
