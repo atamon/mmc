@@ -18,6 +18,14 @@
     &.spacious {
       margin: to_rem(25);
     }
+
+    &.completed a::after {
+      content: "\2713";
+      font-weight: 900;
+      float: right;
+      color: $green-dark;
+      font-size: 28px;
+    }
   }
 
   li:nth-child(odd) {

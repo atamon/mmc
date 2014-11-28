@@ -51,16 +51,21 @@ router.use('/', function (req, res, next) {
 router.get('/', function (req, res) {
   var teamName = req.session.validTeam;
 
-  db.getCompletedChallenges(teamName, function (err, challenges) {
+  db.getCompletedChallenges(teamName, function (err, completed) {
     if (err) {
       log.error(err);
       res.status(500).render('error');
       return;
     }
 
+    completed.forEach(function (bossId) {
+      if (bosses[bossId]) {
+        bosses[bossId].completed = true;
+      }
+    });
+
     res.render('bosses', {
       view: 'team',
-      completed: challenges,
       bosses: bosses
     });
   });
