@@ -1,0 +1,7 @@
+./script/add-team bananas "Bot" "atamon@spotify.com"
+./script/add-team doors "Bot" "atamon@spotify.com"
+./script/add-team maze "Bot" "atamon@spotify.com"
+./script/add-team noob "Bot" "atamon@spotify.com"
+./script/add-team tackling "Bot" "atamon@spotify.com"
+./script/add-team traps "Bot" "atamon@spotify.com"
+./script/add-team tunnels "Bot" "atamon@spotify.com"
