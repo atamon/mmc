@@ -194,6 +194,26 @@ function Animator(options) {
       };
 
       return flash;
+    },
+
+    sparkle: function (sprite, turnDuration, options) {
+      var effectDuration = turnDuration * options.nTurns;
+      var timeLeft = effectDuration;
+
+      var sparkle = function (timeSinceLastFrame) {
+        timeLeft -= timeSinceLastFrame;
+
+        if (timeLeft <= 0) {
+          sprite.tint = 0xFFFFFF;
+          return undefined;
+        }
+
+        sprite.tint += 0x111111 * Math.random();
+
+        return sparkle;
+      };
+
+      return sparkle;
     }
   };
 

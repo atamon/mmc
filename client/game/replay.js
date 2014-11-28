@@ -140,6 +140,22 @@ function hintToEffects(effects, renderingState, h) {
   }
 }
 
+function teamBuffsToEffects(effects, rendererState, teamState, teamName) {
+  forEach(teamState.buffs, function (turnsLeft, buffName) {
+    if (turnsLeft) {
+      switch (buffName) {
+        case 'speedy':
+          effects.push({
+            type: 'sparkle',
+            id: teamName,
+            nTurns: 1
+          });
+          break;
+      }
+    }
+  });
+}
+
 function getInterpolations(rendererStates) {
   var interpolations = [];
   for (var i = 0; i < rendererStates.length - 1; i++) {
@@ -160,6 +176,7 @@ function getInterpolations(rendererStates) {
 
     var effects = [];
     nextState.renderingHints.forEach(hintToEffects.bind(null, effects, nextState));
+    forEach(nextState.teams, teamBuffsToEffects.bind(null, effects, nextState));
 
     interpolations.push({
       effects: effects,
