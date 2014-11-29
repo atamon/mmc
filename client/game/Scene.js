@@ -4,7 +4,6 @@ var Grid = require('./Grid');
 var SpriteFactory = require('./SpriteFactory');
 var forEach = require('mout/collection/forEach');
 var unique = require('mout/array/unique');
-var colors = require('./colors').faded;
 
 
 PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
@@ -133,7 +132,17 @@ var Scene = function (options) {
   var addTrap = function (teams, type, trap) {
     var x = trap.position[1];
     var y = trap.position[0];
-    var tintColor = colors[teams.indexOf(trap.team)];
+
+    // Look up the current team
+    var team = null;
+    for (var i = 0; i < teams.length; i++) {
+      if (teams[i].id === trap.team) {
+        team = teams[i];
+        break;
+      }
+    }
+
+    var tintColor = team.color;
 
     var sprite = SpriteFactory.build(type, { tileWidth: tileWidth, tileHeight: tileHeight });
     sprite.tint = tintColor;

@@ -129,7 +129,8 @@ function start (level) {
       scene.interpolate(interpolations[0], MOVE_TIMEOUT);
       scene.updateTraps(
         rendererState.armedTraps,
-        rendererState.traps, teams);
+        rendererState.traps,
+        rendererState.monkeyDetails);
 
       GUI.update(rendererState);
 

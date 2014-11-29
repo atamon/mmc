@@ -108,7 +108,7 @@ function displayReplay(game) {
     scene.updateTraps(
       rendererState.armedTraps,
       rendererState.traps,
-      rendererState.teams);
+      rendererState.monkeyDetails);
 
     iTurn++;
   }, MOVE_TIMEOUT);
