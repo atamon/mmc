@@ -112,6 +112,13 @@ function start (level) {
 
     var states = [rendererState];
     var running = setInterval(function () {
+      var moving = playerTurns['Player One'].turn.direction ||
+        playerTurns['Player Two'].turn.direction;
+
+      if (!moving) {
+        return;
+      }
+
       var rewindedReplay = replay.step(states[states.length - 1], game, teams, playerTurns);
       resetPlayerCommands();
 
