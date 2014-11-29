@@ -2,6 +2,7 @@
 
 var cradle = require('cradle');
 var teams = new(cradle.Connection)('http://localhost:5984').database('teams');
+var secret = require('../server/secret');
 
 function parseMembers(args) {
   if (args.length % 2 !== 0) {
@@ -38,13 +39,12 @@ teams.get(data.teamName, function (err, doc) {
     return;
   }
 
-  teams.save(data.teamName, data, function (err, doc) {
+  teams.save(data.teamName, data, function (err) {
     if (err) {
       console.error(err);
       process.exit(1);
     }
 
-    console.log('Finished:');
-    console.log(JSON.stringify(doc, null, ' '));
+    console.log('OK. Use apiKey:\n' + secret.forTeam(data.teamName));
   });
 });
