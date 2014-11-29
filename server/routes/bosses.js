@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var request = require('request');
 var bodyParser = require('body-parser');
+var deepClone = require('mout/lang/deepClone');
 var levels = require('../levels');
 var settings = require('../../settings.json');
 
@@ -58,15 +59,16 @@ router.get('/', function (req, res) {
       return;
     }
 
+    var myBosses = deepClone(bosses);
     completed.forEach(function (bossId) {
-      if (bosses[bossId]) {
-        bosses[bossId].completed = true;
+      if (myBosses[bossId]) {
+        myBosses[bossId].completed = true;
       }
     });
 
     res.render('bosses', {
       view: 'team',
-      bosses: bosses
+      bosses: myBosses
     });
   });
 });
