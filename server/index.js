@@ -40,6 +40,10 @@ app.use('/boss', routes.bosses);
 app.use('/replays', routes.replays);
 
 app.use('/create', bodyParser());
+app.use(function(req, res, next) {
+  log.info(req, 'incoming request');
+  next();
+});
 app.post('/create', function (req, res) {
   var id = game.createGame(req.body);
   if (id !== undefined) {
