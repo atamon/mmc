@@ -1,6 +1,7 @@
 var BAD_REQUEST = 400;
 var secret = require('./secret');
 var game = require('./game');
+var log = require('./log');
 
 var validateJoin = function (req, res) {
   return true;
@@ -54,6 +55,7 @@ var validateRequest = function (req, res) {
     res.status(BAD_REQUEST).send({ message: 'unknown command: ' + req.body.command });
     return false;
   } else if (!req.body.gameId || !game.gameExists(req.body.gameId)) {
+    log.warn(req.body, 'rejected request with invalid game id: ');
     res.status(BAD_REQUEST).send({ message: 'invalid game id: ' + req.body.gameId });
     return false;
   } else {
