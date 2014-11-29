@@ -20,7 +20,11 @@ var games = {};
 var waitingTeams = {};
 
 var validateTeamInGame = function (game, teamName) {
-  return game.teams.indexOf(teamName) !== -1;
+  if (!game.teams) {
+    return false;
+  } else {
+    return game.teams.indexOf(teamName) !== -1;
+  }
 };
 
 var tickGame = function (game) {

@@ -7,12 +7,18 @@ level = require('../server/levels').get('maze')
 
 require('../server/log').silence()
 
-
 describe 'when a game is created', ->
   gameId = null
   clock = null
 
+  firstPlayer = null
+  secondPlayer = null
+  firstPlayerMove = null
+  secondPlayerMove = null
+
   beforeEach ->
+    firstPlayer = sinon.spy()
+    secondPlayer = sinon.spy()
     clock = sinon.useFakeTimers()
     gameId = game.createGame
       level: '/boss/maze'
@@ -20,6 +26,15 @@ describe 'when a game is created', ->
   it 'should give me a correct id', ->
     game.gameExists(gameId).should.equal(true)
 
+  describe 'before any teams have joined the game', ->
+
+    beforeEach ->
+      firstPlayerMove = { gameId: gameId, team: 'glenn', command: 'move', direction: 'left' }
+      game.executeTurn(firstPlayerMove, firstPlayer)
+
+    it 'should return false for any team', ->
+      firstPlayer.callCount.should.equal(1)
+      firstPlayer.firstCall.args[0].should.be.a('string')
 
   describe 'when no player joins before timeout', ->
 
@@ -30,15 +45,9 @@ describe 'when a game is created', ->
       game.gameExists(gameId).should.equal(false)
 
   describe 'when the first player joins before the timeout', ->
-    firstPlayer = null
-    secondPlayer = null
-    firstPlayerMove = null
-    secondPlayerMove = null
 
 
     beforeEach ->
-      firstPlayer = sinon.spy()
-      secondPlayer = sinon.spy()
 
       firstPlayerMove = { gameId: gameId, team: 'glenn', command: 'move', direction: 'left' }
       secondPlayerMove = { gameId: gameId, team: 'ada', command: 'move', direction: 'left' }
