@@ -55,9 +55,6 @@ var validateRequest = function (req, res) {
   } else if (!req.body.command) {
     res.status(BAD_REQUEST).send({ message: 'missing command' });
     return false;
-  } else if (!commandValidations[req.body.command]) {
-    res.status(BAD_REQUEST).send({ message: 'unknown command: ' + req.body.command });
-    return false;
   } else if (!req.body.gameId || !game.gameExists(req.body.gameId)) {
     log.warn(req.body, 'rejected request with invalid game id: ');
     res.status(BAD_REQUEST).send({ message: 'invalid game id: ' + req.body.gameId });
