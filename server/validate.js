@@ -61,7 +61,7 @@ var validateRequest = function (req, res) {
     res.status(BAD_REQUEST).send({ message: 'invalid game id: ' + req.body.gameId });
     return false;
   } else {
-    return commandValidations[req.body.command](req, res);
+    return true;
   }
 };
 
