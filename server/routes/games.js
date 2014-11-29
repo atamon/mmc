@@ -41,7 +41,8 @@ router.post('/', function (req, res) {
   // Like to a client that is watching the replay (which does not require authentication)
   delete req.body.apiKey;
 
-  db.isTeamRegistered(req.body.team, function (err, isRegistered) {
+  var teamName = (req.body.team || '').replace(/_2$/, '');
+  db.isTeamRegistered(teamName, function (err, isRegistered) {
     if (err) {
       log.error(err);
       res.status(500).render('error');

@@ -36,6 +36,8 @@ var validateRequest = function (req, res) {
 
   log.info('incoming request with body: ' + JSON.stringify(req.body));
 
+  var teamName = (req.body.team || '').replace(/_2$/, '');
+
   if (!req.body) {
     res.status(BAD_REQUEST).send({ message: 'missing or malformed JSON' });
     return false;
@@ -45,7 +47,7 @@ var validateRequest = function (req, res) {
   } else if (!req.body.apiKey) {
     res.status(BAD_REQUEST).send({ message: 'missing API key' });
     return false;
-  } else if (req.body.apiKey !== secret.forTeam(req.body.team)) {
+  } else if (req.body.apiKey !== secret.forTeam(teamName)) {
     var message = 'wrong API key: ' + req.body.apiKey +
                   ' for team: ' + req.body.team;
     res.status(BAD_REQUEST).send({ message: message });
