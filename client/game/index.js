@@ -107,7 +107,8 @@ function displayReplay(game) {
     scene.interpolate(interpolation, MOVE_TIMEOUT);
     scene.updateTraps(
       rendererState.armedTraps,
-      rendererState.traps);
+      rendererState.traps,
+      rendererState.teams);
 
     iTurn++;
   }, MOVE_TIMEOUT);
