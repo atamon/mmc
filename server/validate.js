@@ -34,6 +34,8 @@ var commandValidations = {
 var validateRequest = function (req, res) {
   if (!req) return false;
 
+  log.info('incoming request with body: ' + JSON.stringify(req.body));
+
   if (!req.body) {
     res.status(BAD_REQUEST).send({ message: 'missing or malformed JSON' });
     return false;
