@@ -4,6 +4,7 @@ var clone = require('mout/lang/clone');
 
 var db = require('../db');
 var log = require('../log');
+var game = require('../game');
 
 function prepareRanking(ranking, ownTeam) {
   return ranking.map(function (team) {
@@ -30,13 +31,17 @@ router.get('/', function (req, res) {
 
   db.getRanking(function (err, ranking) {
     // Let's continue but not render the ranking
-    if (err) log.error(err);
+    if (err) {
+      log.error(err);
+      ranking = [];
+    }
 
     res.render('team', {
       view: 'team',
       teamName: teamName,
       apiKey: secret.forTeam(teamName),
-      ranking: prepareRanking(ranking, teamName)
+      ranking: prepareRanking(ranking, teamName),
+      versusGames: game.getAllOpen()
     });
   });
 });

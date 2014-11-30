@@ -1,14 +1,13 @@
 // We wait a second for teams to post their turn
-var TURN_TIME_LIMIT = 1000;
+var TURN_TIME_LIMIT = exports.TURN_TIME_LIMIT = 1000;
 // We wait a minute for all players to join after the first one
-var PENDING_JOIN_TIMEOUT = 60000 * 2;
+var PENDING_JOIN_TIMEOUT = exports.PENDING_JOIN_TIMEOUT = 60000 * 10;
 // We wait 10 minutes until we kill games that nobody have joined
-var PASSIVE_GAME_LIFE_LENGTH = 60000 * 10;
+var PASSIVE_GAME_LIFE_LENGTH = exports.PASSIVE_GAME_LIFE_LENGTH = 60000 * 20;
 
 var monkeyMusic = require('monkey-music');
 var forEach = require('mout/collection/forEach');
 var compact = require('mout/array/compact');
-var filter = require('mout/collection/filter');
 var EventEmitter = require('events').EventEmitter;
 
 var levels = require('./levels');
@@ -168,16 +167,17 @@ var createGame = function (options) {
      gameId = idCounter++;
   }
 
-  log.info('game created with id', gameId);
-
-  var game = games[gameId] = {};
-  game.id = gameId;
-
   var level = levels.get(options.level);
   if (!level) {
     log.error('failed to create level from option', options.level);
     return false;
   }
+
+  var game = games[gameId] = {};
+  game.id = gameId;
+
+  log.info('game created with id', gameId);
+  log.info('currently ' + Object.keys(games).length + ' games are kept in memory');
 
   // The level JSON, to be handed to monkeyMusic
   game.level = level;
@@ -259,6 +259,9 @@ var joinGame = function (gameId, teamName, cb) {
 
     // Start ticking the first timeouts for all teams
     resetTimeouts(game);
+
+    // Unflag game as 'open' if it was so before
+    game.open = false;
   }
 };
 
@@ -295,9 +298,21 @@ var getNumberOfTickedTurns = function (gameId) {
 };
 
 var getAllOpen = function () {
-  return filter(games, function (game) {
-    return game.open;
-  });
+  return Object.keys(games).reduce(function (openGames, gameId) {
+    var game = games[gameId];
+    if (game && game.open) {
+      var teams = (waitingTeams[gameId] || []).map(function (team) {
+        return team.teamName;
+      });
+      openGames.push({
+        id: gameId,
+        teams: teams,
+        levelId: game.levelId
+      });
+    }
+
+    return openGames;
+  }, []);
 };
 
 exports.executeTurn = executeTurn;

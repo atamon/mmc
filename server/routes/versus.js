@@ -72,12 +72,4 @@ router.get('/new/:levelId', function(req, res) {
   }
 });
 
-router.get('/open-games', function (req, res) {
-  var games = game.getAllOpen();
-  res.render('open-games', {
-    view: 'team',
-    games: games
-  });
-});
-
 module.exports = router;

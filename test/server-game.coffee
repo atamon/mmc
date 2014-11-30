@@ -1,11 +1,10 @@
+require('../server/log').silence()
 chai = require('chai')
 chai.should()
 
 sinon = require('sinon')
 game = require('../server/game')
 level = require('../server/levels').get('maze')
-
-require('../server/log').silence()
 
 describe 'when a game is created', ->
   gameId = null
@@ -23,8 +22,14 @@ describe 'when a game is created', ->
     gameId = game.createGame
       level: '/boss/maze'
 
+  afterEach ->
+    game.closeGame(gameId)
+
   it 'should give me a correct id', ->
     game.gameExists(gameId).should.equal(true)
+
+  it 'should not be listed as an open game by default', ->
+    game.getAllOpen().length.should.equal(0)
 
   describe 'before any teams have joined the game', ->
 
@@ -39,7 +44,7 @@ describe 'when a game is created', ->
   describe 'when no player joins before timeout', ->
 
     beforeEach ->
-      clock.tick(60000 * 10)
+      clock.tick(game.PASSIVE_GAME_LIFE_LENGTH)
 
     it 'should look like the game never existed', ->
       game.gameExists(gameId).should.equal(false)
@@ -53,7 +58,7 @@ describe 'when a game is created', ->
       secondPlayerMove = { gameId: gameId, team: 'ada', command: 'move', direction: 'left' }
 
 
-      clock.tick((60000 * 10) - 10)
+      clock.tick((game.PASSIVE_GAME_LIFE_LENGTH) - 10)
       game.joinGame(gameId, 'glenn', firstPlayer)
 
     it 'should still exist', ->
@@ -65,7 +70,7 @@ describe 'when a game is created', ->
     describe 'it starts a new, shorter, timer', ->
 
       beforeEach ->
-        clock.tick((60000 * 2) - 10)
+        clock.tick((game.PENDING_JOIN_TIMEOUT) - 10)
 
       it 'should allow a second team to join for another two minutes', ->
         game.gameExists(gameId).should.equal(true)
@@ -89,7 +94,7 @@ describe 'when a game is created', ->
         describe 'if nobody is able to provide a turn before turn times out', ->
 
           beforeEach ->
-            clock.tick(1000)
+            clock.tick(game.TURN_TIME_LIMIT)
 
           it 'should tick a turn', ->
             game.getNumberOfTickedTurns(gameId).should.equal(1);
@@ -98,7 +103,7 @@ describe 'when a game is created', ->
 
             beforeEach ->
               game.executeTurn(firstPlayerMove, firstPlayer)
-              clock.tick(1000)
+              clock.tick(game.TURN_TIME_LIMIT)
 
             it 'the team should have missed a turn', ->
               firstPlayer.callCount.should.equal(2)
@@ -109,7 +114,7 @@ describe 'when a game is created', ->
           beforeEach ->
             game.executeTurn(secondPlayerMove, secondPlayer)
             game.executeTurn(secondPlayerMove, secondPlayer)
-            clock.tick(1000)
+            clock.tick(game.TURN_TIME_LIMIT)
 
           it 'should not be allowed to do this, but instead get an error message', ->
             secondPlayer.callCount.should.equal(3)
@@ -122,12 +127,75 @@ describe 'when a game is created', ->
           beforeEach ->
             for i in [0..99]
               game.executeTurn(firstPlayerMove, firstPlayer);
-              clock.tick(1000)
+              clock.tick(game.TURN_TIME_LIMIT)
 
           it 'should still continue until game over', ->
             firstPlayer.callCount.should.equal(101)
             firstPlayer.lastCall.args[1].isGameOver.should.equal(true)
 
 
+  describe 'when another open game is created', ->
+    games = null
+    firstGame = null
+
+    beforeEach ->
+      for i in [1..10]
+        game.createGame
+          level: '/versus/firstblood'
+          open: true
+          gameId: 'open-' + i
+      games = game.getAllOpen()
+      firstGame = games[0]
+
+    afterEach ->
+      for i in [1..10]
+        game.closeGame('open-' + i)
+
+    it 'should be listed as open', ->
+      games.length.should.equal(10)
+
+    it 'should have an id property', ->
+      for i, g of games
+        g.id.should.match(/open-/)
+
+    it 'should have a levelId property', ->
+      for i, g of games
+        g.levelId.should.equal('/versus/firstblood')
+
+    describe 'when a team joins the game', ->
+      gameWithPlayer = null
+
+      beforeEach ->
+        game.joinGame(firstGame.id, 'glenn', firstPlayer)
+        gameWithPlayer = game.getAllOpen()[0]
+
+      it 'should be readable from the list of open games', ->
+        gameWithPlayer.teams[0].should.equal('glenn')
+
+      describe 'when the team times out', ->
+
+        beforeEach ->
+          clock.tick(game.PENDING_JOIN_TIMEOUT)
+
+        it 'should not be open anymore', ->
+          game.getAllOpen().length.should.equal(9)
+
+    describe 'when the game is full of teams', ->
+
+      beforeEach ->
+        game.joinGame(firstGame.id, 'glenn', firstPlayer)
+        game.joinGame(firstGame.id, 'ada', secondPlayer)
+
+      it 'should not be listed in the open list anymore', ->
+        game.getAllOpen().length.should.equal(9)
+
+
+    describe 'when the game dies before anyone joins', ->
+
+      beforeEach ->
+        clock.tick(game.PASSIVE_GAME_LIFE_LENGTH)
+
+      it 'should not be open anymore', ->
+        game.getAllOpen().length.should.equal(0)
 
 
