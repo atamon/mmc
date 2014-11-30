@@ -61,6 +61,13 @@
     .stats {
       float: right;
       text-align: right;
+      color: white;
+
+      .details {
+        margin-left: to_rem(12);
+        font-size: to_rem($base-size / 2);
+        vertical-align: middle;
+      }
     }
 
     &.obfuscated .team-name {
@@ -72,9 +79,6 @@
     &:not(.obfuscated) {
       margin-top: to_rem(20);
       margin-bottom: to_rem(20);
-    }
-
-    &:nth-child(even) {
     }
   }
 }
