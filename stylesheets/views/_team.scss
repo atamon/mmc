@@ -1,8 +1,9 @@
 .team {
   background:
-              url('/images/floral1.svg') no-repeat left bottom,
-              url('/images/floral2.svg') no-repeat right bottom;
+              url('/images/floral1.svg') no-repeat left fixed,
+              url('/images/floral2.svg') no-repeat right fixed;
   background-color: $green-warm;
+  background-position-y: 100%;
 
   [role="main"] {
     max-width: 30rem;
@@ -37,5 +38,39 @@
 
   a {
     display: block;
+  }
+}
+
+.ranking-list {
+  margin: auto;
+  width: 75%;
+
+  .ranking {
+    text-align: left;
+
+    .team-name {
+      font-weight: 900;
+      width: 50%;
+      display: inline-block;
+    }
+
+    .stats {
+      float: right;
+      text-align: right;
+    }
+
+    &.obfuscated .team-name {
+      user-select: none;
+      color: transparent;
+      text-shadow: 0 0 to_rem(15) $green-dark;
+    }
+
+    &:not(.obfuscated) {
+      margin-top: to_rem(20);
+      margin-bottom: to_rem(20);
+    }
+
+    &:nth-child(even) {
+    }
   }
 }

@@ -4,6 +4,17 @@ var teams = connection.database('teams');
 var replays = connection.database('replays');
 
 var bosses = require('../bosses.json');
+var unrankedTeams = require('../unranked-teams.json');
+
+var getTeamKey = function (teamName, key, cb) {
+  teams.get(teamName, function (err, doc) {
+    if (err) return cb(err);
+    if (!doc) return cb('Invalid team ' + teamName);
+
+    var value = doc[key] || null;
+    cb(null, value);
+  });
+};
 
 var getTeamCoins = function (teamName, cb) {
   teams.get(teamName, function (err, doc) {
@@ -87,6 +98,63 @@ var getReplay = function (replayId, cb) {
   replays.get(replayId, cb);
 };
 
+var updatePlayedGames = function (teamName, isWinner, cb) {
+
+  getTeamKey(teamName, 'gameStats', function (err, gameStats) {
+    if (err) return cb(err);
+
+    if (!gameStats) {
+      gameStats = {
+        numberOfGames: 0,
+        wins: 0
+      };
+    }
+
+    gameStats.numberOfGames += 1;
+
+    if (isWinner) {
+      gameStats.wins += 1;
+    }
+
+    teams.merge(teamName, { gameStats: gameStats }, cb);
+  });
+};
+
+// Helper for getRanking
+var rankTeamRows = function (rows) {
+  var rankedTeams = rows.reduce(function (rankedTeams, row) {
+    var team = row.doc;
+    if (unrankedTeams.indexOf(rankedTeams) === -1) {
+      var gameStats = team.gameStats || { wins: 0, numberOfGames: 0 };
+      var ratio = 0;
+      if (gameStats.numberOfGames > 0) {
+        ratio = gameStats.wins / gameStats.numberOfGames;
+      }
+      rankedTeams.push({
+        teamName: team.teamName,
+        wins: gameStats.wins,
+        numberOfGames: gameStats.numberOfGames,
+        ratio: ratio
+      });
+    }
+
+    return rankedTeams;
+  }, []);
+
+  return rankedTeams.sort(function (a, b) {
+    return b.ratio - a.ratio;
+  });
+};
+
+var getRanking = function (cb) {
+  teams.all({ include_docs: true }, function (err, rows) {
+    if (err) return cb(err);
+
+    var rankedTeams = rankTeamRows(rows);
+    cb(null, rankedTeams);
+  });
+};
+
 exports.getTeamCoins = getTeamCoins;
 exports.isTeamRegistered = isTeamRegistered;
 exports.getCompletedChallenges = getCompletedChallenges;
@@ -95,3 +163,5 @@ exports.saveReplay = saveReplay;
 exports.getAllReplays = getAllReplays;
 exports.getReplay = getReplay;
 exports.updateTeamCoins = updateTeamCoins;
+exports.updatePlayedGames = updatePlayedGames;
+exports.getRanking = getRanking;
