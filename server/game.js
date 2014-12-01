@@ -19,7 +19,7 @@ var games = {};
 var waitingTeams = {};
 
 var validateTeamInGame = function (game, teamName) {
-  if (!game.teams) {
+  if (!game || !game.teams) {
     return false;
   } else {
     return game.teams.indexOf(teamName) !== -1;
@@ -315,6 +315,10 @@ var getAllOpen = function () {
   }, []);
 };
 
+var isTeamInGame = function (gameId, teamName) {
+  return validateTeamInGame(games[gameId], teamName);
+};
+
 exports.executeTurn = executeTurn;
 exports.joinGame = joinGame;
 exports.createGame = createGame;
@@ -325,3 +329,4 @@ exports.getNumberOfTickedTurns = getNumberOfTickedTurns;
 exports.closeGame = closeGame;
 exports.on = events.on.bind(events);
 exports.getAllOpen = getAllOpen;
+exports.isTeamInGame = isTeamInGame;

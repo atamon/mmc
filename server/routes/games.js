@@ -41,6 +41,12 @@ router.post('/', function (req, res) {
   // Like to a client that is watching the replay (which does not require authentication)
   delete req.body.apiKey;
 
+  var responseHandler = function (err, stateForPlayer) {
+    if (err) return res.status(BAD_REQUEST).send({ message: err });
+
+    res.send(stateForPlayer);
+  };
+
   var teamName = (req.body.team || '').replace(/_2$/, '');
   db.isTeamRegistered(teamName, function (err, isRegistered) {
     if (err) {
@@ -54,23 +60,20 @@ router.post('/', function (req, res) {
       return;
     }
 
+    if (/_2$/.test(req.body.team) && !game.isTeamInGame(teamName)) {
+      return responseHandler('Versus hack teams are only allowed in games against ' +
+                             'your real team. Join with that team first.');
+    }
+
 
     // Join game is a special server-only command that
     // the game engine knows nothing about, so let's handle
     // it separately
     if (req.body.command === 'join game') {
-      game.joinGame(req.body.gameId, req.body.team, function (err, stateForPlayer) {
-        if (err) return res.status(BAD_REQUEST).send({ message: err });
-
-        res.send(stateForPlayer);
-      });
+      game.joinGame(req.body.gameId, req.body.team, responseHandler);
     } else {
       // Execute the command requested
-      game.executeTurn(req.body, function (err, stateForPlayer) {
-        if (err) return res.status(BAD_REQUEST).send({ message: err });
-
-        res.send(stateForPlayer);
-      });
+      game.executeTurn(req.body, responseHandler);
     }
   });
 });
