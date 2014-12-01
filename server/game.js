@@ -199,6 +199,8 @@ var createGame = function (options) {
   // Open games are to be listed somewhere
   game.open = options.open || false;
 
+  game.teams = [];
+
   // Kill games that nobody has joined after X time
   game.passiveGameTimeout = setTimeout(function () {
     delete waitingTeams[gameId];
@@ -242,9 +244,11 @@ var joinGame = function (gameId, teamName, cb) {
     timeout: timeout
   });
 
+  // Add teams
+  game.teams.unshift(teamName);
+
   // Game ready
   if (waiting.length >= game.numberOfTeams) {
-    game.teams = waiting.map(function (o) { return o.teamName; });
     game.state = monkeyMusic.createGameState(game.teams, game.level);
 
     // Serve first game state to all teams

@@ -166,10 +166,11 @@ describe 'when a game is created', ->
       gameWithPlayer = null
 
       beforeEach ->
-        game.joinGame(firstGame.id, 'glenn', firstPlayer)
+        game.joinGame('open-1', 'glenn', firstPlayer)
         gameWithPlayer = game.getAllOpen()[0]
 
       it 'should be readable from the list of open games', ->
+        gameWithPlayer.id.should.equal('open-1')
         gameWithPlayer.teams[0].should.equal('glenn')
 
       describe 'when the team times out', ->

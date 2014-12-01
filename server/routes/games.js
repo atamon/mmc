@@ -60,7 +60,7 @@ router.post('/', function (req, res) {
       return;
     }
 
-    if (/_2$/.test(req.body.team) && !game.isTeamInGame(teamName)) {
+    if (/_2$/.test(req.body.team) && !game.isTeamInGame(req.body.gameId, teamName)) {
       return responseHandler('Versus hack teams are only allowed in games against ' +
                              'your real team. Join with that team first.');
     }
