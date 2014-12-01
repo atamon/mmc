@@ -175,7 +175,7 @@ function Animator(options) {
       var effectDuration = turnDuration * options.nTurns;
       var timeLeft = effectDuration;
 
-      var blendMode = sprite.blendMode;
+      var blendMode = PIXI.blendModes.NORMAL;
       sprite.blendMode = PIXI.blendModes.ADD;
 
       var flash = function (timeSinceLastFrame) {
