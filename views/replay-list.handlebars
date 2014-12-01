@@ -1,7 +1,14 @@
+<h1>Replays</h1>
+
+<p>(<strong class="highlight">{{replays.length}}</strong> of them)</p>
+
 <ul class="replay-list">
   {{#each replays}}
   <li class="replay">
-    <a href="/replays/{{_id}}">{{#each scores}} <span>{{teamName}}</span> {{/each}}</a>
+    <span class="game-id">
+      <a href="/replays/{{_id}}">{{gameId}}</a>
+    </span>
+    <span class="teams">{{#each scores}} <span>{{teamName}}</span> {{/each}}</span>
   </li>
   {{/each}}
 </ul>

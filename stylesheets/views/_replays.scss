@@ -1,9 +1,22 @@
 .replay-list {
   list-style-type: none;
+  text-align: left;
 
   .replay {
-    span:not(:first-child):before {
-      content: ' - ';
+
+    .game-id {
+      text-align: right;
+      display: inline-block;
+    }
+
+    .teams {
+      float: right;
+      display: inline-block;
+
+      :not(:first-child):before {
+        content: ' VS ';
+        opacity: 0.4;
+      }
     }
   }
 }

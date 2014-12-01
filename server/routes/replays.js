@@ -33,7 +33,7 @@ router.get('/', function (req, res) {
       log.error(err);
       res.status(500).render('error');
     } else {
-      res.render('replay-list', { replays: replays });
+      res.render('replay-list', { replays: replays, view: 'team' });
     }
   });
 });
