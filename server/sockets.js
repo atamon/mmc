@@ -12,7 +12,7 @@ function handleConnection(socket) {
 
     cb({
       level: game.getLevel(gameId),
-      teams: game.getTeams(gameId)
+      teams: null
     });
   });
 }
