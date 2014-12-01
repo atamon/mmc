@@ -74,7 +74,7 @@ var buildMonkey = function (options) {
   // Monkeypatch a graphical object onto it
   var graphics = new PIXI.Graphics();
   graphics.beginFill(options.color);
-  // graphics.beginFill(1, 0xCCCCCC, 0.8);
+  graphics.lineStyle(4, 0xEEEEEE, 0.5);
   graphics.drawCircle(options.tileWidth / 2, -(options.tileHeight / 6), options.tileHeight / 5);
   graphics.endFill();
   monkeySprite.addChild(graphics);
