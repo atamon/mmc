@@ -139,7 +139,7 @@ function Animator(options) {
 
         if (delayLeft <= 0) {
           // Stop monkey animation
-          sprite.tint = 0xCCCCCC;
+          sprite.tint = 0x444444;
 
           // Stop headgear as well
           if (sprite.children[0]) {
