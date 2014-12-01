@@ -15,14 +15,17 @@
   }
 }
 
+.list {
+  .spacious {
+    margin: to_rem(25);
+  }
+}
+
 .boss-list {
 
   li {
     margin-bottom: $lineheight / 4;
 
-    &.spacious {
-      margin: to_rem(25);
-    }
 
     &.completed a::after {
       content: "\2713";
