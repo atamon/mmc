@@ -132,7 +132,7 @@ function Animator(options) {
       var timeLeft = effectDuration;
       var delayLeft = turnDuration * options.delayTurns;
 
-      var oldHeadgearTint = 0xFFFFFF;
+      var oldHeadgearTint = options.fromColor || 0xFFFFFF;
 
       var darken = function (timeSinceLastFrame) {
         delayLeft -= timeSinceLastFrame;
@@ -143,7 +143,6 @@ function Animator(options) {
 
           // Stop headgear as well
           if (sprite.children[0]) {
-            oldHeadgearTint = sprite.children[0].tint;
             sprite.children[0].tint = 0x444444;
           }
 

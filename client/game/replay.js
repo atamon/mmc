@@ -124,11 +124,20 @@ function hintToEffects(effects, renderingState, h) {
         nTurns: 2,
         id: h.team
       });
+
+      var teamColor = 0xFFFFFF;
+      renderingState.monkeyDetails.forEach(function (team) {
+        if (team.id === h.team) {
+          teamColor = team.color;
+        }
+      });
+
       effects.push({
         type: 'darken',
         delayTurns: 1,
         nTurns: 5,
-        id: h.team
+        id: h.team,
+        fromColor: teamColor
       });
       break;
     case 'got-tackled':
