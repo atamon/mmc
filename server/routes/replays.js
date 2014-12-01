@@ -19,7 +19,7 @@ game.on('gameover', function (results) {
   });
 });
 
-router.use('/', function (req, res, next) {
+router.use('/$', function (req, res, next) {
   if (req.session.validTeam !== settings.adminUser) {
     return res.status(403).render('error', { error: 'Nah aah!' });
   } else {
