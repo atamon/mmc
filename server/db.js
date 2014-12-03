@@ -124,7 +124,7 @@ var updatePlayedGames = function (teamName, isWinner, cb) {
 var rankTeamRows = function (rows) {
   var rankedTeams = rows.reduce(function (rankedTeams, row) {
     var team = row.doc;
-    if (unrankedTeams.indexOf(rankedTeams) === -1) {
+    if (unrankedTeams.indexOf(team.teamName) === -1) {
       var gameStats = team.gameStats || { wins: 0, numberOfGames: 0 };
       var ratio = 0;
       if (gameStats.numberOfGames > 0) {
