@@ -17,6 +17,10 @@ function handleConnection(socket) {
   });
 }
 
+exports.sendProgressTo = function (game, progress) {
+  io.to(game).emit('progress', progress);
+};
+
 exports.sendReplayTo = function (game, replay) {
   log.info('sending replay to game %s', game);
   io.to(game).emit('replay', replay);

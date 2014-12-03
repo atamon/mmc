@@ -41,6 +41,7 @@ var tickGame = function (game) {
   commands = compact(commands);
   try {
     game.state = monkeyMusic.runCommands(game.state, commands);
+    game.remainingTurns = monkeyMusic.gameStateForRenderer(game.state).remainingTurns;
   } catch (e) {
     log.error(e);
 
@@ -55,6 +56,12 @@ var tickGame = function (game) {
       sfp.message = team.message;
       team.cb(null, sfp);
     }
+  });
+
+  events.emit('tick', {
+    gameId: game.id,
+    current: game.remainingTurns,
+    expected: game.level.turns
   });
 
   if (monkeyMusic.isGameOver(game.state)) {

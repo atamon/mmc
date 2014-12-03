@@ -1,5 +1,5 @@
 function getMaxGameSize() {
-  var guiHeight = 130;
+  var guiHeight = 0;
   var windowSize = Math.min(window.innerWidth, window.innerHeight - guiHeight);
   return windowSize;
 }

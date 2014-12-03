@@ -1,24 +1,11 @@
-var messages = require('./messages');
 var teamTemplate = require('../templates/team.hbs');
 var globalTemplate = require('../templates/global.hbs');
 var colors = require('./colors').clear;
 
-var statusEl = document.getElementById('game-status'),
-    modalEl = document.getElementById('game-modal'),
-    container = document.getElementById('game-container');
-
-function setStatus(key, keyIsMessage) {
-  if (key.split('\n').length > 1) {
-    modalEl.innerHTML = key;
-    modalEl.classList.remove('hidden');
-  } else {
-    statusEl.innerHTML = keyIsMessage ? key : messages[key];
-    statusEl.classList.toggle('red', key === 'offline');
-
-    modalEl.classList.add('hidden');
-  }
-
-}
+var container = document.getElementById('game-container'),
+    panesLeft = document.querySelector('.panes-left'),
+    panesRight = document.querySelector('.panes-right'),
+    overlay = document.getElementById('game-overlay-content');
 
 function slugify(text) {
   return text.toString().toLowerCase()
@@ -41,10 +28,10 @@ function init(opts) {
     el.id = slugify(id);
 
     if(index % 2 === 0) {
-      container.parentNode.insertBefore(el, container);
+      panesLeft.appendChild(el);
     }
     else {
-      container.parentNode.appendChild(el);
+      panesRight.appendChild(el);
     }
   });
 }
@@ -64,7 +51,7 @@ function updateState(template, data, id) {
 }
 
 function update(rendererState) {
-  updateState(globalTemplate, rendererState, 'global-pane');
+  updateState(globalTemplate, rendererState, 'turns-left');
   Object.keys(rendererState.teams).forEach(function (teamName, index) {
     var teamData = rendererState.teams[teamName];
     teamData.teamName = teamName;
@@ -73,7 +60,12 @@ function update(rendererState) {
   });
 }
 
+function setOverlay(text, isHidden) {
+  overlay.innerHTML = text;
+  overlay.classList.toggle('hidden', isHidden);
+}
+
 exports.init = init;
 exports.update = update;
-exports.setStatus = setStatus;
 exports.clearTeams = clearTeams;
+exports.setOverlay = setOverlay;

@@ -1,0 +1,26 @@
+<div class="game-wrapper">
+  <div id="game-overlay">
+    <div id="game-overlay-content"{{#if gameId}}{{else}} class="hidden"{{/if}}>
+      {{#if gameId}}Join with gameId: {{gameId}}{{/if}}
+    </div>
+  </div>
+  <div class="game-copyright">
+    <p><span class="red">&#10084;</span> <a href="http://www.slashie.org/">Patrik</a> for the character sprites</p>
+    <p><span class="red">&#10084;</span> <a href="http://opengameart.org/users/buch">Buch</a> for the <a href="http://opengameart.org/content/overworld-tiles-0">Overworld</a> sprites</p>
+  </div>
+  <div class="panes-left">
+    <div id="turns-left"></div>
+  </div>
+  <div id="game-container"></div>
+  <div class="panes-right">
+    <div class="game-id-label" title="Use this as gameId in order to join in">
+      {{#if gameId}}Game <strong id="game-id">{{gameId}}</strong>
+      {{else}}
+        {{#if bossGame}}
+        Game <strong id="game-id">{{gameId}}</strong>
+        <button class="btn" id="start-game" disabled>New Game</button>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>

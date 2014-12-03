@@ -1,18 +1,14 @@
 var io = require('socket.io-client');
 var reqwest = require('reqwest');
-var GUI = require('./game/gui');
+var game = require('./game');
 
 var socket = io.connect(location.origin);
 
-GUI.setStatus('offline');
-socket.on('connect', GUI.setStatus.bind(null, 'ready'));
-socket.on('error', GUI.setStatus.bind(null, 'offline', false));
-socket.on('disconnect', GUI.setStatus.bind(null, 'offline', false));
+socket.on('progress', game.updateProgress);
 
-var game = require('./game');
 
 var createGameBtn = document.getElementById('start-game');
-var currentGameDisplay = document.getElementById('game-id');
+var gameIdLabel = document.querySelector('#game-id');
 
 createGameBtn.addEventListener('click', createGame);
 
@@ -27,8 +23,8 @@ function createGame() {
     method: 'POST',
     data: data,
     success: function (body) {
-      currentGameDisplay.innerHTML = body.gameId;
       socket.emit('game', body.gameId, game.displayLevel);
+      gameIdLabel.innerHTML = body.gameId;
     }
   });
 

@@ -53,12 +53,17 @@ function displayLevel(info, cb) {
   });
 }
 
+function updateProgress(progress) {
+  var percent = ((progress.expected - progress.current) / progress.expected) * 100;
+  var isFinished = percent === 100;
+  GUI.setOverlay(percent.toFixed(0) + '%', isFinished);
+}
+
 function displayReplay(game) {
   if (runningGame) {
     clearInterval(runningGame);
     runningGame = null;
 
-    GUI.setStatus('Loading new game', true);
     return setTimeout(function () {
       // By faking a reloading time we can
       // wait for the animations to finish
@@ -68,8 +73,6 @@ function displayReplay(game) {
       displayReplay(game);
     }, GAME_RESTART_TIMEOUT);
   }
-
-  GUI.setStatus('preparing');
 
   var rewindedReplay = replay.prepare(game.teams, game.turns, game.level);
   var rendererStates = rewindedReplay.rendererStates;
@@ -84,8 +87,6 @@ function displayReplay(game) {
     ids: game.teams
   });
 
-  GUI.setStatus('playing');
-
   var iTurn = 0;
   runningGame = setInterval(function () {
     var interpolation = interpolations[iTurn];
@@ -99,8 +100,6 @@ function displayReplay(game) {
       clearInterval(runningGame);
       runningGame = null;
 
-      // Update GUI
-      GUI.setStatus('Game Over', true);
       return;
     }
 
@@ -116,3 +115,4 @@ function displayReplay(game) {
 
 exports.displayLevel = displayLevel;
 exports.displayReplay = displayReplay;
+exports.updateProgress = updateProgress;

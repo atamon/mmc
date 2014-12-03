@@ -85,6 +85,7 @@ router.get('/:bossId', function (req, res) {
   // Look up level and AI for this boss
   // Render boss page
   res.render('boss', {
+    bossGame: true,
     level: level,
     teams: [req.session.validTeam, req.params.bossId]
   });

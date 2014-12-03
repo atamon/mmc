@@ -5,13 +5,15 @@ var bodyParser = require('body-parser');
 
 var validate = require('../validate.js');
 var game = require('../game.js');
-var levels = require('../levels');
 var sockets = require('../sockets');
 var db = require('../db');
 var log = require('../log');
 
 game.on('gameover', function (results) {
   sockets.sendReplayTo(results.gameId, results.replay);
+});
+game.on('tick', function (progress) {
+  sockets.sendProgressTo(progress.gameId, progress);
 });
 
 // Parse POST body

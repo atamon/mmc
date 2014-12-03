@@ -34,41 +34,6 @@ $water: #378ad1;
   }
 }
 
-#game-modal {
-  position: absolute;
-  top: to_rem(40);
-  left: 0;
-  right: 0;
-
-  opacity: 1;
-  transition: opacity 0.5s ease-in-out;
-
-  text-align: justify;
-  font-size: 14px;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding-left: 0;
-  overflow: visible;
-
-  margin: auto;
-  width: to_rem(512);
-
-  &.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-}
-
-#global-pane {
-  background: $water;
-  width: 100%;
-  padding: .5rem 0;
-
-  dl {
-    margin-bottom: 0;
-  }
-}
-
 .game-wrapper {
   position: relative;
 
@@ -79,16 +44,81 @@ $water: #378ad1;
   align-items: center;
   justify-content: space-around;
 
-  .team-pane {
-    .opening-bracket, .closing-bracket {
-      font-size: to_rem(50);
+  .panes-left, .panes-right {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+    height: 100%;
+
+    .team-pane {
+      flex: 1;
+      width: 100%;
+
+      h2, p {
+        margin: 0;
+      }
+
+      h2 {
+        text-shadow: rgba(#000, .2) 2px 2px 0;
+        font-size: 240%;
+      }
+
+      .team-score {
+        font-size: 4em;
+      }
+
+      .opening-bracket, .closing-bracket {
+        font-size: to_rem(50);
+      }
+      .inventory-item {
+        background-repeat: no-repeat;
+        display: inline-block;
+        background-size: cover;
+        width: to_rem(32);
+        height: to_rem(32);
+      }
     }
-    .inventory-item {
-      background-repeat: no-repeat;
-      display: inline-block;
-      background-size: cover;
-      width: to_rem(32);
-      height: to_rem(32);
+
+    .game-id-label, #turns-left {
+      font-size: to_rem(44);
+      height: to_rem(120);
+      opacity: 0.8;
+
+      .fa {
+        margin-right: to_rem(5);
+      }
+
+      button#start-game {
+        margin: auto;
+        display: block;
+        font-size: to_rem(12);
+        vertical-align: middle;
+      }
+    }
+  }
+
+  #game-overlay {
+    position: absolute;
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+    color: white;
+
+    #game-overlay-content {
+      transition: opacity 2s ease-in-out;
+      opacity: 1;
+      margin: auto;
+      max-width: 33%;
+      font-size: 72px;
+      text-shadow: rgba(#000, .2) 2px 2px 0;
+
+      &.hidden {
+        opacity: 0;
+      }
     }
   }
 
@@ -111,19 +141,6 @@ $water: #378ad1;
   }
 
   .team-pane {
-    width: 25%;
-
-    h2, p {
-      margin: 0;
-    }
-
-    h2 {
-      text-shadow: rgba(#000, .2) 2px 2px 0;
-    }
-
-    .team-score {
-      font-size: 3em;
-    }
   }
 
   .game-copyright {
