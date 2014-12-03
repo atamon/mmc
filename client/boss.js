@@ -1,6 +1,7 @@
 var io = require('socket.io-client');
 var reqwest = require('reqwest');
 var game = require('./game');
+var GUI = require('./game/gui');
 
 var socket = io.connect(location.origin);
 
@@ -25,6 +26,7 @@ function createGame() {
     success: function (body) {
       socket.emit('game', body.gameId, game.displayLevel);
       gameIdLabel.innerHTML = body.gameId;
+      GUI.setOverlay('Join with gameId: ' + body.gameId, false);
     }
   });
 
