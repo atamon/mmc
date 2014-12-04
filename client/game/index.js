@@ -87,6 +87,9 @@ function displayReplay(game) {
     ids: game.teams
   });
 
+  // Hide overlay, we're playing here!
+  GUI.setOverlay('', true);
+
   var iTurn = 0;
   runningGame = setInterval(function () {
     var interpolation = interpolations[iTurn];
