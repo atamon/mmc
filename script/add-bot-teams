@@ -1,3 +1,4 @@
+# Tier 1
 ./script/add-team bananas "Bot" "atamon@spotify.com"
 ./script/add-team doors "Bot" "atamon@spotify.com"
 ./script/add-team maze "Bot" "atamon@spotify.com"
@@ -5,3 +6,6 @@
 ./script/add-team tackling "Bot" "atamon@spotify.com"
 ./script/add-team traps "Bot" "atamon@spotify.com"
 ./script/add-team tunnels "Bot" "atamon@spotify.com"
+# Tier 2
+./script/add-team roadwarrior "Bot" "poscar@spotify.com"
+./script/add-team knockknock "Bot" "poscar@spotify.com"

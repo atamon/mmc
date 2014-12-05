@@ -35,5 +35,15 @@
     "description": "Teenage Mutant Ninja Tunnels",
     "bot": "atamon",
     "level": "tunnels"
+  },
+  "roadwarrior": {
+    "description": "TIER 2 – Road Warrior",
+    "bot": "kong",
+    "level": "roadwarrior"
+  },
+  "knockknock": {
+    "description": "TIER 2 – Knock! Knock!",
+    "bot": "kong",
+    "level": "knockknock"
   }
 }
