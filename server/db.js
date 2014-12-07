@@ -142,6 +142,10 @@ var rankTeamRows = function (rows) {
   }, []);
 
   return rankedTeams.sort(function (a, b) {
+    if (b.ratio - a.ratio === 0) {
+      return b.numberOfGames - a.numberOfGames;
+    }
+
     return b.ratio - a.ratio;
   });
 };

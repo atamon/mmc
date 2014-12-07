@@ -6,13 +6,9 @@ var db = require('../db');
 var log = require('../log');
 var game = require('../game');
 
-function prepareRanking(ranking, ownTeam) {
+function prepareRanking(ranking) {
   return ranking.map(function (team) {
     var formatted = clone(team);
-    if (team.teamName !== ownTeam) {
-      formatted.teamName = Math.random().toString(36).substring(7);
-      formatted.obfuscated = true;
-    }
     formatted.ratio = formatted.ratio.toFixed(2);
 
     return formatted;
