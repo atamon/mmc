@@ -1,13 +1,14 @@
 <h2 style="color: {{color}}">{{teamName}}</h2>
 <p><strong class="team-score">{{score}}</strong></p>
 
-<h3>Inventory</h3>
+<div class="inventory">
+  <h3>Inventory</h3>
 
-<p>
-  <span class="opening-bracket">[</span>
-  {{#each inventory}}
-  <span class="inventory-item pixelated" style="background-image: url(/images/{{this}}.png);"></span>
-  {{!-- {{#if last}}{{#else}}<span class="separator">,</span>{{/if}} --}}
-  {{/each}}
-  <span class="closing-bracket">]</span>
-</p>
+  <p>
+    <span class="opening-bracket">[</span>
+    {{#each inventory}}
+    <span class="inventory-item pixelated" style="background-image: url(/images/{{this}}.png);"></span>
+    {{/each}}
+    <span class="closing-bracket">]</span>
+  </p>
+</div>
