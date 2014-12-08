@@ -9,7 +9,11 @@ var unrankedTeams = require('../unranked-teams.json');
 replays.save('_design/list', {
   all: {
     map: function (doc) {
-      if (doc.gameId) emit(doc.gameId, doc);
+      if (doc.gameId) emit(doc.gameId, {
+        scores: doc.scores,
+        _id: doc._id,
+        gameId: doc.gameId
+      });
     }
   }
 });
