@@ -6,9 +6,9 @@
   {{#each replays}}
   <li class="replay">
     <span class="game-id">
-      <a href="/replays/{{doc._id}}">{{doc.gameId}}</a>
+      <a href="/replays/{{value._id}}">{{value.gameId}}</a>
     </span>
-    <span class="teams">{{#each doc.scores}} <span>{{teamName}}</span> {{/each}}</span>
+    <span class="teams">{{#each value.scores}} <span>{{teamName}}</span> {{/each}}</span>
   </li>
   {{/each}}
 </ul>

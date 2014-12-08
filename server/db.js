@@ -6,6 +6,14 @@ var replays = connection.database('replays');
 var bosses = require('../bosses.json');
 var unrankedTeams = require('../unranked-teams.json');
 
+replays.save('_design/list', {
+  all: {
+    map: function (doc) {
+      if (doc.gameId) emit(doc.gameId, doc);
+    }
+  }
+});
+
 var getTeamKey = function (teamName, key, cb) {
   teams.get(teamName, function (err, doc) {
     if (err) return cb(err);
@@ -87,9 +95,8 @@ var saveReplay = function (gameId, results, cb) {
 };
 
 var getAllReplays = function (cb) {
-  replays.all({ include_docs: true }, function (err, rows) {
+  replays.view('list/all', function (err, rows) {
     if (err) return cb(err);
-
     cb(null, rows);
   });
 };
