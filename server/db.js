@@ -90,7 +90,7 @@ var getAllReplays = function (cb) {
   replays.all({ include_docs: true }, function (err, rows) {
     if (err) return cb(err);
 
-    cb(null, rows.map(function (row) { return row; }));
+    cb(null, rows);
   });
 };
 
